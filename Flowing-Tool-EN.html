@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Flowing Tool · Debate Note-Taking</title>
+<title>简易流水单 · 辩论记录工具</title>
 <style>
 :root{--bg:#0d0d0d;--card:#141414;--border:#222;--input-bg:#1a1a1a;--gold:#ffc000;--text:#eee;--gray:#999;--dark-gray:#555;--blue:#4fa8ee;--green:#6ecd71;--red:#ee5555;--radius:8px;--radius-sm:6px}
 body.light{--bg:#f5f5f5;--card:#fff;--border:#e0e0e0;--input-bg:#f0f0f0;--gold:#4f6bed;--text:#222;--gray:#666;--dark-gray:#999;--blue:#4f6bed;--green:#4caf50;--red:#e53935}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;height:100vh;display:flex;flex-direction:column}
+body{background:var(--bg);color:var(--text);font-family:'Microsoft YaHei','PingFang SC',sans-serif;height:100vh;display:flex;flex-direction:column}
 header{background:var(--card);padding:14px 24px 14px 80px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:relative}
-header h1{font-size:16px;color:var(--gold);position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap}
+header h1{font-size:30px;color:var(--gold);position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap}
+.home-btn{position:absolute;left:20px}
 header .step-label{font-size:12px;color:var(--gray)}
 main{flex:1;overflow-y:auto;padding:20px;max-width:920px;margin:0 auto;width:100%}
 
-.step-bar{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:20px;flex-wrap:wrap;font-size:13px}
+/* Step bar */
+.step-bar{display:flex;align-items:center;justify-content:center;gap:6px;margin:16px 0 20px;flex-wrap:wrap;font-size:13px}
 .step-bar .dot{width:10px;height:10px;border-radius:50%;background:var(--border);flex-shrink:0}
 .step-bar .dot.done{background:var(--green)}
 .step-bar .dot.current{background:var(--gold)}
@@ -23,8 +25,10 @@ main{flex:1;overflow-y:auto;padding:20px;max-width:920px;margin:0 auto;width:100
 .step-bar .label.current{color:var(--gold);font-weight:bold}
 .step-bar .label.done{color:var(--green)}
 
+/* Round name centered */
 .round-name-center{text-align:center;font-size:18px;color:var(--gold);font-weight:bold;margin-bottom:20px}
 
+/* Start page */
 .start-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;gap:24px}
 .start-wrap .logo{font-size:36px;margin-bottom:8px}
 .start-wrap h2{color:var(--gold);font-size:22px}
@@ -32,31 +36,35 @@ main{flex:1;overflow-y:auto;padding:20px;max-width:920px;margin:0 auto;width:100
 .start-wrap .desc li{list-style:none;margin:4px 0}
 .start-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px}
 
+/* Buttons - match workbench */
 .btn{background:var(--card);color:var(--gray);border:1px solid var(--border);padding:10px 20px;border-radius:var(--radius-sm);cursor:pointer;font-size:14px;font-family:inherit;transition:all .15s}
 .btn:hover{border-color:var(--gold);color:var(--gold)}
-.btn.gold{background:var(--gold);color:#000;border:none;font-weight:bold}
+.btn.gold{background:var(--gold);color:var(--on-accent);border:none;font-weight:bold}
 .btn.gold:hover{opacity:.85}
-body.light .btn.gold{color:#fff}
+body.light .btn.gold{color:var(--on-accent)}
 .btn-sm{background:var(--card);border:1px solid var(--border);color:var(--gray);padding:10px 14px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;font-family:inherit}
 .btn-sm:hover{border-color:var(--gold);color:var(--gold)}
 .btn-sm.danger{color:var(--red);border-color:transparent}
 .btn-sm.danger:hover{border-color:var(--red)}
 .btn-sm.gold{border-color:var(--gold);color:var(--gold)}
-.btn-sm.gold:hover{background:var(--gold);color:#000}
-body.light .btn-sm.gold:hover{color:#fff}
+.btn-sm.gold:hover{background:var(--gold);color:var(--on-accent)}
+body.light .btn-sm.gold:hover{color:var(--on-accent)}
 
+/* Cards */
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
 .card h3{color:var(--gold);font-size:15px;margin:0 0 8px 0;border-bottom:1px solid var(--border);padding-bottom:6px}
 .card h4{font-size:13px;color:var(--gray);margin:8px 0 4px}
 
+/* Form rows */
 .row-inp{display:flex;gap:10px;align-items:flex-start;margin:8px 0}
-.row-inp label{color:var(--gray);font-size:12px;min-width:70px;padding-top:9px;flex-shrink:0}
+.row-inp label{color:var(--gray);font-size:12px;width:96px;min-width:96px;padding-top:9px;flex-shrink:0}
 .row-inp input,.row-inp textarea,.row-inp select{flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:var(--radius-sm);font-size:13px;font-family:inherit;outline:none}
 .row-inp textarea{min-height:72px;resize:vertical;width:100%;word-wrap:break-word;white-space:pre-wrap}
 .row-inp input:focus,.row-inp textarea:focus,.row-inp select:focus{border-color:var(--gold)}
 
+/* +1 btn */
 .plus-one-row{display:flex;gap:10px;align-items:flex-start;margin:8px 0}
-.plus-one-row .plus-label{color:var(--gray);font-size:12px;min-width:70px;padding-top:9px;flex-shrink:0}
+.plus-one-row .plus-label{color:var(--gray);font-size:12px;width:96px;min-width:96px;padding-top:9px;flex-shrink:0}
 .plus-one-row .ta-wrap{flex:1}
 .plus-one-row .ta-wrap textarea{width:100%;min-height:72px;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:var(--radius-sm);font-size:13px;font-family:inherit;outline:none;resize:vertical;word-wrap:break-word;white-space:pre-wrap}
 .plus-one-row .ta-wrap textarea:focus{border-color:var(--gold)}
@@ -65,31 +73,39 @@ body.light .btn-sm.gold:hover{color:#fff}
 select{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 8px;border-radius:var(--radius-sm);font-size:13px;font-family:inherit;outline:none}
 select:focus{border-color:var(--gold)}
 
+/* Round config */
 .round-config{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding:10px 14px;background:var(--input-bg);border-radius:var(--radius-sm);font-size:13px}
 .round-config select{min-width:90px}
 .round-config .config-text{color:var(--text);font-size:14px;white-space:nowrap}
 
+/* VS divider */
 .vs-divider{text-align:center;padding:8px 0;color:var(--gold);font-weight:bold;font-size:15px}
+
+/* Side divider */
 .side-divider{border:none;border-top:2px dashed var(--border);margin:16px 0}
 
+/* Footer bar */
 #footer-bar{padding:12px 80px 12px 80px;border-top:1px solid var(--border);flex-shrink:0;display:flex;justify-content:center;background:var(--card);align-items:center;position:relative;gap:8px;flex-wrap:wrap;min-height:48px}
 #footer-bar .spacer{flex:1}
 #footer-bar .home-btn-left{position:absolute;left:20px;top:50%;transform:translateY(-50%)}
 #footer-bar .start-btn-left{position:absolute;left:20px;top:50%;transform:translateY(-50%)}
 
+/* Summary */
 .summary-box textarea{min-height:160px;font-size:14px;line-height:1.7;width:100%;word-wrap:break-word;white-space:pre-wrap}
 .export-group{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-top:16px}
 .export-group h3{color:var(--gold);font-size:14px;margin-bottom:10px}
 .export-group .note{color:var(--gray);font-size:12px;margin-bottom:10px}
 
+/* Theme toggle */
 #theme-toggle{background:transparent;border:1px solid var(--border);color:var(--gray);padding:10px 14px;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit}
 #theme-toggle:hover{border-color:var(--gold);color:var(--gold)}
 
+/* Utility */
 .mt-8{margin-top:8px}.mt-12{margin-top:12px}.mb-8{margin-bottom:8px}
 .hidden{display:none !important}
 .text-sm{font-size:12px}.text-gray{color:var(--gray)}
 @media(max-width:600px){
-  header{padding:10px 14px}header h1{font-size:13px;position:static;transform:none;margin:4px 0;width:100%;text-align:center}
+  header{padding:10px 14px;flex-wrap:wrap;gap:6px}.home-btn{position:static;margin-right:auto}header h1{font-size:14px;position:static;transform:none;margin:4px 0;width:100%;text-align:center;order:5}header span{margin-left:auto}
   header .btn-sm{position:static;font-size:11px;padding:6px 8px}
   #theme-toggle{font-size:11px;padding:6px 8px}
   main{padding:12px}
@@ -103,34 +119,444 @@ select:focus{border-color:var(--gold)}
   #footer-bar .btn{padding:8px 12px;font-size:13px}
   #footer-bar .btn-sm{padding:8px 10px;font-size:12px}
 }
+
+
+/* R5: navigation styling resides in existing native CSS, without new style/JS loop. */
+header[data-dc-nav]{
+ --dc-nav-line:var(--border,var(--line,#d8dee9));
+ --dc-nav-bg:var(--card,var(--bg,#fff));--dc-nav-accent:var(--gold,var(--accent,#4f6bed));
+ display:grid;grid-template-columns:minmax(55px,1fr) minmax(0,2fr) minmax(55px,1fr);
+ align-items:center;gap:8px;min-height:56px;height:auto;
+ padding:8px max(12px,env(safe-area-inset-right,0px)) 8px max(12px,env(safe-area-inset-left,0px));
+}
+header[data-dc-nav]>[data-dc-back]{grid-column:1;grid-row:1;justify-self:start;position:static;left:auto;top:auto;transform:none}
+header[data-dc-nav]>[data-dc-title]{grid-column:2;grid-row:1;justify-self:center;position:static;inset:auto;transform:none;
+ text-align:center;margin:0;min-width:0;max-width:100%;overflow-wrap:anywhere;font-size:clamp(17px,2vw,26px);line-height:1.25}
+header[data-dc-nav]>[data-dc-actions]{grid-column:3;grid-row:1;justify-self:end;display:flex;align-items:center;
+ justify-content:flex-end;flex-wrap:wrap;gap:6px;margin-left:0}
+header[data-dc-nav] [data-dc-back]{min-width:46px;min-height:40px;border:1px solid var(--dc-nav-line);
+ background:var(--dc-nav-bg);color:inherit;border-radius:12px;padding:8px 12px;line-height:1.2;
+ font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+header[data-dc-nav] button:focus-visible{outline:2px solid var(--dc-nav-accent);outline-offset:2px}
+header[data-dc-nav] [data-dc-back]:hover{border-color:var(--dc-nav-accent);box-shadow:0 2px 12px var(--glow,transparent)}
+@media(max-width:690px){
+ header[data-dc-nav]{grid-template-columns:auto minmax(0,1fr) auto;gap:6px;padding:7px max(9px,env(safe-area-inset-right,0px)) 7px max(9px,env(safe-area-inset-left,0px))}
+ header[data-dc-nav]>[data-dc-title]{font-size:clamp(14px,3.5vw,20px)}
+ header[data-dc-nav]>[data-dc-actions]{gap:4px}
+ header[data-dc-nav]>[data-dc-actions] button{min-height:36px;padding-inline:8px}
+ header[data-dc-nav] [data-dc-back]{padding-inline:9px}
+}
+@media(max-width:430px){
+ header[data-dc-nav]:not([data-dc-nav="board"])>[data-dc-title]{grid-column:1/-1;grid-row:2}
+ header[data-dc-nav]:not([data-dc-nav="board"])>[data-dc-actions]{grid-column:3;grid-row:1}
+}
+header[data-dc-nav="board"]{grid-template-columns:auto minmax(100px,1fr) minmax(170px,1.2fr) auto;gap:8px}
+header[data-dc-nav="board"]>[data-dc-title]{grid-column:2}
+header[data-dc-nav="board"]>.hd-center{grid-column:3;grid-row:1;min-width:0;position:static;transform:none}
+header[data-dc-nav="board"]>.hd-right{grid-column:4;grid-row:1}
+@media(max-width:1050px){
+ header[data-dc-nav="board"]{grid-template-columns:auto minmax(0,1fr) auto}
+ header[data-dc-nav="board"]>[data-dc-title]{grid-column:2}
+ header[data-dc-nav="board"]>.hd-center{grid-column:1/-1;grid-row:2;justify-self:stretch}
+ header[data-dc-nav="board"]>.hd-right{grid-column:3}
+}
+@media(max-width:600px){
+ header[data-dc-nav="board"]{grid-template-columns:auto minmax(0,1fr) auto;row-gap:4px}
+ header[data-dc-nav="board"]>[data-dc-title]{grid-column:1/-1;grid-row:2;white-space:normal;justify-self:center}
+ header[data-dc-nav="board"]>.hd-center{grid-column:1/-1;grid-row:3;justify-self:stretch}
+ header[data-dc-nav="board"]>.hd-right{grid-column:3;grid-row:1}
+}
+header[data-dc-nav="tendency"]{grid-template-columns:auto minmax(0,1fr) auto auto}
+header[data-dc-nav="tendency"]>[data-dc-title]{grid-column:2}
+header[data-dc-nav="tendency"]>.spacer{display:none}
+header[data-dc-nav="tendency"]>#lang-btn{grid-column:3}
+header[data-dc-nav="tendency"]>#hdr-theme{grid-column:4}
+header .bar[data-dc-nav="glossary"]{display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+ min-height:58px;padding-inline:max(12px,env(safe-area-inset-left,0px)) max(12px,env(safe-area-inset-right,0px))}
+header .bar[data-dc-nav="glossary"]>[data-dc-back]{min-height:40px;border-radius:12px;padding:8px 11px}
+header .bar[data-dc-nav="glossary"]>[data-dc-title]{flex:1;text-align:center;min-width:100px;position:static;transform:none}
+header .bar[data-dc-nav="glossary"]>#search{min-width:100px;max-width:210px;flex:1}
+
+
+/* R6 theme control: original native buttons, same moon/sun paths as Timer. No JS listener or extra DOM. */
+header button[data-dc-theme],header #btnTheme[data-dc-theme],header #theme-toggle[data-dc-theme],header #hdr-theme[data-dc-theme],header #dc-theme-glossary[data-dc-theme]{display:inline-flex;align-items:center;justify-content:center;
+ flex:0 0 42px;box-sizing:border-box;width:42px;min-width:42px;max-width:42px;height:42px;min-height:42px;
+ border-radius:12px;padding:0;font-size:0;line-height:0;white-space:nowrap;overflow:hidden;vertical-align:middle}
+header button[data-dc-theme]::before{content:"";display:block;flex:0 0 19px;width:19px;height:19px;
+ background-color:currentColor;
+ -webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M21%2012.8A9%209%200%201%201%2011.2%203a7%207%200%200%200%209.8%209.8z%22%2F%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M21%2012.8A9%209%200%201%201%2011.2%203a7%207%200%200%200%209.8%209.8z%22%2F%3E%3C%2Fsvg%3E");
+ -webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain;
+ -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+body.dark header button[data-dc-theme]::before{
+ -webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%224%22%2F%3E%3Cpath%20d%3D%22M12%202v2M12%2020v2M4.9%204.9l1.4%201.4M17.7%2017.7l1.4%201.4M2%2012h2M20%2012h2M4.9%2019.1l1.4-1.4M17.7%206.3l1.4-1.4%22%2F%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%224%22%2F%3E%3Cpath%20d%3D%22M12%202v2M12%2020v2M4.9%204.9l1.4%201.4M17.7%2017.7l1.4%201.4M2%2012h2M20%2012h2M4.9%2019.1l1.4-1.4M17.7%206.3l1.4-1.4%22%2F%3E%3C%2Fsvg%3E")}
+header button[data-dc-theme]:focus-visible{outline:2px solid var(--dc-nav-accent,var(--gold,#679efe));outline-offset:2px}
+@media(max-width:690px){header button[data-dc-theme]{flex-basis:40px;width:40px;min-width:40px;max-width:40px;height:40px;min-height:40px}}
 </style>
+<script>
+(function(){
+var P={"aurora":{"name":"极光","font":"'MiSans','HarmonyOS Sans SC','Alibaba PuHuiTi R','Noto Sans SC',system-ui,'Microsoft YaHei','PingFang SC',sans-serif","light":{"bg":"#f4f6fb","card":"#ffffff","ivory":"#eef1f8","paper":"#f8fafd","input":"#eef1f7","text1":"#171c26","text2":"#384152","text3":"#667085","text4":"#9aa3b2","accent":"#4f6bed","accentLight":"#6d87f5","accentSoft":"#e6ebfd","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#8f9bb3","goldSoft":"#eef1f8","minor":"#b0b8c7","line":"#e1e6f0","lineSoft":"#eaeef6","blue":"#4f6bed","green":"#12b76a","red":"#ef4444","warnBg":"#fef4e6","warnBorder":"#f59e0b","eng":"#8e44ad","grid":"#dfe5f1","hover":"#f2f5fb","shadow":"rgba(23,32,54,.10)","shadowSm":"rgba(23,32,54,.06)","shadowMd":"rgba(23,32,54,.15)","radius":"14px","radiusSm":"10px","accent2":"#06b6d4","glow":"rgba(79,107,237,.32)","dot":"rgba(79,107,237,.13)","sans":"'MiSans','HarmonyOS Sans SC','Alibaba PuHuiTi R','Noto Sans SC',system-ui,'Microsoft YaHei','PingFang SC',sans-serif","serif":"'LXGW WenKai','Source Han Serif SC','Songti SC','STSong',Georgia,serif"},"dark":{"bg":"#0b0e16","card":"#121722","ivory":"#161c2a","paper":"#0e1220","input":"#171e2e","text1":"#f1f4fa","text2":"#c6cddc","text3":"#8b94a8","text4":"#525b6e","accent":"#679efe","accentLight":"#8ab2ff","accentSoft":"#1a2440","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#8f9bb3","goldSoft":"#1a2130","minor":"#5a6478","line":"#232b3d","lineSoft":"#1b2230","blue":"#679efe","green":"#22c55e","red":"#f25a5a","warnBg":"#2a2000","warnBorder":"#6b5226","eng":"#c39bdb","grid":"#1a2130","hover":"#161d2b","shadow":"rgba(0,0,0,.45)","shadowSm":"rgba(0,0,0,.35)","shadowMd":"rgba(0,0,0,.6)","radius":"14px","radiusSm":"10px","accent2":"#22d3ee","glow":"rgba(103,158,254,.35)","dot":"rgba(122,158,255,.15)","sans":"'MiSans','HarmonyOS Sans SC','Alibaba PuHuiTi R','Noto Sans SC',system-ui,'Microsoft YaHei','PingFang SC',sans-serif","serif":"'LXGW WenKai','Source Han Serif SC','Songti SC','STSong',Georgia,serif"}},"classic":{"name":"经典","font":"'Microsoft YaHei','PingFang SC',system-ui,sans-serif","light":{"bg":"#f5f5f5","card":"#ffffff","ivory":"#f0f0f0","paper":"#fafafa","input":"#f0f0f0","text1":"#222222","text2":"#333333","text3":"#666666","text4":"#999999","accent":"#4f6bed","accentLight":"#4f6bed","accentSoft":"#e3e9f8","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#8f9bb3","goldSoft":"#f0f0f0","minor":"#b0b0b0","line":"#e0e0e0","lineSoft":"#e8e8e8","blue":"#4f6bed","green":"#4caf50","red":"#e53935","warnBg":"#fff3cd","warnBorder":"#ffc107","eng":"#8e44ad","grid":"#e4e4e4","hover":"#fafafa","shadow":"rgba(0,0,0,.08)","shadowSm":"rgba(0,0,0,.06)","shadowMd":"rgba(0,0,0,.10)","radius":"8px","radiusSm":"6px","sans":"'Microsoft YaHei','PingFang SC',system-ui,sans-serif","serif":"'Songti SC','STSong',Georgia,serif"},"dark":{"bg":"#0d0d0d","card":"#141414","ivory":"#1a1a1a","paper":"#101010","input":"#1a1a1a","text1":"#eeeeee","text2":"#cccccc","text3":"#999999","text4":"#555555","accent":"#ffc000","accentLight":"#ffd75e","accentSoft":"#332b00","onAccent":"#000000","onFunc":"#ffffff","gold":"#8f9bb3","goldSoft":"#2a2a2a","minor":"#666666","line":"#222222","lineSoft":"#1b1b1b","blue":"#4fa8ee","green":"#6ecd71","red":"#ee5555","warnBg":"#2a2000","warnBorder":"#664400","eng":"#c39bdb","grid":"#1e1e1e","hover":"#1b1b1b","shadow":"rgba(0,0,0,.35)","shadowSm":"rgba(0,0,0,.30)","shadowMd":"rgba(0,0,0,.45)","radius":"8px","radiusSm":"6px","sans":"'Microsoft YaHei','PingFang SC',system-ui,sans-serif","serif":"'Songti SC','STSong',Georgia,serif"}},"tendency":{"name":"人格测试","font":"-apple-system,'SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',system-ui,sans-serif","light":{"bg":"#eef1f6","card":"#ffffff","ivory":"#f7f9fc","paper":"#f2f5fa","input":"#f7f9fc","text1":"#1c2333","text2":"#39445a","text3":"#5f6b80","text4":"#8b95a8","accent":"#123a6d","accentLight":"#2b5ea8","accentSoft":"#e7eef8","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#6f7f99","goldSoft":"#eef2f8","minor":"#b0bfd4","line":"#dde3ec","lineSoft":"#e8ecf3","blue":"#2b5ea8","green":"#1e8e5a","red":"#c0392b","warnBg":"#eef2f8","warnBorder":"#b0bfd4","eng":"#2b5ea8","grid":"#dde3ec","hover":"#f7f9fc","shadow":"rgba(18,40,80,.06)","shadowSm":"rgba(18,40,80,.06)","shadowMd":"rgba(18,40,80,.08)","radius":"20px","radiusSm":"12px","sans":"-apple-system,'SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',system-ui,sans-serif","serif":"Georgia,'Songti SC','STSong','Source Han Serif SC','Noto Serif CJK SC','SimSun',serif"},"dark":{"bg":"#0c1017","card":"#141a26","ivory":"#171e2c","paper":"#121722","input":"#171e2c","text1":"#ece8df","text2":"#c8c2b2","text3":"#98917f","text4":"#6f6959","accent":"#f0b429","accentLight":"#ffd166","accentSoft":"#2b2412","onAccent":"#1c2333","onFunc":"#ffffff","gold":"#d9b25f","goldSoft":"#241d10","minor":"#5a4c2c","line":"#232c3d","lineSoft":"#1f2837","blue":"#9db9e3","green":"#6ecf8f","red":"#e57a77","warnBg":"#2b2412","warnBorder":"#5a4c2c","eng":"#9db9e3","grid":"#232c3d","hover":"#171e2c","shadow":"rgba(0,0,0,.4)","shadowSm":"rgba(0,0,0,.4)","shadowMd":"rgba(0,0,0,.4)","radius":"20px","radiusSm":"12px","sans":"-apple-system,'SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',system-ui,sans-serif","serif":"Georgia,'Songti SC','STSong','Source Han Serif SC','Noto Serif CJK SC','SimSun',serif"}},"apple":{"name":"苹果风","font":"-apple-system,'SF Pro Display','SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',system-ui,sans-serif","light":{"bg":"#f5f3f0","card":"#ffffff","ivory":"#faf8f6","paper":"#f5f3f0","input":"#faf8f6","text1":"#1c1c1e","text2":"#3a3a3c","text3":"#6e6e73","text4":"#8e8e93","accent":"#007aff","accentLight":"#3395ff","accentSoft":"#e5f0ff","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#bf8d3c","goldSoft":"#faf6ed","minor":"#d1d1d6","line":"#e5e5ea","lineSoft":"#eae9e8","blue":"#007aff","green":"#1e7a1e","red":"#b13e3e","warnBg":"#faf6ed","warnBorder":"#bf8d3c","eng":"#bf8d3c","grid":"#e5e5ea","hover":"#faf8f6","shadow":"rgba(0,0,0,.04)","shadowSm":"rgba(0,0,0,.04)","shadowMd":"rgba(0,0,0,.06)","radius":"20px","radiusSm":"12px","sans":"-apple-system,'SF Pro Display','SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',system-ui,sans-serif","serif":"Georgia,'Songti SC','STSong',serif"},"dark":{"bg":"#101014","card":"#1c1c1e","ivory":"#2c2c2e","paper":"#17171a","input":"#2c2c2e","text1":"#f2f2f7","text2":"#c7c7cc","text3":"#8e8e93","text4":"#636366","accent":"#0a84ff","accentLight":"#409cff","accentSoft":"#14273f","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#d4a95c","goldSoft":"#2a2416","minor":"#48484a","line":"#38383a","lineSoft":"#2c2c2e","blue":"#0a84ff","green":"#30d158","red":"#ff453a","warnBg":"#2a2416","warnBorder":"#bf8d3c","eng":"#d4a95c","grid":"#38383a","hover":"#2c2c2e","shadow":"rgba(0,0,0,.5)","shadowSm":"rgba(0,0,0,.5)","shadowMd":"rgba(0,0,0,.5)","radius":"20px","radiusSm":"12px","sans":"-apple-system,'SF Pro Display','SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',system-ui,sans-serif","serif":"Georgia,'Songti SC','STSong',serif"}},"editorial":{"name":"编辑风","font":"'Songti SC','STSong','Source Han Serif SC','Noto Serif CJK SC',Georgia,'Microsoft YaHei',serif","light":{"bg":"#f5f4ed","card":"#faf9f5","ivory":"#faf9f5","paper":"#f5f4ed","input":"#faf9f5","text1":"#141413","text2":"#3d3d3a","text3":"#504e49","text4":"#6b6a64","accent":"#1B365D","accentLight":"#2D5A8A","accentSoft":"#E4ECF5","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#b98f3f","goldSoft":"#EEF2F7","minor":"#b8b7b0","line":"#e8e6dc","lineSoft":"#e5e3d8","blue":"#2D5A8A","green":"#52734f","red":"#9c3b33","warnBg":"#f6e9c8","warnBorder":"#b98f3f","eng":"#1B365D","grid":"#e8e6dc","hover":"#faf9f5","shadow":"rgba(20,20,19,.06)","shadowSm":"rgba(20,20,19,.05)","shadowMd":"rgba(20,20,19,.08)","radius":"10px","radiusSm":"6px","sans":"'Microsoft YaHei','PingFang SC',system-ui,sans-serif","serif":"'Songti SC','STSong','Source Han Serif SC','Noto Serif CJK SC',Georgia,'Microsoft YaHei',serif"},"dark":{"bg":"#141413","card":"#1c1c1a","ivory":"#1c1c1a","paper":"#141413","input":"#222220","text1":"#f2f0e9","text2":"#b0aea5","text3":"#8f8d84","text4":"#6b6a64","accent":"#4a7fb5","accentLight":"#6b9fd1","accentSoft":"#1e2a38","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#b98f3f","goldSoft":"#23221f","minor":"#5a5952","line":"#2a2a28","lineSoft":"#242422","blue":"#6b9fd1","green":"#7fa37f","red":"#d08a80","warnBg":"#2a2416","warnBorder":"#b98f3f","eng":"#8fb3d9","grid":"#2a2a28","hover":"#222220","shadow":"rgba(0,0,0,.5)","shadowSm":"rgba(0,0,0,.5)","shadowMd":"rgba(0,0,0,.5)","radius":"10px","radiusSm":"6px","sans":"'Microsoft YaHei','PingFang SC',system-ui,sans-serif","serif":"'Songti SC','STSong','Source Han Serif SC','Noto Serif CJK SC',Georgia,'Microsoft YaHei',serif"}}};
+var A={"bg":["--bg"],"card":["--card"],"ivory":["--ivory"],"paper":["--paper"],"input":["--input-bg","--input"],"text1":["--text","--text-1"],"text2":["--text-2"],"text3":["--gray","--text-3"],"text4":["--dark-gray","--text-4"],"accent":["--gold","--ink"],"accentLight":["--ink-light"],"accentSoft":["--ink-soft"],"accent2":["--gold2"],"glow":["--glow"],"dot":["--dot"],"goldSoft":["--gold-soft"],"minor":["--minor"],"line":["--border","--line"],"lineSoft":["--line-soft"],"blue":["--blue"],"green":["--green"],"red":["--red"],"warnBg":["--warn-bg"],"warnBorder":["--warn-border"],"eng":["--eng"],"grid":["--grid"],"hover":["--hover"],"shadow":["--shadow"],"shadowSm":["--shadow-sm"],"shadowMd":["--shadow-md"],"radius":["--radius"],"radiusSm":["--radius-sm"],"sans":["--sans"],"serif":["--serif"],"onAccent":["--on-accent"],"onFunc":["--on-func"]};
+var F='darkroot';
+var DEF='classic';
+function css(v){var s='';if(!v)return s;for(var k in v){var a=A[k];if(!a)continue;for(var i=0;i<a.length;i++)s+=a[i]+':'+v[k]+';';}return s;}
+function read(){try{var c=JSON.parse(localStorage.getItem('debate_coach_toolbox_theme')||localStorage.getItem('debate_toolbox_theme')||'null');if(c&&c.preset==='custom'&&c.light&&c.dark)return c;if(c&&P[c.preset])return c;return {preset:DEF};}catch(e){return {preset:DEF};}}
+function tokens(mode){var c=read();var t=P[c.preset]||P.classic;if(c.preset==='custom')return (mode==='dark'?(c.dark||t.dark):(c.light||t.light));return mode==='dark'?t.dark:t.light;}
+function themeCss(c){var t=P[c.preset]||P[DEF]||P.classic;var L=(c.preset==='custom'?(c.light||t.light):t.light);var D=(c.preset==='custom'?(c.dark||t.dark):t.dark);var f=(c.preset==='custom'?(c.font||t.font):t.font)||t.font;var root=(F==='darkroot')?css(D):css(L);return ':root{'+root+'}body.light{'+css(L)+'}body.dark{'+css(D)+'}body{font-family:'+f+';-webkit-font-smoothing:antialiased}.tools .card{border-radius:var(--radius)}.home{border-radius:var(--radius-sm)}';}
+function emit(c){var p=c&&c.preset?c.preset:DEF;if(p==='custom')p=(c&&c.base)||DEF;document.documentElement.setAttribute('data-tbx-style',p);var cssText=themeCss(c);var old=document.getElementById('tbx-theme');if(old&&old.parentNode)old.parentNode.removeChild(old);if(document.body){var s=document.createElement('style');s.id='tbx-theme';s.textContent=cssText;document.head.appendChild(s);}else{document.write('<style id="tbx-theme">'+cssText+'</style>');}}
+var share=null;
+function tokensFor(name,mode){var t=P[name]||P[DEF]||P.classic;return mode==='dark'?t.dark:t.light;}
+function tokens(mode){if(share)return tokensFor(share,mode);var c=read();var t=P[c.preset]||P[DEF]||P.classic;if(c.preset==='custom')return (mode==='dark'?(c.dark||t.dark):(c.light||t.light));return mode==='dark'?t.dark:t.light;}
+function setShare(name){share=name||null;}
+function getShare(){return share;}
+var cfg=read();emit(cfg);
+window.__TBX={P:P,A:A,F:F,emit:emit,read:read,tokens:tokens,tokensFor:tokensFor,setShare:setShare,getShare:getShare};
+})();
+</script>
+<script>
+/*
+COACH_FILE_IO_ARCHITECTURE_CONTRACT_BEGIN
+R01 SINGLE-FILE COACH FILE DELIVERY CONTRACT (source-owned, not a help page).
+SCOPE: createCoachFileIO(environment) is the one shared file delivery/receipt service,
+installed as window.DCFileIO in the executable Coach shell. AI Recorder is excluded.
+OWNERSHIP: Module producers alone own payload bytes, original name, MIME, JSON
+schema, IDs, links, history, session state and import validation/commit.
+The service accepts a canonical Blob once; it does NOT serialize JSON, repair
+invalid inputs, alter report content, commit a project, or inspect prompts.
+API: present(PreparedFile) offers supported actions; deliver(PreparedFile,
+'download'|'share'|'save-local') performs exactly one intent; openPreview()
+starts read-only HTML preview; standaloneSource() emits this same self-contained
+factory for Atlas/Startrack offline reports. PreparedFile: {blob,name,mime,kind,
+owner,lang,nativeLocation:{directory,folder},profile:'ordinary'|'timer'}.
+Receipt.status: download-started, preview-open-started, share-returned, saved,
+cancelled, share-not-completed, unsupported, failed. A resolved Promise or an
+anchor.click does not establish that the destination file was saved.
+WEB: iOS HTTPS uses navigator.share({files:[File]}) ONLY, never title/text;
+JSON/MD may use text/plain MIME without changing extension. Android Web JSON/MD
+share uses byte-identical .json.txt/.md.txt and text/plain regardless of
+canShare(original); original extension is retained for downloads. Unsupported
+Web Share falls back to a *user-selected* download, not a silent retry. Explicit
+cancellation/failure NEVER auto-downloads. Asynchronously prepared exports wait
+for a NEW user click before Web Share; no await before navigator.share.
+NATIVE: Use existing Capacitor Filesystem -> URI -> Share or test-only LocalSave
+(SAF). Write raw Blob bytes in <=256 KiB slices, Base64 encode each slice, await
+writeFile then serial appendFile without encoding. Verify raw byte count/stat;
+Timer uses partial -> stat -> rename -> URI while ordinary files use the prior
+direct target. Preserve original per-module DOCUMENTS/CACHE folder. Do not
+decode entire Blob as text, build whole-file Base64, or share partial files.
+INPUT: JSON can be carried in .json/.txt/.md only if the ENTIRE contents parse
+as JSON (remove only one leading BOM); original module parser/validator commits
+or rejects. Genuine Markdown reports (especially Judge) have independent
+report import paths; no code-fence extraction or LLM JSON repair.
+FILE MATRIX: JSON/MD/TXT/HTML/CSV/SVG keep actual bytes/MIME; XLSX, JPG,
+PNG/audio/other binary MUST keep real bytes and extensions, never TXT aliases.
+No new PDF/ZIP generators are implied; existing HTML preview/print is separate.
+LARGE TIMER: ordinary format <=5 MiB; portable JSON <=96 MiB; display-image
+library single image <=80 MiB and total <=256 MiB is a different data domain.
+8 MiB selects Timer's dedicated large-file *import parser*, not an export cap.
+Android Chromium browser Web Share currently gates files over 50 MiB to the
+normal download action; this is NOT a Timer generation/import limit. Never
+change MATCH/FORMAT, clocks, sounds, media inclusion semantics, canvas or
+explicit settings application in an I/O change.
+FAILURES: One prepared file, one user intent, one Receipt. Cancelled share or SAF
+save must not report success or cause a second action. No global a.click/Blob/
+JSON.parse intercepts, duplicate delivery services, extra schema engine,
+persistent file cache, external file dependency, or Recorder coupling.
+MAINTENANCE: When changing a service interface, edit this comment; when a
+module exception changes, edit its FILE_IO_ADAPTER comment near the real code.
+Real execution code and current project rules outrank stale comments/line IDs.
+COACH_FILE_IO_ARCHITECTURE_CONTRACT_END
+*/
+function createCoachFileIO(environment) {
+  'use strict';
+  const host=environment||window;
+  const held=new Map();
+  let sequence=0;
+  const BUCKET=256*1024;
+  const allowed=new Set(['download','share','save-local']);
+  const isNative=()=>{
+    try {return !!(host.Capacitor&&host.Capacitor.isNativePlatform&&host.Capacitor.isNativePlatform());}
+    catch(_) {return false;}
+  };
+  const lang=file=>file.lang==='en'?'en':'zh';
+  const say=(file,zh,en)=>lang(file)==='en'?en:zh;
+  const filename=str=>String(str||'Export').replace(/[\\/:*?"<>|\u0000-\u001f]/g,'-').trim()||'Export';
+  const mimeOf=(file)=>String(file.mime||file.blob?.type||'application/octet-stream');
+  const kindOf=file=>{
+    if(file.kind&&file.kind!=='ordinary'&&file.kind!=='timer')return file.kind;
+    const ext=String(file.name).toLowerCase().split('.').pop();
+    return ({json:'json',md:'markdown',txt:'text',html:'html',htm:'html',
+      csv:'csv',svg:'svg',png:'image',jpg:'image',jpeg:'image',xlsx:'binary'})[ext]||'binary';
+  };
+  function prepare(input) {
+    if(!input||!input.blob||typeof input.blob.slice!=='function'||!Number.isFinite(input.blob.size))
+      throw Error('A prepared Blob is required');
+    return {...input,name:filename(input.name),mime:mimeOf(input),kind:kindOf(input)};
+  }
+  function receipt(file,status,method,extra) {
+    return Object.freeze({status,method,originalName:file.name,bytes:file.blob.size,...(extra||{})});
+  }
+  function message(r,file){
+    const en=lang(file)==='en';
+    const labels={
+      'download-started':en?'Download started; check your downloads folder.':'已发起下载，请检查下载目录。',
+      'preview-open-started':en?'Preview opening was requested.':'已发起预览，请检查新窗口。',
+      'share-returned':en?'System share returned; verify the destination file.':'系统分享流程已返回，请确认目标应用中的文件。',
+      saved:en?'File saved to the selected location.':'文件已保存到选择的位置。',
+      cancelled:en?'Action cancelled; no download was started.':'已取消，未自动下载。',
+      'share-not-completed':en?'System share did not complete; no download was started.':'系统分享未完成，未自动下载。',
+      unsupported:en?'This action is unsupported; select Download.':'当前环境不支持该操作，请选择下载。',
+      failed:en?'File operation failed; retry explicitly.':'文件操作失败，请自行选择重试。'
+    };
+    return labels[r.status]||r.message||'';
+  }
+  function capability(file){
+    const native=isNative(),nav=host.navigator||{},mobile=/Android|iPhone|iPad|iPod/i.test(String(nav.userAgent||''))||
+      (/Macintosh/i.test(String(nav.userAgent||''))&&Number(nav.maxTouchPoints||0)>1);
+    const androidWeb=!native&&/Android/i.test(String(nav.userAgent||''));
+    let share=!!(native&&host.Capacitor?.Plugins?.Share?.share);
+    if(!native&&mobile&&host.isSecureContext!==false&&typeof nav.share==='function'&&
+       typeof nav.canShare==='function'&&typeof host.File==='function'&&
+       (!androidWeb||file.blob.size<=50*1024*1024)){
+      try {
+        const type=(androidWeb&&['json','markdown'].includes(file.kind))?'text/plain':file.mime;
+        const name=(androidWeb&&['json','markdown'].includes(file.kind))?file.name+'.txt':file.name;
+        share=!!nav.canShare({files:[new host.File([file.blob],name,{type})]});
+        if(!share&&!androidWeb&&['json','markdown'].includes(file.kind))
+          share=!!nav.canShare({files:[new host.File([file.blob],file.name,{type:'text/plain'})]});
+      }catch(_) {share=false;}
+    }
+    const local=!!(native&&host.Capacitor?.Plugins?.LocalSave?.saveDocument);
+    return {native,mobile,androidWeb,share,local};
+  }
+  function webDownload(file){
+    let url=null,link=null;
+    try{
+      url=host.URL.createObjectURL(file.blob);
+      link=host.document.createElement('a');
+      link.href=url;link.download=file.name;link.style.cssText='position:fixed;top:-9999px;left:0';
+      (host.document.body||host.document.documentElement).appendChild(link);
+      link.click();
+      return receipt(file,'download-started','browser-download');
+    }catch(e){return receipt(file,'failed','browser-download',{errorName:e.name,message:String(e.message||e)});}
+    finally{
+      if(url||link)host.setTimeout(()=>{
+        try{link?.remove();}catch(_){}try{if(url)host.URL.revokeObjectURL(url);}catch(_){}
+      },30000);
+    }
+  }
+  // Called from a fresh click; call navigator.share before any await.
+  function webShare(file,cap){
+    const nav=host.navigator;
+    if(!cap.share)return Promise.resolve(receipt(file,'unsupported','web-share'));
+    try{
+      const androidTxt=cap.androidWeb&&['json','markdown'].includes(file.kind);
+      let name=androidTxt?file.name+'.txt':file.name;
+      let type=androidTxt?'text/plain':file.mime;
+      let shareFile=new host.File([file.blob],name,{type});
+      if(!nav.canShare({files:[shareFile]})&&!androidTxt&&['json','markdown'].includes(file.kind)){
+        type='text/plain';
+        shareFile=new host.File([file.blob],name,{type});
+      }
+      if(!nav.canShare({files:[shareFile]}))return Promise.resolve(receipt(file,'unsupported','web-share'));
+      const pending=nav.share({files:[shareFile]}); // files-only: iOS contract
+      return Promise.resolve(pending).then(
+        ()=>receipt(file,'share-returned','web-share',{deliveredName:name}),
+        e=>receipt(file,e?.name==='AbortError'?'share-not-completed':'failed','web-share',
+          {errorName:e?.name||'Error',message:String(e?.message||e),deliveredName:name}));
+    }catch(e){return Promise.resolve(receipt(file,'failed','web-share',{errorName:e.name,message:String(e.message||e)}));}
+  }
+  function encode64(array){
+    let binary='';
+    for(let i=0;i<array.length;i+=8192)
+      binary+=String.fromCharCode.apply(null,array.subarray(i,i+8192));
+    return host.btoa(binary);
+  }
+  async function writeNativeBlob(file,session){
+    const C=host.Capacitor,FS=C?.Plugins?.Filesystem;
+    if(!FS||typeof FS.writeFile!=='function'||typeof FS.appendFile!=='function'||
+       typeof FS.stat!=='function'||typeof FS.getUri!=='function')
+      throw Error('Native Filesystem byte operations unavailable');
+    const loc=file.nativeLocation;
+    if(!loc||!['DOCUMENTS','CACHE'].includes(String(loc.directory))||
+       !loc.folder||!/^[-\w/]+$/.test(loc.folder))
+      throw Error('Missing audited nativeLocation');
+    const dir=loc.directory,final=loc.folder.replace(/\/+$/,'')+'/'+file.name;
+    const key=dir+':'+final;
+    const occupant=held.get(key);
+    if(occupant&&occupant!==session)throw Error('This file is being delivered by another session');
+    held.set(key,session);
+    session.pathKey=key;
+    if(session.artifact)return session.artifact;
+    const timer=file.profile==='timer',tmp=timer?final+'.partial-'+(++sequence).toString(36):final;
+    let written=0;
+    try{
+      if(timer&&typeof FS.rename!=='function')throw Error('Timer rename unavailable');
+      if(file.blob.size===0){
+        await FS.writeFile({path:tmp,data:'',directory:dir,recursive:true});
+      }else{
+        for(let off=0;off<file.blob.size;off+=BUCKET){
+          const buf=new Uint8Array(await file.blob.slice(off,Math.min(file.blob.size,off+BUCKET)).arrayBuffer());
+          const data=encode64(buf);
+          if(off===0)await FS.writeFile({path:tmp,data,directory:dir,recursive:true});
+          else await FS.appendFile({path:tmp,data,directory:dir});
+          written+=buf.byteLength;
+        }
+      }
+      if(written!==file.blob.size)throw Error('Native chunk size mismatch');
+      const stat=await FS.stat({path:tmp,directory:dir});
+      if(Number(stat?.size)!==file.blob.size)throw Error('Native stored bytes mismatch');
+      if(timer)await FS.rename({from:tmp,to:final,directory:dir,toDirectory:dir});
+      const uri=(await FS.getUri({path:final,directory:dir}))?.uri;
+      if(!uri)throw Error('Native file URI missing');
+      session.artifact={uri,bytes:written,path:final,directory:dir};
+      return session.artifact;
+    }catch(e){
+      if(timer)try{await FS.deleteFile({path:tmp,directory:dir});}catch(_){}
+      throw e;
+    }
+  }
+  async function deliver(input,intent='download',options={}){
+    let file;
+    try{file=prepare(input);}catch(e){return {status:'failed',method:'prepare',message:String(e.message||e),bytes:0};}
+    if(!allowed.has(intent))return receipt(file,'unsupported','unknown-intent');
+    const cap=capability(file);
+    if(!cap.native){
+      if(intent==='download')return webDownload(file);
+      if(intent==='share')return webShare(file,cap);
+      return receipt(file,'unsupported','web-save-location');
+    }
+    if(intent==='download')return receipt(file,'unsupported','native-download');
+    if(intent==='share'&&!cap.share||intent==='save-local'&&!cap.local)
+      return receipt(file,'unsupported','native-plugin');
+    const session=options.session||{pathKey:null,artifact:null};
+    const own=!options.session;
+    try{
+      const artifact=await writeNativeBlob(file,session);
+      if(intent==='share'){
+        try{
+          await host.Capacitor.Plugins.Share.share({files:[artifact.uri]});
+          return receipt(file,'share-returned','native-share',
+            {nativeFileWritten:true,nativeUri:artifact.uri});
+        }catch(e){return receipt(file,e?.name==='AbortError'?'share-not-completed':'failed','native-share',
+          {nativeFileWritten:true,nativeUri:artifact.uri,errorName:e?.name,message:String(e?.message||e)});}
+      }
+      try{
+        const data=await host.Capacitor.Plugins.LocalSave.saveDocument({
+          sourceUri:artifact.uri,name:file.name,mimeType:file.mime});
+        if(data?.canceled||data?.cancelled)return receipt(file,'cancelled','native-local-save',
+          {nativeFileWritten:true,nativeUri:artifact.uri});
+        if(data?.saved&&Number(data.bytes)===file.blob.size)
+          return receipt(file,'saved','native-local-save',{nativeFileWritten:true,nativeUri:artifact.uri});
+        throw Error('Local save did not confirm byte-complete closed stream');
+      }catch(e){return receipt(file,e?.name==='AbortError'?'cancelled':'failed','native-local-save',
+        {nativeFileWritten:true,nativeUri:artifact.uri,errorName:e?.name,message:String(e?.message||e)});}
+    }catch(e){return receipt(file,'failed','native-write',{errorName:e?.name,message:String(e?.message||e)});}
+    finally{if(own&&session.pathKey)held.delete(session.pathKey);}
+  }
+  function present(input,options={}){
+    let file;
+    try{file=prepare(input);}catch(e){return Promise.resolve({status:'failed',method:'prepare',message:String(e.message||e)});}
+    const cap=capability(file);
+    if(!cap.mobile&&!cap.native)return deliver(file,'download');
+    const doc=host.document;
+    if(!doc||!doc.body)return deliver(file,cap.native?'share':'download');
+    return new Promise(resolve=>{
+      const session={pathKey:null,artifact:null};
+      const layer=doc.createElement('div');
+      layer.style.cssText='position:fixed;inset:0;z-index:2147483646;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:16px';
+      const box=doc.createElement('div');
+      // FILE_IO_ADAPTER: delivery dialog --surface is translucent; choose opaque theme tokens instead.
+      box.style.cssText='background:var(--bg1,#fff);color:var(--ink,#222);border-radius:14px;padding:20px;max-width:440px;width:100%;box-shadow:0 20px 60px #0004;display:grid;gap:10px;font:14px/1.5 system-ui,sans-serif';
+      const head=doc.createElement('div');head.textContent=say(file,'文件已准备好，请选择交付方式','File ready. Choose a delivery method.');
+      head.style.cssText='font-size:17px;font-weight:700';
+      const detail=doc.createElement('div');detail.textContent=file.name+' ('+file.blob.size+' bytes)';
+      detail.style.cssText='overflow-wrap:anywhere;font-size:12px;opacity:.75';
+      const info=doc.createElement('div');info.setAttribute('role','status');info.style.cssText='font-size:13px;min-height:20px;overflow-wrap:anywhere';
+      box.append(head,detail);
+      let active=false,closed=false,last=null;
+      const buttons=[];
+      function finish(){
+        if(closed)return;
+        if(active)return;
+        closed=true;layer.remove();
+        if(session.pathKey)held.delete(session.pathKey);
+        resolve(last||receipt(file,'cancelled','dialog'));
+      }
+      function add(label,intent){
+        const btn=doc.createElement('button');
+        btn.type='button';btn.textContent=label;btn.style.cssText='padding:11px;border:1px solid #aaa;border-radius:8px;background:var(--bg0,#f4f6fb);color:inherit;cursor:pointer;font:inherit';
+        btn.addEventListener('click',()=>{
+          if(intent==='close'){finish();return;}
+          if(active)return;active=true;for(const b of buttons)b.disabled=true;
+          // Call deliver immediately under user activation, before any await.
+          Promise.resolve(deliver(file,intent,{session})).then(r=>{
+            last=r;info.textContent=message(r,file)+(r.deliveredName&&r.deliveredName!==file.name?' '+r.deliveredName:'');
+            if(typeof options.onReceipt==='function')try{options.onReceipt(r);}catch(_){}
+          }).catch(e=>{last=receipt(file,'failed',intent,{message:String(e?.message||e)});info.textContent=message(last,file);})
+            .finally(()=>{active=false;for(const b of buttons)b.disabled=false;});
+        });
+        box.appendChild(btn);buttons.push(btn);return btn;
+      }
+      if(!cap.native)add(say(file,'下载原文件','Download original file'),'download');
+      if(cap.share)add(say(file,cap.androidWeb&&['json','markdown'].includes(file.kind)?'分享TXT兼容副本':'分享文件','Share file'),'share');
+      if(cap.local)add(say(file,'另存为（选择文件位置）','Save as (choose location)'),'save-local');
+      add(say(file,'完成 / 取消','Done / Cancel'),'close');
+      box.appendChild(info);layer.appendChild(box);doc.body.appendChild(layer);
+      layer.addEventListener('click',e=>{if(e.target===layer)finish();});
+    });
+  }
+  function openPreview(input) {
+    let file;try{file=prepare(input);}catch(e){return {status:'failed',method:'preview',message:String(e.message||e)};}
+    try{
+      const url=host.URL.createObjectURL(file.blob);
+      const w=host.open(url,'_blank');
+      host.setTimeout(()=>{try{host.URL.revokeObjectURL(url);}catch(_){}},30000);
+      return receipt(file,w?'preview-open-started':'failed','web-preview');
+    }catch(e){return receipt(file,'failed','web-preview',{message:String(e.message||e)});}
+  }
+  function standaloneSource(){
+    return '(function(){window.DCFileIO=('+createCoachFileIO.toString()+')(window);})();';
+  }
+  return Object.freeze({present,deliver,openPreview,standaloneSource,message,capability,
+    readJsonText:text=>JSON.parse(String(text).replace(/^\uFEFF/,''))});
+}
+
+if(window.Capacitor?.isNativePlatform?.()&&typeof window.Capacitor.registerPlugin==="function") window.Capacitor.registerPlugin("LocalSave");
+window.DCFileIO=createCoachFileIO(window);
+</script>
 </head>
-<body class="light">
-<header>
-  <button onclick="window.top.location.reload()" class="btn-sm" style="position:absolute;left:20px">Home</button>
-  <h1>Debate · Flowing Tool <span class="step-label" id="match-title-label"></span></h1>
-  <span style="display:flex;gap:8px;align-items:center">
-    <button id="theme-toggle" onclick="toggleTheme()">Theme</button>
+<body class="light"><script>if(localStorage.getItem("debate_coach_theme")==="dark")document.body.classList.remove("light")</script>
+<header data-dc-nav="flow">
+  <button data-dc-back onclick="parent.DCHandleBack()" class="btn-sm home-btn">返回</button>
+  <h1 data-dc-title>辩论筑基 · 简易流水单 <span class="step-label" id="match-title-label"></span></h1>
+  <span data-dc-actions style="display:flex;gap:8px;align-items:center;margin-left:auto">
+    <button id="theme-toggle" data-dc-theme aria-label="切换界面颜色 / Toggle color theme" onclick="toggleTheme()">界面颜色</button><button class="btn-sm" id="lang-toggle" onclick="toggleToolLanguage()">EN</button>
   </span>
 </header>
 <div id="step-bar-container"></div>
 <main id="main"></main>
 <div id="footer-bar">
-  <button onclick="goStart()" class="btn start-btn-left" style="padding:10px 12px">Start</button>
+  <button onclick="goStart()" class="btn start-btn-left" style="padding:10px 12px">开始页</button>
   <span id="footer-btns" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center"></span>
 </div>
 
-<script>
+<script>var __TBX_LOCALE=window.__TBX_LOCALE=localStorage.getItem('debate_coach_lang')==='zh'?'zh':'en';
 
-// Data
+
+// ── Data ──
 var M=null;
 var VIEW=0; // 0=start, 1=opening, 2=round, 3=summary
 var roundIdx=0;
 var STORAGE_KEY='flowing_v2_data';
 var STORAGE_LIST_KEY='flowing_v2_matches';
 
-var POSITIONS=['','1st Speaker','2nd Speaker','3rd Speaker','4th Speaker','5th Speaker','6th Speaker','Coach','Judge','Other','N/A'];
-var ROUND_TYPES=['Select','Cross-Examination','Direct Confrontation','Deposition','Rebuttal','Summary','Free Debate','Closing Speech','Surprise Attack','Judge Q&A','Other'];
+var POSITIONS=['',(window.__TBX_LOCALE==='en'?'1st Speaker':'一辩'),(window.__TBX_LOCALE==='en'?'2nd Speaker':'二辩'),(window.__TBX_LOCALE==='en'?'3rd Speaker':'三辩'),(window.__TBX_LOCALE==='en'?'4th Speaker':'四辩'),(window.__TBX_LOCALE==='en'?'5th Speaker':'五辩'),(window.__TBX_LOCALE==='en'?'6th Speaker':'六辩'),(window.__TBX_LOCALE==='en'?'Coach':'教练'),(window.__TBX_LOCALE==='en'?'Judge':'评委'),(window.__TBX_LOCALE==='en'?'Other':'其他'),(window.__TBX_LOCALE==='en'?'N/A':'无')];
+var ROUND_TYPES=[(window.__TBX_LOCALE==='en'?'Select':'选择'),(window.__TBX_LOCALE==='en'?'Cross-Examination':'质询'),(window.__TBX_LOCALE==='en'?'Direct Confrontation':'对辩'),(window.__TBX_LOCALE==='en'?'Deposition':'盘问'),(window.__TBX_LOCALE==='en'?'Rebuttal':'申论或驳论'),(window.__TBX_LOCALE==='en'?'Summary':'攻辩小结'),(window.__TBX_LOCALE==='en'?'Free Debate':'自由辩'),(window.__TBX_LOCALE==='en'?'Closing Speech':'总结陈词'),(window.__TBX_LOCALE==='en'?'Surprise Attack':'奇袭'),(window.__TBX_LOCALE==='en'?'Judge Q&A':'评委互动'),(window.__TBX_LOCALE==='en'?'Other':'其它')];
+
+function roundLabel(r,i){
+  if(r.name&&r.name!==(window.__TBX_LOCALE==='en'?'Select':'选择'))return r.name;
+  return (window.__TBX_LOCALE==='en'?'Round ':'环节')+(i+1)+'/'+(M.rounds.length+1);
+}
 
 function save(){if(M){M._updated=Date.now();localStorage.setItem(STORAGE_KEY,JSON.stringify(M));}}
 
@@ -138,8 +564,8 @@ function newMatch(){
   return {
     title:'', date:new Date().toISOString(), _summaryVisited:false,
     rounds:[{
-      name:'Constructive',type:'opening',proPlayer:'1st Speaker',conPlayer:'1st Speaker',
-      proStance:'Pro',conStance:'Con',
+      name:(window.__TBX_LOCALE==='en'?'Constructive':'立论'),type:'opening',proPlayer:(window.__TBX_LOCALE==='en'?'1st Speaker':'一辩'),conPlayer:(window.__TBX_LOCALE==='en'?'1st Speaker':'一辩'),
+      proStance:(window.__TBX_LOCALE==='en'?'Pro':'正方'),conStance:(window.__TBX_LOCALE==='en'?'Con':'反方'),
       pro:{definition:'',scope:'',standard:'',points:['',''],value:'',other:['']},
       con:{definition:'',scope:'',standard:'',points:['',''],value:'',other:['']}
     }],
@@ -153,11 +579,12 @@ function loadMatch(){
   return false;
 }
 
-function migrateData(){
-  if(!M||!M.rounds)return;
-  if(!M.rounds[0].proStance)M.rounds[0].proStance='Pro';
-  if(!M.rounds[0].conStance)M.rounds[0].conStance='Con';
-  M.rounds.forEach(function(r){
+function migrateData(candidate){
+  var target=candidate||M;
+  if(!target||!target.rounds)return;
+  if(!target.rounds[0].proStance)target.rounds[0].proStance=(window.__TBX_LOCALE==='en'?'Pro':'正方');
+  if(!target.rounds[0].conStance)target.rounds[0].conStance=(window.__TBX_LOCALE==='en'?'Con':'反方');
+  target.rounds.forEach(function(r){
     if(r.type==='opening'){
       ['pro','con'].forEach(function(side){
         var o=r[side];
@@ -170,48 +597,49 @@ function migrateData(){
     }
     if(!r.mergedNote)r.mergedNote='';
   });
-  if(!M.assessment)M.assessment={proStruct:'',conStruct:'',proArg:'',conArg:'',impression:'',value:'',overall:'',otherAssess:''};
-  if(M.assessment.otherAssess===undefined)M.assessment.otherAssess='';
-  delete M.assessment.aiNotes;
-  if(M._summaryVisited===undefined)M._summaryVisited=false;
-  if(M.lastView===undefined)M.lastView=1;
-  if(M.lastRoundIdx===undefined)M.lastRoundIdx=0;
+  if(!target.assessment)target.assessment={proStruct:'',conStruct:'',proArg:'',conArg:'',impression:'',value:'',overall:'',otherAssess:''};
+  if(target.assessment.otherAssess===undefined)target.assessment.otherAssess='';
+  delete target.assessment.aiNotes;
+  if(target._summaryVisited===undefined)target._summaryVisited=false;
+  if(target.lastView===undefined)target.lastView=1;
+  if(target.lastRoundIdx===undefined)target.lastRoundIdx=0;
+  return target;
 }
-
-// View switching
+// ── View switching ──
 function goStart(){VIEW=0;render();}
 function goOpening(){VIEW=1;render();}
 function goRound(idx){VIEW=2;roundIdx=idx;render();}
 function goSummary(){save();M._summaryVisited=true;M._lastRoundBeforeSummary=roundIdx;VIEW=3;render();}
 function gotoLast(){if(M&&M.lastView!==undefined&&M.lastView>0){VIEW=M.lastView;if(VIEW===2)roundIdx=(M.lastRoundIdx!==undefined?M.lastRoundIdx:M.rounds.length-1);render();}else if(M){goOpening();}}
 
-function render(){
-  if(M){M.lastView=VIEW;M.lastRoundIdx=roundIdx;}save();
+function render(localeOnly){
+  if(!localeOnly){if(M){M.lastView=VIEW;M.lastRoundIdx=roundIdx;}save();}
   renderStepBar();
   var m=document.getElementById('main');
   var f=document.getElementById('footer-btns');
   updateTitleLabel();
   if(VIEW===0){renderStart(m,f);}
   else if(VIEW===1){renderOpening(m,f);}
-  else if(VIEW===2){renderRound(m,f,roundIdx);}
+  else if(VIEW===2){renderRound(m,f,roundIdx,localeOnly);}
   else if(VIEW===3){renderSummary(m,f);}
 }
 
-// Step bar
+// ── Step bar ──
 function renderStepBar(){
   var container=document.getElementById('step-bar-container');
   if(!M||VIEW===0){container.innerHTML='';return;}
   var total=M.rounds.length+1;
-  var steps=[{name:'Constructive',idx:1}];
+  var steps=[{name:(window.__TBX_LOCALE==='en'?'Constructive':'立论'),idx:1}];
   M.rounds.forEach(function(r,i){if(r.type!=='opening')steps.push({name:r.name,idx:steps.length+1});});
-  steps.push({name:'Summary',idx:total});
+  steps.push({name:(window.__TBX_LOCALE==='en'?'Summary':'汇总分析'),idx:total});
   var h='<div class="step-bar">';
   steps.forEach(function(s,i){
-    var cls='',labelCls='';
-    if(s.name==='Constructive'&&(VIEW===1||(VIEW===2&&roundIdx===0))){cls=' current';labelCls=' current';}
-    else if(VIEW===2&&M.rounds[roundIdx]&&M.rounds[roundIdx].name===s.name&&M.rounds[roundIdx].type!=='opening'){cls=' current';labelCls=' current';}
-    else if(VIEW===3&&s.name==='Summary'){cls=' current';labelCls=' current';}
-    else if(VIEW===3||(VIEW===2&&i<=roundIdx)){cls=' done';labelCls=' done';}
+    var cls='',labelCls='',isCurrent=false;
+    if(VIEW===1)isCurrent=(i===0);
+    else if(VIEW===2)isCurrent=(roundIdx===0?i===0:i===roundIdx);
+    else if(VIEW===3)isCurrent=(i===steps.length-1);
+    if(isCurrent){cls=' current';labelCls=' current';}
+    else if(VIEW===3||(VIEW===2&&i<roundIdx)){cls=' done';labelCls=' done';}
     h+='<span class="dot'+cls+'"></span>';
     h+='<span class="label'+labelCls+'">'+s.idx+'/'+total+'. '+s.name+'</span>';
     if(i<steps.length-1)h+='<span class="sep">──</span>';
@@ -220,39 +648,41 @@ function renderStepBar(){
   container.innerHTML=h;
 }
 
-// View 0: Start
+// ── View 0: Start ──
 function renderStart(m,f){
   f.innerHTML='';
   var hasMatch=!!M;
   var h='<div class="start-wrap">';
   h+='<div class="logo">📋</div>';
-  h+='<h2>Debate · Flowing Tool</h2>';
+  h+=(window.__TBX_LOCALE==='en'?'<h2>Debate · Flowing Tool</h2>':'<h2>辩论筑基 · 简易流水单</h2>');
   h+='<div class="desc"><ul>';
-  h+='<li>📝 <b>Constructive Case</b> — Map both sides: definition, criterion, arguments, value</li>';
-  h+='<li>🎙️ <b>Round Notes</b> — Record clash content round by round</li>';
-  h+='<li>📊 <b>Post-Match Summary</b> — Auto-compiled flow, multi-dimensional assessment</li>';
-  h+='<li>📁 <b>Import / Export</b> — Format templates, JSON/MD/HTML/CSV/TXT</li>';
+  h+=(window.__TBX_LOCALE==='en'?'<li>📝 <b>Constructive Case</b> — Map both sides: definition, criterion, arguments, value</li>':'<li>📝 <b>立论架构</b> — 梳理双方定义、标准、论点、价值</li>');
+  h+=(window.__TBX_LOCALE==='en'?'<li>🎙️ <b>Round Notes</b> — Record clash content round by round</li>':'<li>🎙️ <b>环节记录</b> — 按环节记录双方攻防内容</li>');
+  h+=(window.__TBX_LOCALE==='en'?'<li>📊 <b>Post-Match Summary</b> — Auto-compiled flow, multi-dimensional assessment</li>':'<li>📊 <b>赛后汇总</b> — 自动拼接流水，多维评估论证质量</li>');
+  h+=(window.__TBX_LOCALE==='en'?'<li>📁 <b>Import / Export</b> — Format templates, JSON/MD/HTML/CSV/TXT</li>':'<li>📁 <b>导入/导出</b> — 支持赛制模板、JSON/MD/HTML/CSV/TXT</li>');
   h+='</ul></div>';
   h+='<div class="start-actions">';
-  if(hasMatch)h+='<button class="btn gold" onclick="gotoLast()">Continue Last Match</button>';
-  h+='<button class="btn'+(hasMatch?'':' primary')+'" onclick="startNew()">New Match</button>';
-  h+='<button class="btn-sm" onclick="document.getElementById(\'load-file\').click()">Load Match</button>';
-  h+='<button class="btn-sm" onclick="document.getElementById(\'import-template\').click()">Import Template</button>';
+  if(hasMatch)h+=(window.__TBX_LOCALE==='en'?'<button class="btn gold" onclick="gotoLast()">Continue Last Match</button>':'<button class="btn gold" onclick="gotoLast()">继续上次比赛</button>');
+  h+='<button class="btn'+(hasMatch?'':' primary')+(window.__TBX_LOCALE==='en'?'" onclick="startNew()">New Match</button>':'" onclick="startNew()">开始新比赛</button>');
+  h+=(window.__TBX_LOCALE==='en'?'<button class="btn-sm" onclick="document.getElementById(\'load-file\').click()">Load Match</button>':'<button class="btn-sm" onclick="document.getElementById(\'load-file\').click()">加载历史比赛</button>');
+  h+=(window.__TBX_LOCALE==='en'?'<button class="btn-sm" onclick="document.getElementById(\'import-template\').click()">Import Template</button>':'<button class="btn-sm" onclick="document.getElementById(\'import-template\').click()">导入赛制模板</button>');
   h+='</div>';
-  h+='<input type="file" id="load-file" accept=".json" class="hidden" onchange="loadFromFile(this)">';
-  h+='<input type="file" id="import-template" accept=".json" class="hidden" onchange="importTemplate(this)">';
+  h+='<input type="file" id="load-file" accept=".json,.txt,.md,application/json,text/plain,text/markdown" class="hidden" onchange="loadFromFile(this)">';
+  h+='<input type="file" id="import-template" accept=".json,.txt,.md,application/json,text/plain,text/markdown" class="hidden" onchange="importTemplate(this)">';
   if(hasMatch){
-    h+='<p class="text-sm text-gray mt-12">Match in progress: '+(M.title||'(Untitled)')+'（'+new Date(M.date).toLocaleString()+'）</p>';
+    h+=(window.__TBX_LOCALE==='en'?'<p class="text-sm text-gray mt-12">Match in progress: ':'<p class="text-sm text-gray mt-12">已有进行中的比赛：')+(M.title||(window.__TBX_LOCALE==='en'?'(Untitled)':'(未命名比赛)'))+'（'+new Date(M.date).toLocaleString()+'）</p>';
   }
   h+=renderMatchList();
-  h+='<div style="margin-top:24px"><button class="btn-sm danger" onclick="clearAllData()">Clear All Data</button></div>';
+  // Clear cache button
+  h+=(window.__TBX_LOCALE==='en'?'<div style="margin-top:24px"><button class="btn-sm danger" onclick="clearAllData()">Clear All Data</button></div>':'<div style="margin-top:24px"><button class="btn-sm danger" onclick="clearAllData()">清除全部缓存</button></div>');
   h+='</div>';
   m.innerHTML=h;
 }
 
 function clearAllData(){
-  if(!confirm('Clear all match data?\n\nThis will delete all locally stored flowing data including the current match and match history.\nThis cannot be undone.'))return;
-  if(!confirm('Confirm: Really delete all data?'))return;
+  if(!confirm((window.__TBX_LOCALE==='en'?'Clear all match data?\n\nThis will delete all locally stored flowing data including the current match and match history.\nThis cannot be undone.':'确定清除全部比赛缓存数据？\n\n此操作将删除本地存储的所有简易流水单数据，包括当前比赛和历史比赛列表。\n此操作不可撤销。')))return;
+  if(!confirm((window.__TBX_LOCALE==='en'?'Confirm: Really delete all data?':'再次确认：真的要清除全部数据吗？')))return;
+  // Clear all flowing-related keys
   try{
     var list=JSON.parse(localStorage.getItem(STORAGE_LIST_KEY)||'[]');
     list.forEach(function(item){localStorage.removeItem('flowing_v2_'+item.key);});
@@ -260,18 +690,18 @@ function clearAllData(){
   }catch(e){}
   localStorage.removeItem(STORAGE_KEY);
   M=null;VIEW=0;render();
-  alert('Cache cleared.');
+  alert((window.__TBX_LOCALE==='en'?'Cache cleared.':'缓存已清除。'));
 }
 
 function renderMatchList(){
   try{
     var list=JSON.parse(localStorage.getItem(STORAGE_LIST_KEY)||'[]');
     if(!list.length)return'';
-    var h='<div class="card" style="max-width:500px;text-align:left;margin-top:20px"><h3>Saved Matches</h3>';
+    var h=(window.__TBX_LOCALE==='en'?'<div class="card" style="max-width:500px;text-align:left;margin-top:20px"><h3>Saved Matches</h3>':'<div class="card" style="max-width:500px;text-align:left;margin-top:20px"><h3>已保存比赛</h3>');
     list.forEach(function(item,i){
       h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">';
-      h+='<span style="flex:1;cursor:pointer" onclick="loadMatchByKey(\''+item.key+'\')">'+(item.title||'Untitled')+' <span class="text-sm text-gray">'+new Date(item.date).toLocaleString()+'</span></span>';
-      h+='<button class="btn-sm danger" onclick="deleteMatch(\''+item.key+'\',this)">Delete</button>';
+      h+='<span style="flex:1;cursor:pointer" onclick="loadMatchByKey(\''+item.key+'\')">'+(item.title||(window.__TBX_LOCALE==='en'?'Untitled':'未命名'))+' <span class="text-sm text-gray">'+new Date(item.date).toLocaleString()+'</span></span>';
+      h+='<button class="btn-sm danger" onclick="deleteMatch(\''+item.key+(window.__TBX_LOCALE==='en'?'\',this)">Delete</button>':'\',this)">删除</button>');
       h+='</div>';
     });
     h+='</div>';
@@ -288,10 +718,13 @@ function loadFromFile(input){
   var reader=new FileReader();
   reader.onload=function(e){
     try{
-      var data=JSON.parse(e.target.result);
-      if(data.rounds&&Array.isArray(data.rounds)){M=data;migrateData();M._updated=Date.now();save();saveToList();gotoLast();}
-      else{alert('Invalid match file format.');}
-    }catch(ex){alert('JSON parse error: '+ex.message);}
+      var data=JSON.parse(String(e.target.result).replace(/^\uFEFF/,""));
+      if(data&&Array.isArray(data.rounds)&&data.rounds.length&&data.rounds.every(function(r){return r&&typeof r==="object"&&!Array.isArray(r);})){
+        var candidate=migrateData(data);
+        M=candidate;M._updated=Date.now();save();saveToList();gotoLast();
+      }
+      else{alert((window.__TBX_LOCALE==='en'?'Invalid match file format.':'无效的比赛文件格式'));}
+    }catch(ex){alert((window.__TBX_LOCALE==='en'?'JSON parse error: ':'JSON解析失败：')+ex.message);}
   };
   reader.readAsText(input.files[0]);input.value='';
 }
@@ -301,7 +734,7 @@ function loadMatchByKey(key){
 }
 
 function deleteMatch(key,btn){
-  if(!confirm('Delete this match?'))return;
+  if(!confirm((window.__TBX_LOCALE==='en'?'Delete this match?':'删除这场比赛？')))return;
   localStorage.removeItem('flowing_v2_'+key);
   try{
     var list=JSON.parse(localStorage.getItem(STORAGE_LIST_KEY)||'[]');
@@ -318,58 +751,58 @@ function saveToList(){
     var key='match_'+Date.now();
     localStorage.setItem('flowing_v2_'+key,JSON.stringify(M));
     var existing=list.findIndex(function(x){return x.title===M.title&&x.date===M.date;});
-    var entry={key:key,title:M.title||'Untitled',date:M.date||new Date().toISOString()};
+    var entry={key:key,title:M.title||(window.__TBX_LOCALE==='en'?'Untitled':'未命名'),date:M.date||new Date().toISOString()};
     if(existing>=0)list[existing]=entry;else list.push(entry);
     if(list.length>50)list=list.slice(-50);
     localStorage.setItem(STORAGE_LIST_KEY,JSON.stringify(list));
   }catch(e){}
 }
 
-// View 1: Opening
+// ── View 1: Opening ──
 function renderOpening(m,f){
   var r=M.rounds[0];
-  var h='<div class="round-name-center">Constructive</div>';
-  h+='<div style="text-align:center;margin-bottom:16px"><input value="'+esc(M.title||'')+'" oninput="M.title=this.value;save();updateTitleLabel()" placeholder="Click to enter match title" style="background:transparent;border:none;border-bottom:1px dashed var(--border);color:var(--text);font-size:14px;text-align:center;padding:4px 12px;width:300px;max-width:100%;font-family:inherit;outline:none"></div>';
-  h+='<div class="card"><h3>Proposition</h3>';
+  var h=(window.__TBX_LOCALE==='en'?'<div class="round-name-center">Constructive</div>':'<div class="round-name-center">立论</div>');
+  h+='<div style="text-align:center;margin-bottom:16px"><input value="'+esc(M.title||'')+(window.__TBX_LOCALE==='en'?'" oninput="M.title=this.value;save();updateTitleLabel()" placeholder="Click to enter match title" style="background:transparent;border:none;border-bottom:1px dashed var(--border);color:var(--text);font-size:14px;text-align:center;padding:4px 12px;width:300px;max-width:100%;font-family:inherit;outline:none"></div>':'" oninput="M.title=this.value;save();updateTitleLabel()" placeholder="点击输入比赛名称" style="background:transparent;border:none;border-bottom:1px dashed var(--border);color:var(--text);font-size:14px;text-align:center;padding:4px 12px;width:300px;max-width:100%;font-family:inherit;outline:none"></div>');
+  h+=(window.__TBX_LOCALE==='en'?'<div class="card"><h3>Proposition</h3>':'<div class="card"><h3>正方</h3>');
   h+=openingFields('pro',r.proPlayer,'setRoundField(0,\'proPlayer\',this.value)');
   h+='</div>';
-  h+='<div class="vs-divider">'+(r.proStance||'Pro')+' VS '+(r.conStance||'Con')+'</div>';
-  h+='<div class="card"><h3>Opposition</h3>';
+  h+='<div class="vs-divider">'+(r.proStance||(window.__TBX_LOCALE==='en'?'Pro':'正方'))+' VS '+(r.conStance||(window.__TBX_LOCALE==='en'?'Con':'反方'))+'</div>';
+  h+=(window.__TBX_LOCALE==='en'?'<div class="card"><h3>Opposition</h3>':'<div class="card"><h3>反方</h3>');
   h+=openingFields('con',r.conPlayer,'setRoundField(0,\'conPlayer\',this.value)');
   h+='</div>';
   m.innerHTML=h;
-  f.innerHTML='<button class="btn gold" onclick="nextFromOpening()">Next →</button>';
+  f.innerHTML=(window.__TBX_LOCALE==='en'?'<button class="btn gold" onclick="nextFromOpening()">Next →</button>':'<button class="btn gold" onclick="nextFromOpening()">下一环节 →</button>');
 }
 
 function openingFields(side,playerVal,playerOnchange){
   var stanceKey=side==='pro'?'proStance':'conStance';
-  var stanceVal=M.rounds[0][stanceKey]||(side==='pro'?'Pro':'Con');
-  var h='<div class="row-inp"><label>Stance</label><input value="'+esc(stanceVal)+'" oninput="setRoundField(0,\''+stanceKey+'\',this.value)" placeholder="Enter stance name"></div>';
-  h+='<div class="row-inp"><label>Speaker</label><select onchange="'+playerOnchange+'">'+POSITIONS.map(function(x){return'<option '+(playerVal===x?'selected':'')+'>'+(x||'— Select —')+'</option>';}).join('')+'</select></div>';
+  var stanceVal=M.rounds[0][stanceKey]||(side==='pro'?(window.__TBX_LOCALE==='en'?'Pro':'正方'):(window.__TBX_LOCALE==='en'?'Con':'反方'));
+  var h=(window.__TBX_LOCALE==='en'?'<div class="row-inp"><label>Stance</label><input value="':'<div class="row-inp"><label>持方</label><input value="')+esc(stanceVal)+'" oninput="setRoundField(0,\''+stanceKey+(window.__TBX_LOCALE==='en'?'\',this.value)" placeholder="Enter stance name"></div>':'\',this.value)" placeholder="请输入持方名称"></div>');
+  h+=(window.__TBX_LOCALE==='en'?'<div class="row-inp"><label>Speaker</label><select onchange="':'<div class="row-inp"><label>选手</label><select onchange="')+playerOnchange+'">'+POSITIONS.map(function(x){return'<option '+(playerVal===x?'selected':'')+'>'+(x||(window.__TBX_LOCALE==='en'?'— Select —':'— 选择 —'))+'</option>';}).join('')+'</select></div>';
   var o=M.rounds[0][side];
-  var fields=[['Inherent Definition (Domain)','definition'],['Scope of Discussion','scope'],['Criterion','standard']];
+  var fields=[[(window.__TBX_LOCALE==='en'?'Inherent Definition (Domain)':'固有定义（域）'),'definition'],[(window.__TBX_LOCALE==='en'?'Scope of Discussion':'论域切入'),'scope'],[(window.__TBX_LOCALE==='en'?'Criterion':'标准'),'standard']];
   fields.forEach(function(f){
-    h+='<div class="row-inp"><label>'+f[0]+'</label><textarea oninput="setOpeningField(0,\''+side+'\',\''+f[1]+'\',this.value)" placeholder="Enter text">'+esc(o[f[1]]||'')+'</textarea></div>';
+    h+='<div class="row-inp"><label>'+f[0]+'</label><textarea oninput="setOpeningField(0,\''+side+'\',\''+f[1]+(window.__TBX_LOCALE==='en'?'\',this.value)" placeholder="Enter text">':'\',this.value)" placeholder="请输入">')+esc(o[f[1]]||'')+'</textarea></div>';
   });
   // Points array
   if(!o.points||!Array.isArray(o.points))o.points=['',''];
   if(o.points.length<2)o.points.push('');
   o.points.forEach(function(pt,i){
     h+='<div class="plus-one-row">';
-    h+='<span class="plus-label">Sub-Argument'+(o.points.length>1?(i+1):'')+'</span>';
-    h+='<div class="ta-wrap"><textarea oninput="setOpeningArrField(0,\''+side+'\',\'points\','+i+',this.value)" placeholder="Enter text">'+esc(pt)+'</textarea></div>';
-    if(i===o.points.length-1)h+='<div class="plus-col"><button class="plus-one-btn" onclick="addOpeningArrField(0,\''+side+'\',\'points\')">+1</button></div>';
+    h+=(window.__TBX_LOCALE==='en'?'<span class="plus-label">Sub-Argument':'<span class="plus-label">分论点')+(o.points.length>1?(i+1):'')+'</span>';
+    h+='<div class="ta-wrap"><textarea oninput="setOpeningArrField(0,\''+side+'\',\'points\','+i+(window.__TBX_LOCALE==='en'?',this.value)" placeholder="Enter text">':',this.value)" placeholder="请输入">')+esc(pt)+'</textarea></div>';
+    if(i===o.points.length-1)h+='<div class="plus-col"><button class="plus-one-btn" onclick="addOpeningArrField(0,\''+side+(window.__TBX_LOCALE==='en'?'\',\'points\')">+1</button></div>':'\',\'points\')">+1栏</button></div>');
     h+='</div>';
   });
   // Value
-  h+='<div class="row-inp"><label>Value Point</label><textarea oninput="setOpeningField(0,\''+side+'\',\'value\',this.value)" placeholder="Enter text">'+esc(o.value||'')+'</textarea></div>';
+  h+=(window.__TBX_LOCALE==='en'?'<div class="row-inp"><label>Value Point</label><textarea oninput="setOpeningField(0,\'':'<div class="row-inp"><label>价值点</label><textarea oninput="setOpeningField(0,\'')+side+(window.__TBX_LOCALE==='en'?'\',\'value\',this.value)" placeholder="Enter text">':'\',\'value\',this.value)" placeholder="请输入">')+esc(o.value||'')+'</textarea></div>';
   // Other array
   if(!o.other||!Array.isArray(o.other))o.other=[''];
   o.other.forEach(function(ot,i){
     h+='<div class="plus-one-row">';
-    h+='<span class="plus-label">Additional'+(o.other.length>1?(i+1):'')+'</span>';
-    h+='<div class="ta-wrap"><textarea oninput="setOpeningArrField(0,\''+side+'\',\'other\','+i+',this.value)" placeholder="Enter text">'+esc(ot)+'</textarea></div>';
-    if(i===o.other.length-1)h+='<div class="plus-col"><button class="plus-one-btn" onclick="addOpeningArrField(0,\''+side+'\',\'other\')">+1</button></div>';
+    h+=(window.__TBX_LOCALE==='en'?'<span class="plus-label">Additional':'<span class="plus-label">其它补充')+(o.other.length>1?(i+1):'')+'</span>';
+    h+='<div class="ta-wrap"><textarea oninput="setOpeningArrField(0,\''+side+'\',\'other\','+i+(window.__TBX_LOCALE==='en'?',this.value)" placeholder="Enter text">':',this.value)" placeholder="请输入">')+esc(ot)+'</textarea></div>';
+    if(i===o.other.length-1)h+='<div class="plus-col"><button class="plus-one-btn" onclick="addOpeningArrField(0,\''+side+(window.__TBX_LOCALE==='en'?'\',\'other\')">+1</button></div>':'\',\'other\')">+1栏</button></div>');
     h+='</div>';
   });
   return h;
@@ -386,70 +819,71 @@ function addOpeningArrField(ri,side,arrName){
 function setRoundField(ri,field,val){M.rounds[ri][field]=val;save();}
 
 function nextFromOpening(){
-  if(!M.rounds[1]){M.rounds.push({name:'Select',type:null,proPlayer:'',conPlayer:'',proContent:'',conContent:'',mergedNote:''});save();}
+  if(!M.rounds[1]){M.rounds.push({name:(window.__TBX_LOCALE==='en'?'Select':'选择'),type:null,proPlayer:'',conPlayer:'',proContent:'',conContent:'',mergedNote:''});save();}
   VIEW=2;roundIdx=1;render();
 }
 
-// View 2: Round
-function renderRound(m,f,idx){
-  save();
+// ── View 2: Round ──
+function renderRound(m,f,idx,localeOnly){
+  if(!localeOnly)save();
   var r=M.rounds[idx];
   if(!r.proContent)r.proContent='';
   if(!r.conContent)r.conContent='';
   if(!r.mergedNote)r.mergedNote='';
-  var proStance=M.rounds[0].proStance||'Pro';
-  var conStance=M.rounds[0].conStance||'Con';
+  var proStance=M.rounds[0].proStance||(window.__TBX_LOCALE==='en'?'Pro':'正方');
+  var conStance=M.rounds[0].conStance||(window.__TBX_LOCALE==='en'?'Con':'反方');
   var h='<div class="round-name-center">'+r.name+' · '+esc(proStance)+' VS '+esc(conStance)+'</div>';
   // Config bar
   h+='<div class="round-config">';
-  h+='<span class="config-text">Round</span>';
-  h+='<select onchange="onRoundTypeChange('+idx+',this)">'+ROUND_TYPES.map(function(x){return'<option '+(r.name===x?'selected':'')+'>'+x+'</option>';}).join('')+'</select>';
-  h+='<span class="config-text">, Pro</span>';
-  h+='<select onchange="setRoundField('+idx+',\'proPlayer\',this.value)">'+POSITIONS.map(function(x){return'<option '+(r.proPlayer===x?'selected':'')+'>'+(x||'— Select —')+'</option>';}).join('')+'</select>';
-  h+='<span class="config-text"> VS Con</span>';
-  h+='<select onchange="setRoundField('+idx+',\'conPlayer\',this.value)">'+POSITIONS.map(function(x){return'<option '+(r.conPlayer===x?'selected':'')+'>'+(x||'— Select —')+'</option>';}).join('')+'</select>';
+  h+=(window.__TBX_LOCALE==='en'?'<span class="config-text">Round</span>':'<span class="config-text">环节</span>');
+  h+='<select onchange="onRoundTypeChange('+idx+',this)">'+ROUND_TYPES.map(function(x){return'<option value="'+x+'"'+(r.name===x?'selected':'')+'>'+(x===(window.__TBX_LOCALE==='en'?'Select':'选择')?roundLabel(r,idx):x)+'</option>';}).join('')+'</select>';
+  h+=(window.__TBX_LOCALE==='en'?'<span class="config-text">, Pro</span>':'<span class="config-text">，正方</span>');
+  h+='<select onchange="setRoundField('+idx+',\'proPlayer\',this.value)">'+POSITIONS.map(function(x){return'<option '+(r.proPlayer===x?'selected':'')+'>'+(x||(window.__TBX_LOCALE==='en'?'— Select —':'— 选择 —'))+'</option>';}).join('')+'</select>';
+  h+=(window.__TBX_LOCALE==='en'?'<span class="config-text"> VS Con</span>':'<span class="config-text"> VS 反方</span>');
+  h+='<select onchange="setRoundField('+idx+',\'conPlayer\',this.value)">'+POSITIONS.map(function(x){return'<option '+(r.conPlayer===x?'selected':'')+'>'+(x||(window.__TBX_LOCALE==='en'?'— Select —':'— 选择 —'))+'</option>';}).join('')+'</select>';
   h+='</div>';
   // Pro
-  h+='<div class="card"><h3>Pro'+(r.proPlayer?' · '+r.proPlayer:'')+'</h3>';
-  h+='<div class="row-inp"><textarea style="min-height:140px" oninput="setRoundField('+idx+',\'proContent\',this.value)" placeholder="Enter notes">'+esc(r.proContent)+'</textarea></div>';
+  h+=(window.__TBX_LOCALE==='en'?'<div class="card"><h3>Pro':'<div class="card"><h3>正方')+(r.proPlayer?' · '+r.proPlayer:'')+'</h3>';
+  h+='<div class="row-inp"><textarea style="min-height:140px" oninput="setRoundField('+idx+(window.__TBX_LOCALE==='en'?',\'proContent\',this.value)" placeholder="Enter notes">':',\'proContent\',this.value)" placeholder="请输入">')+esc(r.proContent)+'</textarea></div>';
   h+='</div>';
   h+='<div class="vs-divider">'+esc(proStance)+' VS '+esc(conStance)+'</div>';
   // Con
-  h+='<div class="card"><h3>Con'+(r.conPlayer?' · '+r.conPlayer:'')+'</h3>';
-  h+='<div class="row-inp"><textarea style="min-height:140px" oninput="setRoundField('+idx+',\'conContent\',this.value)" placeholder="Enter notes">'+esc(r.conContent)+'</textarea></div>';
+  h+=(window.__TBX_LOCALE==='en'?'<div class="card"><h3>Con':'<div class="card"><h3>反方')+(r.conPlayer?' · '+r.conPlayer:'')+'</h3>';
+  h+='<div class="row-inp"><textarea style="min-height:140px" oninput="setRoundField('+idx+(window.__TBX_LOCALE==='en'?',\'conContent\',this.value)" placeholder="Enter notes">':',\'conContent\',this.value)" placeholder="请输入">')+esc(r.conContent)+'</textarea></div>';
   h+='</div>';
   // Merged
-  h+='<div class="card"><h3>Merged Notes</h3>';
-  h+='<div class="row-inp"><textarea style="min-height:80px" oninput="setRoundField('+idx+',\'mergedNote\',this.value)" placeholder="Enter notes">'+esc(r.mergedNote)+'</textarea></div>';
+  h+=(window.__TBX_LOCALE==='en'?'<div class="card"><h3>Merged Notes</h3>':'<div class="card"><h3>合并记录或备注</h3>');
+  h+='<div class="row-inp"><textarea style="min-height:80px" oninput="setRoundField('+idx+(window.__TBX_LOCALE==='en'?',\'mergedNote\',this.value)" placeholder="Enter notes">':',\'mergedNote\',this.value)" placeholder="请输入">')+esc(r.mergedNote)+'</textarea></div>';
   h+='</div>';
   m.innerHTML=h;
 
+  // Footer: prev at left, others at center/right
   var isLastRound=(idx===M.rounds.length-1);
-  var isSummary= (r.name==='Closing Speech');
+  var isSummary= (r.name===(window.__TBX_LOCALE==='en'?'Closing Speech':'总结陈词'));
   var shouldConfirm= isLastRound && (isSummary || M._summaryVisited);
-  var summaryBtnLabel=M._summaryVisited?'Back to Summary':'Finish Match & Summarize';
+  var summaryBtnLabel=M._summaryVisited?(window.__TBX_LOCALE==='en'?'Back to Summary':'回到汇总页面'):(window.__TBX_LOCALE==='en'?'Finish Match & Summarize':'比赛结束，进行汇总');
 
   f.innerHTML='';
-  f.innerHTML+='<button class="btn" onclick="goPrev('+idx+')">← Prev</button>';
-  f.innerHTML+='<button class="btn gold" onclick="goOpening()">Constructive</button>';
+  f.innerHTML+='<button class="btn" onclick="goPrev('+idx+(window.__TBX_LOCALE==='en'?')">← Prev</button>':')">← 上一环节</button>');
+  f.innerHTML+=(window.__TBX_LOCALE==='en'?'<button class="btn gold" onclick="goOpening()">Constructive</button>':'<button class="btn gold" onclick="goOpening()">立论</button>');
   f.innerHTML+='<span class="spacer"></span>';
-  f.innerHTML+='<button class="btn gold" onclick="goNext('+idx+','+(shouldConfirm?'true':'false')+')">Next →</button>';
+  f.innerHTML+='<button class="btn gold" onclick="goNext('+idx+','+(shouldConfirm?'true':'false')+(window.__TBX_LOCALE==='en'?')">Next →</button>':')">下一环节 →</button>');
   f.innerHTML+='<button class="btn-sm" style="margin-left:8px" onclick="goSummary()">'+summaryBtnLabel+'</button>';
   if(idx>0){
-    f.innerHTML+='<button class="btn-sm danger" style="margin-left:16px" onclick="deleteRound('+idx+')">Delete Round</button>';
+    f.innerHTML+='<button class="btn-sm danger" style="margin-left:16px" onclick="deleteRound('+idx+(window.__TBX_LOCALE==='en'?')">Delete Round</button>':')">删除本环节</button>');
   }
 }
 
 function onRoundTypeChange(idx,sel){
   var val=sel.value;
-  if(val==='Select'){M.rounds[idx].name='Select';save();render();return;}
-  if(val==='Other'){
-    var custom=prompt('Enter custom round name:','Other');
-    if(custom&&custom.trim())val=custom.trim();else{M.rounds[idx].name='Other';sel.value='Other';save();return;}
+  if(val===(window.__TBX_LOCALE==='en'?'Select':'选择')){M.rounds[idx].name=(window.__TBX_LOCALE==='en'?'Select':'选择');save();render();return;}
+  if(val===(window.__TBX_LOCALE==='en'?'Other':'其它')){
+    var custom=prompt((window.__TBX_LOCALE==='en'?'Enter custom round name:':'请输入自定义环节名称：'),(window.__TBX_LOCALE==='en'?'Other':'其它'));
+    if(custom&&custom.trim())val=custom.trim();else{M.rounds[idx].name=(window.__TBX_LOCALE==='en'?'Other':'其它');sel.value=(window.__TBX_LOCALE==='en'?'Other':'其它');save();return;}
   }
   M.rounds[idx].name=val;
-  if(val==='Free Debate'){M.rounds[idx].proPlayer='Other';M.rounds[idx].conPlayer='Other';}
-  else if(val==='Closing Speech'){M.rounds[idx].proPlayer='4th Speaker';M.rounds[idx].conPlayer='4th Speaker';}
+  if(val===(window.__TBX_LOCALE==='en'?'Free Debate':'自由辩')){M.rounds[idx].proPlayer=(window.__TBX_LOCALE==='en'?'Other':'其他');M.rounds[idx].conPlayer=(window.__TBX_LOCALE==='en'?'Other':'其他');}
+  else if(val===(window.__TBX_LOCALE==='en'?'Closing Speech':'总结陈词')){M.rounds[idx].proPlayer=(window.__TBX_LOCALE==='en'?'4th Speaker':'四辩');M.rounds[idx].conPlayer=(window.__TBX_LOCALE==='en'?'4th Speaker':'四辩');}
   save();render();
 }
 
@@ -462,118 +896,119 @@ function goPrev(idx){
 function goNext(idx,shouldConfirm){
   save();
   if(shouldConfirm){
-    if(!confirm('This is the closing round or the last round before summary. Add another round?'))return;
+    if(!confirm((window.__TBX_LOCALE==='en'?'This is the closing round or the last round before summary. Add another round?':'已是总结环节或汇总前最后一个环节，是否确认新增一个环节？')))return;
   }
   var nextIdx=idx+1;
   if(!M.rounds[nextIdx]){
-    M.rounds.splice(nextIdx,0,{name:'Select',type:null,proPlayer:'',conPlayer:'',proContent:'',conContent:'',mergedNote:''});save();
+    M.rounds.splice(nextIdx,0,{name:(window.__TBX_LOCALE==='en'?'Select':'选择'),type:null,proPlayer:'',conPlayer:'',proContent:'',conContent:'',mergedNote:''});save();
   }
   VIEW=2;roundIdx=nextIdx;render();
 }
 
 function deleteRound(idx){
-  if(idx===0){alert('The constructive round cannot be deleted.');return;}
-  if(!confirm('Delete "'+M.rounds[idx].name+'" round? This cannot be undone.'))return;
+  if(idx===0){alert((window.__TBX_LOCALE==='en'?'The constructive round cannot be deleted.':'立论环节不可删除'));return;}
+  if(!confirm((window.__TBX_LOCALE==='en'?'Delete "':'确定删除「')+M.rounds[idx].name+(window.__TBX_LOCALE==='en'?'" round? This cannot be undone.':'」环节？此操作不可撤销。')))return;
   M.rounds.splice(idx,1);save();
   if(M.rounds.length<=1){goOpening();return;}
   if(roundIdx>=M.rounds.length)roundIdx=M.rounds.length-1;
   render();
 }
 
-// View 3: Summary
+// ── View 3: Summary ──
 function renderSummary(m,f){
   save();
+  // Always rebuild auto-summary from current data
   var proSummary=buildSideSummary('pro');
   var conSummary=buildSideSummary('con');
   M._proSummary=proSummary;
   M._conSummary=conSummary;
 
-  var h='<div class="round-name-center">Summary & Analysis</div>';
-  h+='<div style="text-align:center;margin-bottom:16px"><input value="'+esc(M.title||'')+'" oninput="M.title=this.value;save();updateTitleLabel()" placeholder="Click to enter match title" style="background:transparent;border:none;border-bottom:1px dashed var(--border);color:var(--text);font-size:14px;text-align:center;padding:4px 12px;width:300px;max-width:100%;font-family:inherit;outline:none"></div>';
-  var proStance=M.rounds[0].proStance||'Pro';
-  var conStance=M.rounds[0].conStance||'Con';
-  h+='<h3 style="color:var(--gold);margin-bottom:8px">Match Flow Summary</h3>';
+  var h=(window.__TBX_LOCALE==='en'?'<div class="round-name-center">Summary & Analysis</div>':'<div class="round-name-center">汇总分析</div>');
+  h+='<div style="text-align:center;margin-bottom:16px"><input value="'+esc(M.title||'')+(window.__TBX_LOCALE==='en'?'" oninput="M.title=this.value;save();updateTitleLabel()" placeholder="Click to enter match title" style="background:transparent;border:none;border-bottom:1px dashed var(--border);color:var(--text);font-size:14px;text-align:center;padding:4px 12px;width:300px;max-width:100%;font-family:inherit;outline:none"></div>':'" oninput="M.title=this.value;save();updateTitleLabel()" placeholder="点击输入比赛名称" style="background:transparent;border:none;border-bottom:1px dashed var(--border);color:var(--text);font-size:14px;text-align:center;padding:4px 12px;width:300px;max-width:100%;font-family:inherit;outline:none"></div>');
+  var proStance=M.rounds[0].proStance||(window.__TBX_LOCALE==='en'?'Pro':'正方');
+  var conStance=M.rounds[0].conStance||(window.__TBX_LOCALE==='en'?'Con':'反方');
+  h+=(window.__TBX_LOCALE==='en'?'<h3 style="color:var(--gold);margin-bottom:8px">Match Flow Summary</h3>':'<h3 style="color:var(--gold);margin-bottom:8px">比赛流水汇总</h3>');
   h+='<div class="card summary-box"><h3>'+esc(proStance)+'</h3>';
   h+='<textarea oninput="M._proSummary=this.value;save()">'+esc(M._proSummary)+'</textarea></div>';
   h+='<div class="vs-divider">'+esc(proStance)+' VS '+esc(conStance)+'</div>';
   h+='<div class="card summary-box"><h3>'+esc(conStance)+'</h3>';
   h+='<textarea oninput="M._conSummary=this.value;save()">'+esc(M._conSummary)+'</textarea></div>';
 
-  // Assessment
-  h+='<div class="card mt-12"><h3>Argument Assessment</h3>';
-  h+=assessField('Pro Structure','proStruct');
-  h+=assessField('Con Structure','conStruct');
-  h+=assessField('Pro Argument Quality','proArg');
-  h+=assessField('Con Argument Quality','conArg');
+  // Assessment blocks
+  h+=(window.__TBX_LOCALE==='en'?'<div class="card mt-12"><h3>Argument Assessment</h3>':'<div class="card mt-12"><h3>论证完成度评估</h3>');
+  h+=assessField((window.__TBX_LOCALE==='en'?'Pro Structure':'正方架构完成度'),'proStruct');
+  h+=assessField((window.__TBX_LOCALE==='en'?'Con Structure':'反方架构完成度'),'conStruct');
+  h+=assessField((window.__TBX_LOCALE==='en'?'Pro Argument Quality':'正方论证质量'),'proArg');
+  h+=assessField((window.__TBX_LOCALE==='en'?'Con Argument Quality':'反方论证质量'),'conArg');
   h+='</div>';
 
-  h+='<div class="card mt-12"><h3>Impression Assessment</h3>';
-  h+=assessField('General Impression','impression');
-  h+=assessField('Discussion Value','value');
-  h+=assessField('Overall Assessment','overall');
+  h+=(window.__TBX_LOCALE==='en'?'<div class="card mt-12"><h3>Impression Assessment</h3>':'<div class="card mt-12"><h3>心证评估</h3>');
+  h+=assessField((window.__TBX_LOCALE==='en'?'General Impression':'一般情绪/印象'),'impression');
+  h+=assessField((window.__TBX_LOCALE==='en'?'Discussion Value':'讨论价值'),'value');
+  h+=assessField((window.__TBX_LOCALE==='en'?'Overall Assessment':'总体定性'),'overall');
   h+='</div>';
 
-  h+='<div class="card mt-12"><h3>Other Notes</h3>';
-  h+=assessField('Other Notes','otherAssess');
+  h+=(window.__TBX_LOCALE==='en'?'<div class="card mt-12"><h3>Other Notes</h3>':'<div class="card mt-12"><h3>其它评估</h3>');
+  h+=assessField((window.__TBX_LOCALE==='en'?'Other Notes':'其它评估'),'otherAssess');
   h+='</div>';
 
-  // Export
+  // Export group
   h+='<div class="export-group">';
-  h+='<h3>Export Full Report</h3>';
-  h+='<p class="note">All formats include the complete flow record and assessment:</p>';
+  h+=(window.__TBX_LOCALE==='en'?'<h3>Export Full Report</h3>':'<h3>汇总导出上述全部内容</h3>');
+  h+=(window.__TBX_LOCALE==='en'?'<p class="note">All formats include the complete flow record and assessment:</p>':'<p class="note">以下格式均包含完整流水记录和评估内容：</p>');
   h+='<div style="display:flex;gap:8px;flex-wrap:wrap">';
-  h+='<button class="btn-sm" onclick="exportMatch(\'md\')">Export Markdown</button>';
-  h+='<button class="btn-sm" onclick="exportMatch(\'html\')">Export HTML</button>';
-  h+='<button class="btn-sm" onclick="exportMatch(\'csv\')">Export CSV</button>';
-  h+='<button class="btn-sm" onclick="exportMatch(\'txt\')">Export Text</button>';
-  h+='<button class="btn-sm" style="color:var(--gold);border-color:var(--gold)" onclick="exportMatch(\'json\')">Export JSON <span class="text-sm text-gray">(JSON only: supports re-import)</span></button>';
+  h+=(window.__TBX_LOCALE==='en'?'<button class="btn-sm" onclick="exportMatch(\'md\')">Export Markdown</button>':'<button class="btn-sm" onclick="exportMatch(\'md\')">导出 MD</button>');
+  h+=(window.__TBX_LOCALE==='en'?'<button class="btn-sm" onclick="exportMatch(\'html\')">Export HTML</button>':'<button class="btn-sm" onclick="exportMatch(\'html\')">导出 HTML</button>');
+  h+=(window.__TBX_LOCALE==='en'?'<button class="btn-sm" onclick="exportMatch(\'csv\')">Export CSV</button>':'<button class="btn-sm" onclick="exportMatch(\'csv\')">导出 CSV</button>');
+  h+=(window.__TBX_LOCALE==='en'?'<button class="btn-sm" onclick="exportMatch(\'txt\')">Export Text</button>':'<button class="btn-sm" onclick="exportMatch(\'txt\')">导出 TXT</button>');
+  h+=(window.__TBX_LOCALE==='en'?'<button class="btn-sm" style="color:var(--gold);border-color:var(--gold)" onclick="exportMatch(\'json\')">Export JSON <span class="text-sm text-gray">(JSON only: supports re-import)</span></button>':'<button class="btn-sm" style="color:var(--gold);border-color:var(--gold)" onclick="exportMatch(\'json\')">导出 JSON <span class="text-sm text-gray">（仅有此格式支持导入历史记录）</span></button>');
   h+='</div></div>';
   m.innerHTML=h;
 
   f.innerHTML='';
-  f.innerHTML+='<button class="btn" onclick="goPrevFromSummary()">← Prev</button>';
-  f.innerHTML+='<button class="btn-sm" style="margin-left:16px" onclick="exportTemplate()">Export Round Template</button>';
+  f.innerHTML+=(window.__TBX_LOCALE==='en'?'<button class="btn" onclick="goPrevFromSummary()">← Prev</button>':'<button class="btn" onclick="goPrevFromSummary()">← 上一环节</button>');
+  f.innerHTML+=(window.__TBX_LOCALE==='en'?'<button class="btn-sm" style="margin-left:16px" onclick="exportTemplate()">Export Round Template</button>':'<button class="btn-sm" style="margin-left:16px" onclick="exportTemplate()">导出本场比赛赛制为模板</button>');
   f.innerHTML+='<span class="spacer"></span>';
-  f.innerHTML+='<button class="btn-sm danger" onclick="clearAllData()">Clear All Data</button>';
+  f.innerHTML+=(window.__TBX_LOCALE==='en'?'<button class="btn-sm danger" onclick="clearAllData()">Clear All Data</button>':'<button class="btn-sm danger" onclick="clearAllData()">清除全部缓存</button>');
 }
 
 function buildSideSummary(side){
   var lines=[];
-  M.rounds.forEach(function(r){
-    var label='['+r.name+']';
+  M.rounds.forEach(function(r,i){
+    var label=(window.__TBX_LOCALE==='en'?'[':'【')+roundLabel(r,i)+(window.__TBX_LOCALE==='en'?']':'】');
     if(side==='pro'){
       if(r.type==='opening'){
         var o=r.pro;
         lines.push(label);
-        if(o.definition)lines.push('Inherent Definition (Domain): '+o.definition);
-        if(o.scope)lines.push('Scope of Discussion: '+o.scope);
-        if(o.standard)lines.push('Criterion: '+o.standard);
+        if(o.definition)lines.push((window.__TBX_LOCALE==='en'?'Inherent Definition (Domain): ':'固有定义（域）：')+o.definition);
+        if(o.scope)lines.push((window.__TBX_LOCALE==='en'?'Scope of Discussion: ':'论域切入：')+o.scope);
+        if(o.standard)lines.push((window.__TBX_LOCALE==='en'?'Criterion: ':'标准：')+o.standard);
         var pts=Array.isArray(o.points)?o.points:[o.points];
-        pts.forEach(function(p,i){if(p)lines.push('Sub-Argument'+(pts.length>1?(i+1):'')+': '+p);});
-        if(o.value)lines.push('Value Point: '+o.value);
+        pts.forEach(function(p,i){if(p)lines.push((window.__TBX_LOCALE==='en'?'Sub-Argument':'分论点')+(pts.length>1?(i+1):'')+(window.__TBX_LOCALE==='en'?': ':'：')+p);});
+        if(o.value)lines.push((window.__TBX_LOCALE==='en'?'Value Point: ':'价值点：')+o.value);
         var oths=Array.isArray(o.other)?o.other:[o.other];
-        oths.forEach(function(ot,i){if(ot)lines.push('Additional'+(oths.length>1?(i+1):'')+': '+ot);});
+        oths.forEach(function(ot,i){if(ot)lines.push((window.__TBX_LOCALE==='en'?'Additional':'其它补充')+(oths.length>1?(i+1):'')+(window.__TBX_LOCALE==='en'?': ':'：')+ot);});
       }else{
         if(r.proContent||r.proPlayer)lines.push(label+' '+(r.proPlayer||'')+'\n'+(r.proContent||''));
         else lines.push(label);
-        if(r.mergedNote)lines.push('Merged/Notes: '+r.mergedNote);
+        if(r.mergedNote)lines.push((window.__TBX_LOCALE==='en'?'Merged/Notes: ':'合并/备注：')+r.mergedNote);
       }
     }else{
       if(r.type==='opening'){
         var o=r.con;
         lines.push(label);
-        if(o.definition)lines.push('Inherent Definition (Domain): '+o.definition);
-        if(o.scope)lines.push('Scope of Discussion: '+o.scope);
-        if(o.standard)lines.push('Criterion: '+o.standard);
+        if(o.definition)lines.push((window.__TBX_LOCALE==='en'?'Inherent Definition (Domain): ':'固有定义（域）：')+o.definition);
+        if(o.scope)lines.push((window.__TBX_LOCALE==='en'?'Scope of Discussion: ':'论域切入：')+o.scope);
+        if(o.standard)lines.push((window.__TBX_LOCALE==='en'?'Criterion: ':'标准：')+o.standard);
         var pts=Array.isArray(o.points)?o.points:[o.points];
-        pts.forEach(function(p,i){if(p)lines.push('Sub-Argument'+(pts.length>1?(i+1):'')+': '+p);});
-        if(o.value)lines.push('Value Point: '+o.value);
+        pts.forEach(function(p,i){if(p)lines.push((window.__TBX_LOCALE==='en'?'Sub-Argument':'分论点')+(pts.length>1?(i+1):'')+(window.__TBX_LOCALE==='en'?': ':'：')+p);});
+        if(o.value)lines.push((window.__TBX_LOCALE==='en'?'Value Point: ':'价值点：')+o.value);
         var oths=Array.isArray(o.other)?o.other:[o.other];
-        oths.forEach(function(ot,i){if(ot)lines.push('Additional'+(oths.length>1?(i+1):'')+': '+ot);});
+        oths.forEach(function(ot,i){if(ot)lines.push((window.__TBX_LOCALE==='en'?'Additional':'其它补充')+(oths.length>1?(i+1):'')+(window.__TBX_LOCALE==='en'?': ':'：')+ot);});
       }else{
         if(r.conContent||r.conPlayer)lines.push(label+' '+(r.conPlayer||'')+'\n'+(r.conContent||''));
         else lines.push(label);
-        if(r.mergedNote)lines.push('Merged/Notes: '+r.mergedNote);
+        if(r.mergedNote)lines.push((window.__TBX_LOCALE==='en'?'Merged/Notes: ':'合并/备注：')+r.mergedNote);
       }
     }
     lines.push('');
@@ -591,62 +1026,62 @@ function goPrevFromSummary(){
 
 function assessField(label,key){
   var val=M.assessment[key]||'';
-  return'<div class="row-inp"><label>'+label+'</label><textarea oninput="setAssess(\''+key+'\',this.value)" placeholder="Enter notes">'+esc(val)+'</textarea></div>';
+  return'<div class="row-inp"><label>'+label+'</label><textarea oninput="setAssess(\''+key+(window.__TBX_LOCALE==='en'?'\',this.value)" placeholder="Enter notes">':'\',this.value)" placeholder="请输入">')+esc(val)+'</textarea></div>';
 }
 function setAssess(key,val){M.assessment[key]=val;save();}
 
-// Export
+// ── Export ──
 async function exportMatch(fmt){
   if(!M)return;
   var dateStr=new Date().toLocaleString();
-  var title=M.title||'Debate Flow Record';
+  var title=M.title||(window.__TBX_LOCALE==='en'?'Debate Flow Record':'辩论流水记录');
   var content='';
   if(fmt==='txt'||fmt==='md'){
     content+='# '+title+'\n\n'+dateStr+'\n\n';
-    M.rounds.forEach(function(r){
-      content+='## '+r.name+'\n\n';
+    M.rounds.forEach(function(r,i){
+      content+='## '+roundLabel(r,i)+'\n\n';
       if(r.type==='opening'){
-        content+=sideText(r,'pro','Pro')+'\n';
-        content+=sideText(r,'con','Con')+'\n';
+        content+=sideText(r,'pro',(window.__TBX_LOCALE==='en'?'Pro':'正方'))+'\n';
+        content+=sideText(r,'con',(window.__TBX_LOCALE==='en'?'Con':'反方'))+'\n';
       }else{
-        content+='### Pro'+(r.proPlayer?' · '+r.proPlayer:'')+'\n'+(r.proContent||'')+'\n\n';
-        content+='### Con'+(r.conPlayer?' · '+r.conPlayer:'')+'\n'+(r.conContent||'')+'\n\n';
-        if(r.mergedNote)content+='### Merged Notes\n'+r.mergedNote+'\n\n';
+        content+=(window.__TBX_LOCALE==='en'?'### Pro':'### 正方')+(r.proPlayer?' · '+r.proPlayer:'')+'\n'+(r.proContent||'')+'\n\n';
+        content+=(window.__TBX_LOCALE==='en'?'### Con':'### 反方')+(r.conPlayer?' · '+r.conPlayer:'')+'\n'+(r.conContent||'')+'\n\n';
+        if(r.mergedNote)content+=(window.__TBX_LOCALE==='en'?'### Merged Notes\n':'### 合并记录或备注\n')+r.mergedNote+'\n\n';
       }
     });
-    content+='\n\n=== Argument Assessment ===\n'+assessSections();
+    content+=(window.__TBX_LOCALE==='en'?'\n\n=== Argument Assessment ===\n':'\n\n=== 论证完成度评估 ===\n')+assessSections();
   }else if(fmt==='html'){
     content='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+title+'</title></head><body>';
     content+='<h1>'+title+'</h1><p>'+dateStr+'</p>';
-    M.rounds.forEach(function(r){
-      content+='<h2>'+r.name+'</h2>';
-      if(r.type==='opening'){content+=sideHTML(r,'pro','Pro');content+=sideHTML(r,'con','Con');}
+    M.rounds.forEach(function(r,i){
+      content+='<h2>'+roundLabel(r,i)+'</h2>';
+      if(r.type==='opening'){content+=sideHTML(r,'pro',(window.__TBX_LOCALE==='en'?'Pro':'正方'));content+=sideHTML(r,'con',(window.__TBX_LOCALE==='en'?'Con':'反方'));}
       else{
-        content+='<h3>Pro'+(r.proPlayer?' · '+r.proPlayer:'')+'</h3><p>'+nl2br(r.proContent||'')+'</p>';
-        content+='<h3>Con'+(r.conPlayer?' · '+r.conPlayer:'')+'</h3><p>'+nl2br(r.conContent||'')+'</p>';
-        if(r.mergedNote)content+='<h3>Merged Notes</h3><p>'+nl2br(r.mergedNote)+'</p>';
+        content+=(window.__TBX_LOCALE==='en'?'<h3>Pro':'<h3>正方')+(r.proPlayer?' · '+r.proPlayer:'')+'</h3><p>'+nl2br(r.proContent||'')+'</p>';
+        content+=(window.__TBX_LOCALE==='en'?'<h3>Con':'<h3>反方')+(r.conPlayer?' · '+r.conPlayer:'')+'</h3><p>'+nl2br(r.conContent||'')+'</p>';
+        if(r.mergedNote)content+=(window.__TBX_LOCALE==='en'?'<h3>Merged Notes</h3><p>':'<h3>合并记录或备注</h3><p>')+nl2br(r.mergedNote)+'</p>';
       }
     });
     content+=assessHTML()+'</body></html>';
   }else if(fmt==='csv'){
-    content='Round,Pro Speaker,Pro Content,Con Speaker,Con Content,Merged Notes\n';
-    M.rounds.forEach(function(r){
+    content=(window.__TBX_LOCALE==='en'?'Round,Pro Speaker,Pro Content,Con Speaker,Con Content,Merged Notes\n':'环节,正方选手,正方内容,反方选手,反方内容,合并记录或备注\n');
+    M.rounds.forEach(function(r,i){
       if(r.type==='opening'){
-        content+=csvCell(r.name)+','+csvCell(r.proPlayer)+','+csvCell(openingToOneLine(r.pro))+','+csvCell(r.conPlayer)+','+csvCell(openingToOneLine(r.con))+',\n';
+        content+=csvCell(roundLabel(r,i))+','+csvCell(r.proPlayer)+','+csvCell(openingToOneLine(r.pro))+','+csvCell(r.conPlayer)+','+csvCell(openingToOneLine(r.con))+',\n';
       }else{
-        content+=csvCell(r.name)+','+csvCell(r.proPlayer)+','+csvCell(r.proContent||'')+','+csvCell(r.conPlayer)+','+csvCell(r.conContent||'')+','+csvCell(r.mergedNote||'')+'\n';
+        content+=csvCell(roundLabel(r,i))+','+csvCell(r.proPlayer)+','+csvCell(r.proContent||'')+','+csvCell(r.conPlayer)+','+csvCell(r.conContent||'')+','+csvCell(r.mergedNote||'')+'\n';
       }
     });
-    content+='\n\nAssessment Item,Content\n';
+    content+=(window.__TBX_LOCALE==='en'?'\n\nAssessment Item,Content\n':'\n\n评估项,内容\n');
     var a=M.assessment;
-    content+=csvCell('Pro Structure')+','+csvCell(a.proStruct||'')+'\n';
-    content+=csvCell('Con Structure')+','+csvCell(a.conStruct||'')+'\n';
-    content+=csvCell('Pro Argument Quality')+','+csvCell(a.proArg||'')+'\n';
-    content+=csvCell('Con Argument Quality')+','+csvCell(a.conArg||'')+'\n';
-    content+=csvCell('General Impression')+','+csvCell(a.impression||'')+'\n';
-    content+=csvCell('Discussion Value')+','+csvCell(a.value||'')+'\n';
-    content+=csvCell('Overall Assessment')+','+csvCell(a.overall||'')+'\n';
-    content+=csvCell('Other Notes')+','+csvCell(a.otherAssess||'')+'\n';
+    content+=csvCell((window.__TBX_LOCALE==='en'?'Pro Structure':'正方架构完成度'))+','+csvCell(a.proStruct||'')+'\n';
+    content+=csvCell((window.__TBX_LOCALE==='en'?'Con Structure':'反方架构完成度'))+','+csvCell(a.conStruct||'')+'\n';
+    content+=csvCell((window.__TBX_LOCALE==='en'?'Pro Argument Quality':'正方论证质量'))+','+csvCell(a.proArg||'')+'\n';
+    content+=csvCell((window.__TBX_LOCALE==='en'?'Con Argument Quality':'反方论证质量'))+','+csvCell(a.conArg||'')+'\n';
+    content+=csvCell((window.__TBX_LOCALE==='en'?'General Impression':'一般情绪/印象'))+','+csvCell(a.impression||'')+'\n';
+    content+=csvCell((window.__TBX_LOCALE==='en'?'Discussion Value':'讨论价值'))+','+csvCell(a.value||'')+'\n';
+    content+=csvCell((window.__TBX_LOCALE==='en'?'Overall Assessment':'总体定性'))+','+csvCell(a.overall||'')+'\n';
+    content+=csvCell((window.__TBX_LOCALE==='en'?'Other Notes':'其它评估'))+','+csvCell(a.otherAssess||'')+'\n';
   }else if(fmt==='json'){
     saveToList();
     var out=JSON.parse(JSON.stringify(M));
@@ -658,7 +1093,7 @@ async function exportMatch(fmt){
   else if(fmt==='html'){ext='html';mime='text/html;charset=utf-8';}
   else if(fmt==='csv'){ext='csv';mime='text/csv;charset=utf-8';}
   else if(fmt==='json'){ext='json';mime='application/json';}
-  var fname='Flowing-Tool-'+title+'-'+new Date().toISOString().slice(0,10)+'.'+ext;
+  var fname=(window.__TBX_LOCALE==='en'?'Flowing-Tool-':'简易流水单-')+title+'-'+new Date().toISOString().slice(0,10)+'.'+ext;
   await doExport(content,mime,fname);
 }
 
@@ -666,20 +1101,17 @@ async function doExport(content,mime,fname){
   save();
   var ext=fname.split('.').pop();
   var blob=new Blob(['﻿'+content],{type:mime+';charset=utf-8'});
-  if(typeof Capacitor!=='undefined'&&Capacitor.Plugins&&Capacitor.Plugins.Filesystem){
-    try{var C=Capacitor,FS=C.Plugins.Filesystem;
-      var result=await FS.writeFile({path:'Debate-Coach/'+fname,data:ext==='csv'?'﻿'+content:content,directory:'CACHE',recursive:true,encoding:'utf8'});
-      try{var Share=C.Plugins.Share;if(Share&&Share.share)Share.share({title:'Export Flowing Tool',url:result.uri});}catch(e2){}
-      alert('Exported: '+fname);return;
-    }catch(e){alert('Export failed: '+e.message);return;}
-  }
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download=fname;a.click();URL.revokeObjectURL(a.href);
+  /* FILE_IO_ADAPTER: flow doExport preserves its report/BOM/template generation, calls DCFileIO.present
+   * with CACHE/Debate-Coach. Importers: full JSON only in .json/.txt/.md;
+   * preserve opening round, same-name round matching, migrateData, local-history limit. */
+  var result=await top.DCFileIO.present({blob:blob,name:fname,mime:blob.type,kind:"ordinary",owner:"flow",lang:window.__TBX_LOCALE==='en'?'en':'zh',nativeLocation:{directory:"CACHE",folder:"Debate-Coach"}});
+  if(["failed","unsupported"].includes(result.status))alert(top.DCFileIO.message(result,{lang:window.__TBX_LOCALE}));
+
 }
 
 async function exportTemplate(){
   if(!M)return;
-  var tplName=prompt('Template name:',(M.title||'Custom Format')+' Template');
+  var tplName=prompt((window.__TBX_LOCALE==='en'?'Template name:':'模板名称：'),(M.title||(window.__TBX_LOCALE==='en'?'Custom Format':'自定义赛制'))+(window.__TBX_LOCALE==='en'?' Template':'模板'));
   if(!tplName)return;
   var tpl={type:'flowing_template',name:tplName,rounds:[]};
   M.rounds.forEach(function(r){tpl.rounds.push({name:r.name,type:r.type||null});});
@@ -692,53 +1124,53 @@ function importTemplate(input){
   var reader=new FileReader();
   reader.onload=function(e){
     try{
-      var tpl=JSON.parse(e.target.result);
-      if(tpl.type!=='flowing_template'||!tpl.rounds){alert('Invalid template file.');return;}
-      if(!M)M=newMatch();
-      var opening=M.rounds[0];
+      var tpl=JSON.parse(String(e.target.result).replace(/^\uFEFF/,""));
+      if(!tpl||tpl.type!=='flowing_template'||!Array.isArray(tpl.rounds)||!tpl.rounds.every(function(r){return r&&typeof r==='object'&&!Array.isArray(r);})){alert((window.__TBX_LOCALE==='en'?'Invalid template file.':'无效的赛制模板文件'));return;}
+      var baseMatch=M||newMatch();
+      var opening=baseMatch.rounds[0];
       var newRounds=[opening];
       tpl.rounds.forEach(function(tr,i){
         if(tr.type==='opening'&&i===0)return;
         var existing=null;
-        if(i<M.rounds.length&&M.rounds[i]&&M.rounds[i].name===tr.name)existing=M.rounds[i];
-        newRounds.push(existing||{name:tr.name||'Select',type:tr.type||null,proPlayer:'',conPlayer:'',proContent:'',conContent:'',mergedNote:''});
+        if(i<baseMatch.rounds.length&&baseMatch.rounds[i]&&baseMatch.rounds[i].name===tr.name)existing=baseMatch.rounds[i];
+        newRounds.push(existing||{name:tr.name||(window.__TBX_LOCALE==='en'?'Select':'选择'),type:tr.type||null,proPlayer:'',conPlayer:'',proContent:'',conContent:'',mergedNote:''});
       });
-      M.rounds=newRounds;save();
-      alert('Template "'+tpl.name+'" imported ('+newRounds.length+' rounds total).');
+      baseMatch.rounds=newRounds;M=baseMatch;save();
+      alert((window.__TBX_LOCALE==='en'?'Template "':'模板「')+tpl.name+(window.__TBX_LOCALE==='en'?'" imported (':'」已导入（共')+newRounds.length+(window.__TBX_LOCALE==='en'?' rounds total).':'个环节）'));
       goOpening();
-    }catch(ex){alert('JSON parse error: '+ex.message);}
+    }catch(ex){alert((window.__TBX_LOCALE==='en'?'JSON parse error: ':'JSON解析失败：')+ex.message);}
   };
   reader.readAsText(input.files[0]);input.value='';
 }
 
-// Helpers
+// ── Helpers ──
 function esc(s){if(!s)return'';return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function nl2br(s){if(!s)return'';return s.replace(/\n/g,'<br>');}
 function csvCell(s){if(!s)return'';return'"'+String(s).replace(/"/g,'""')+'"';}
 function openingToOneLine(o){
   var parts=[];
-  if(o.definition)parts.push('Definition: '+o.definition);
-  if(o.scope)parts.push('Scope: '+o.scope);
-  if(o.standard)parts.push('Criterion: '+o.standard);
+  if(o.definition)parts.push((window.__TBX_LOCALE==='en'?'Definition: ':'定义：')+o.definition);
+  if(o.scope)parts.push((window.__TBX_LOCALE==='en'?'Scope: ':'切入：')+o.scope);
+  if(o.standard)parts.push((window.__TBX_LOCALE==='en'?'Criterion: ':'标准：')+o.standard);
   var pts=Array.isArray(o.points)?o.points:[o.points];
-  pts.forEach(function(p,i){if(p)parts.push('Sub-Argument'+(pts.length>1?(i+1):'')+': '+p);});
-  if(o.value)parts.push('Value: '+o.value);
+  pts.forEach(function(p,i){if(p)parts.push((window.__TBX_LOCALE==='en'?'Sub-Argument':'分论点')+(pts.length>1?(i+1):'')+(window.__TBX_LOCALE==='en'?': ':'：')+p);});
+  if(o.value)parts.push((window.__TBX_LOCALE==='en'?'Value: ':'价值：')+o.value);
   var oths=Array.isArray(o.other)?o.other:[o.other];
-  oths.forEach(function(ot,i){if(ot)parts.push('Additional'+(oths.length>1?(i+1):'')+': '+ot);});
-  return parts.join('; ');
+  oths.forEach(function(ot,i){if(ot)parts.push((window.__TBX_LOCALE==='en'?'Additional':'补充')+(oths.length>1?(i+1):'')+(window.__TBX_LOCALE==='en'?': ':'：')+ot);});
+  return parts.join((window.__TBX_LOCALE==='en'?'; ':'；'));
 }
 function sideText(r,side,label){
   var o=r[side];
   if(r.type==='opening'){
     var parts=[];
-    if(o.definition)parts.push('Inherent Definition (Domain): '+o.definition);
-    if(o.scope)parts.push('Scope of Discussion: '+o.scope);
-    if(o.standard)parts.push('Criterion: '+o.standard);
+    if(o.definition)parts.push((window.__TBX_LOCALE==='en'?'Inherent Definition (Domain): ':'固有定义（域）：')+o.definition);
+    if(o.scope)parts.push((window.__TBX_LOCALE==='en'?'Scope of Discussion: ':'论域切入：')+o.scope);
+    if(o.standard)parts.push((window.__TBX_LOCALE==='en'?'Criterion: ':'标准：')+o.standard);
     var pts=Array.isArray(o.points)?o.points:[o.points];
-    pts.forEach(function(p,i){if(p)parts.push('Sub-Argument'+(pts.length>1?(i+1):'')+': '+p);});
-    if(o.value)parts.push('Value Point: '+o.value);
+    pts.forEach(function(p,i){if(p)parts.push((window.__TBX_LOCALE==='en'?'Sub-Argument':'分论点')+(pts.length>1?(i+1):'')+(window.__TBX_LOCALE==='en'?': ':'：')+p);});
+    if(o.value)parts.push((window.__TBX_LOCALE==='en'?'Value Point: ':'价值点：')+o.value);
     var oths=Array.isArray(o.other)?o.other:[o.other];
-    oths.forEach(function(ot,i){if(ot)parts.push('Additional'+(oths.length>1?(i+1):'')+': '+ot);});
+    oths.forEach(function(ot,i){if(ot)parts.push((window.__TBX_LOCALE==='en'?'Additional':'其它补充')+(oths.length>1?(i+1):'')+(window.__TBX_LOCALE==='en'?': ':'：')+ot);});
     return '### '+label+(r[side+'Player']?' · '+r[side+'Player']:'')+'\n'+parts.join('\n\n');
   }
   return '';
@@ -747,50 +1179,116 @@ function sideHTML(r,side,label){
   var o=r[side];
   if(r.type==='opening'){
     var parts=[];
-    if(o.definition)parts.push('<p><b>Inherent Definition (Domain)</b>: '+nl2br(o.definition)+'</p>');
-    if(o.scope)parts.push('<p><b>Scope of Discussion</b>: '+nl2br(o.scope)+'</p>');
-    if(o.standard)parts.push('<p><b>Criterion</b>: '+nl2br(o.standard)+'</p>');
+    if(o.definition)parts.push((window.__TBX_LOCALE==='en'?'<p><b>Inherent Definition (Domain)</b>: ':'<p><b>固有定义（域）</b>：')+nl2br(o.definition)+'</p>');
+    if(o.scope)parts.push((window.__TBX_LOCALE==='en'?'<p><b>Scope of Discussion</b>: ':'<p><b>论域切入</b>：')+nl2br(o.scope)+'</p>');
+    if(o.standard)parts.push((window.__TBX_LOCALE==='en'?'<p><b>Criterion</b>: ':'<p><b>标准</b>：')+nl2br(o.standard)+'</p>');
     var pts=Array.isArray(o.points)?o.points:[o.points];
-    pts.forEach(function(p,i){if(p)parts.push('<p><b>Sub-Argument'+(pts.length>1?(i+1):'')+'</b>: '+nl2br(p)+'</p>');});
-    if(o.value)parts.push('<p><b>Value Point</b>: '+nl2br(o.value)+'</p>');
+    pts.forEach(function(p,i){if(p)parts.push((window.__TBX_LOCALE==='en'?'<p><b>Sub-Argument':'<p><b>分论点')+(pts.length>1?(i+1):'')+(window.__TBX_LOCALE==='en'?'</b>: ':'</b>：')+nl2br(p)+'</p>');});
+    if(o.value)parts.push((window.__TBX_LOCALE==='en'?'<p><b>Value Point</b>: ':'<p><b>价值点</b>：')+nl2br(o.value)+'</p>');
     var oths=Array.isArray(o.other)?o.other:[o.other];
-    oths.forEach(function(ot,i){if(ot)parts.push('<p><b>Additional'+(oths.length>1?(i+1):'')+'</b>: '+nl2br(ot)+'</p>');});
+    oths.forEach(function(ot,i){if(ot)parts.push((window.__TBX_LOCALE==='en'?'<p><b>Additional':'<p><b>其它补充')+(oths.length>1?(i+1):'')+(window.__TBX_LOCALE==='en'?'</b>: ':'</b>：')+nl2br(ot)+'</p>');});
     return '<h3>'+label+(r[side+'Player']?' · '+r[side+'Player']:'')+'</h3>'+parts.join('');
   }
   return '';
 }
 function assessHTML(){
   var a=M.assessment;
-  var h='<h2>Argument Assessment</h2><ul>';
-  h+='<li>Pro Structure: '+(a.proStruct||'')+'</li>';
-  h+='<li>Con Structure: '+(a.conStruct||'')+'</li>';
-  h+='<li>Pro Argument Quality: '+(a.proArg||'')+'</li>';
-  h+='<li>Con Argument Quality: '+(a.conArg||'')+'</li>';
-  h+='</ul><h2>Impression Assessment</h2><ul>';
-  h+='<li>General Impression: '+(a.impression||'')+'</li>';
-  h+='<li>Discussion Value: '+(a.value||'')+'</li>';
-  h+='<li>Overall Assessment: '+(a.overall||'')+'</li>';
-  h+='</ul><h2>Other Notes</h2><p>'+(a.otherAssess||'')+'</p>';
+  var h=(window.__TBX_LOCALE==='en'?'<h2>Argument Assessment</h2><ul>':'<h2>论证完成度评估</h2><ul>');
+  h+=(window.__TBX_LOCALE==='en'?'<li>Pro Structure: ':'<li>正方架构完成度：')+(a.proStruct||'')+'</li>';
+  h+=(window.__TBX_LOCALE==='en'?'<li>Con Structure: ':'<li>反方架构完成度：')+(a.conStruct||'')+'</li>';
+  h+=(window.__TBX_LOCALE==='en'?'<li>Pro Argument Quality: ':'<li>正方论证质量：')+(a.proArg||'')+'</li>';
+  h+=(window.__TBX_LOCALE==='en'?'<li>Con Argument Quality: ':'<li>反方论证质量：')+(a.conArg||'')+'</li>';
+  h+=(window.__TBX_LOCALE==='en'?'</ul><h2>Impression Assessment</h2><ul>':'</ul><h2>心证评估</h2><ul>');
+  h+=(window.__TBX_LOCALE==='en'?'<li>General Impression: ':'<li>一般情绪/印象：')+(a.impression||'')+'</li>';
+  h+=(window.__TBX_LOCALE==='en'?'<li>Discussion Value: ':'<li>讨论价值：')+(a.value||'')+'</li>';
+  h+=(window.__TBX_LOCALE==='en'?'<li>Overall Assessment: ':'<li>总体定性：')+(a.overall||'')+'</li>';
+  h+=(window.__TBX_LOCALE==='en'?'</ul><h2>Other Notes</h2><p>':'</ul><h2>其它评估</h2><p>')+(a.otherAssess||'')+'</p>';
   return h;
 }
 function assessSections(){
   var a=M.assessment;
-  return 'Pro Structure: '+(a.proStruct||'')+'\nCon Structure: '+(a.conStruct||'')+'\nPro Argument Quality: '+(a.proArg||'')+'\nCon Argument Quality: '+(a.conArg||'')+'\n\nGeneral Impression: '+(a.impression||'')+'\nDiscussion Value: '+(a.value||'')+'\nOverall Assessment: '+(a.overall||'')+'\n\nOther Notes: '+(a.otherAssess||'');
+  return (window.__TBX_LOCALE==='en'?'Pro Structure: ':'正方架构完成度：')+(a.proStruct||'')+(window.__TBX_LOCALE==='en'?'\nCon Structure: ':'\n反方架构完成度：')+(a.conStruct||'')+(window.__TBX_LOCALE==='en'?'\nPro Argument Quality: ':'\n正方论证质量：')+(a.proArg||'')+(window.__TBX_LOCALE==='en'?'\nCon Argument Quality: ':'\n反方论证质量：')+(a.conArg||'')+(window.__TBX_LOCALE==='en'?'\n\nGeneral Impression: ':'\n\n一般情绪/印象：')+(a.impression||'')+(window.__TBX_LOCALE==='en'?'\nDiscussion Value: ':'\n讨论价值：')+(a.value||'')+(window.__TBX_LOCALE==='en'?'\nOverall Assessment: ':'\n总体定性：')+(a.overall||'')+(window.__TBX_LOCALE==='en'?'\n\nOther Notes: ':'\n\n其它评估：')+(a.otherAssess||'');
 }
 function assessText(){
   var a=M.assessment;
-  return 'Pro Structure: '+(a.proStruct||'')+'\nCon Structure: '+(a.conStruct||'')+'\nPro Argument Quality: '+(a.proArg||'')+'\nCon Argument Quality: '+(a.conArg||'')+'\nImpression: '+(a.impression||'')+'\nDiscussion Value: '+(a.value||'')+'\nOverall Assessment: '+(a.overall||'')+'\nOther Notes: '+(a.otherAssess||'');
+  return (window.__TBX_LOCALE==='en'?'Pro Structure: ':'正方架构完成度：')+(a.proStruct||'')+(window.__TBX_LOCALE==='en'?'\nCon Structure: ':'\n反方架构完成度：')+(a.conStruct||'')+(window.__TBX_LOCALE==='en'?'\nPro Argument Quality: ':'\n正方论证质量：')+(a.proArg||'')+(window.__TBX_LOCALE==='en'?'\nCon Argument Quality: ':'\n反方论证质量：')+(a.conArg||'')+(window.__TBX_LOCALE==='en'?'\nImpression: ':'\n印象：')+(a.impression||'')+(window.__TBX_LOCALE==='en'?'\nDiscussion Value: ':'\n讨论价值：')+(a.value||'')+(window.__TBX_LOCALE==='en'?'\nOverall Assessment: ':'\n总体定性：')+(a.overall||'')+(window.__TBX_LOCALE==='en'?'\nOther Notes: ':'\n其它评估：')+(a.otherAssess||'');
 }
 
 function updateTitleLabel(){document.getElementById('match-title-label').textContent=M&&M.title?M.title:'';}
-function toggleTheme(){document.body.classList.toggle('light');}
-
-// Init
 (function(){
   if(loadMatch()){if(M.lastView&&M.lastView>0)gotoLast();else goStart();}
   else{goStart();}
 })();
 
+
+var __TBX_LEGACY_OPTIONS={zh:{POSITIONS:['','一辩','二辩','三辩','四辩','五辩','六辩','教练','评委','其他','无'],ROUND_TYPES:['选择','质询','对辩','盘问','申论或驳论','攻辩小结','自由辩','总结陈词','奇袭','评委互动','其它']},en:{POSITIONS:['','1st Speaker','2nd Speaker','3rd Speaker','4th Speaker','5th Speaker','6th Speaker','Coach','Judge','Other','N/A'],ROUND_TYPES:['Select','Cross-Examination','Direct Confrontation','Deposition','Rebuttal','Summary','Free Debate','Closing Speech','Surprise Attack','Judge Q&A','Other']}};
+function __tbxRestoreFocus(draw){
+ var target=document.activeElement,selector='input,textarea,select,button';
+ var all=Array.prototype.slice.call(document.querySelectorAll(selector)),idx=all.indexOf(target);
+ var key=target&&target.getAttribute('data-k'),selection=null,position=null;
+ var host=document.getElementById('main')||document.getElementById('content');
+ var scroll=host?{top:host.scrollTop,left:host.scrollLeft}:null;
+ if(target&&typeof target.selectionStart==='number')try{selection={start:target.selectionStart,end:target.selectionEnd};}catch(_e){}
+ if(target&&typeof target.scrollTop==='number')position={top:target.scrollTop,left:target.scrollLeft};
+ draw();
+ if(host&&scroll){host.scrollTop=scroll.top;host.scrollLeft=scroll.left;}
+ if(idx>=0){
+   var next=key?document.querySelector('[data-k="'+key.replace(/"/g,'')+'"]'):null;
+   if(!next)next=document.querySelectorAll(selector)[idx];
+   if(next&&!next.disabled){
+     next.focus({preventScroll:true});
+     if(selection&&typeof next.setSelectionRange==='function')try{next.setSelectionRange(selection.start,selection.end);}catch(_e){}
+     if(position){next.scrollTop=position.top;next.scrollLeft=position.left;}
+   }
+ }
+}
+function __tbxApplyHeader(){
+ var en=window.__TBX_LOCALE==='en',title=document.querySelector('header h1');
+ var titles=["辩论筑基 · 简易流水单","Debate · Flowing Tool"];
+ var titleText=en?titles[1]:titles[0];
+ if(title){for(var i=0;i<title.childNodes.length;i++){var n=title.childNodes[i];if(n.nodeType===3){n.nodeValue=titleText+' ';break;}}}
+ document.title=titleText;
+ document.documentElement.lang=en?'en':'zh-CN';
+ var btn=document.getElementById('lang-toggle');if(btn)btn.textContent=en?'中文':'EN';
+ var theme=document.getElementById('theme-toggle');if(theme)theme.textContent=en?'Theme':'界面颜色';
+ var home=document.querySelector('header .home-btn')||document.querySelector('button[onclick*="toolbox.html"]');
+ if(home)home.textContent=en?'Back':'返回';
+ var start=document.querySelector('#footer-bar button.start-btn-left');
+ if(start)start.textContent=en?'Start':'开始页';
+ if("flow"==='case'){
+   var prev=document.getElementById('btn-prev');if(prev)prev.textContent=en?'← Previous':'← 上一步';
+   var next=document.getElementById('btn-next');if(next)next.textContent=current===STEPS.length-1?(en?'✓ Finish':'✓ 完成'):(en?'Next →':'下一步 →');
+ }
+}
+function __tbxWriteShared(key,value){
+  // Same public key in the owning srcdoc/file contexts; no new state or polling.
+  try{localStorage.setItem(key,value);}catch(_e){}
+  try{if(parent!==window)parent.localStorage.setItem(key,value);}catch(_e){}
+  try{if(top!==window&&top!==parent)top.localStorage.setItem(key,value);}catch(_e){}
+}
+function applyToolLanguage(next,first){
+ var wanted=next==='en'?'en':'zh',old=window.__TBX_LOCALE;
+ window.__TBX_LOCALE=wanted;
+ __tbxWriteShared('debate_coach_lang',wanted);
+ POSITIONS=__TBX_LEGACY_OPTIONS[window.__TBX_LOCALE].POSITIONS.map(function(x){return typeof x==='object'?Object.assign({},x):x;});
+ROUND_TYPES=__TBX_LEGACY_OPTIONS[window.__TBX_LOCALE].ROUND_TYPES.map(function(x){return typeof x==='object'?Object.assign({},x):x;});
+ __tbxApplyHeader();
+ if(!first&&old!==wanted)__tbxRestoreFocus(function(){render(true);});
+}
+function toggleToolLanguage(){applyToolLanguage(window.__TBX_LOCALE==='en'?'zh':'en',false);}
+function toggleTheme(){
+ var dark=document.body.classList.contains('light');
+ document.body.classList.toggle('light',!dark);
+ document.body.classList.toggle('dark',dark);
+ __tbxWriteShared('debate_coach_theme',dark?'dark':'light');
+ try{if(parent&&typeof parent.syncOpenToolTheme==='function')parent.syncOpenToolTheme();}catch(e){}
+}
+window.applyToolLanguage=applyToolLanguage;window.toggleToolLanguage=toggleToolLanguage;
+applyToolLanguage(window.__TBX_LOCALE,true);
+var __tbxCurrentTheme=localStorage.getItem('debate_coach_theme')==='dark'?'dark':'light';
+document.body.classList.toggle('light',__tbxCurrentTheme==='light');
+document.body.classList.toggle('dark',__tbxCurrentTheme==='dark');
+ 
 </script>
 </body>
 </html>
