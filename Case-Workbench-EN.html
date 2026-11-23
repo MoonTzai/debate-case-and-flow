@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Case Prep · Standardized Case Workbench</title>
+<title>备赛整合 · 标准化辩案工作台</title>
 <style>
 :root {
   --bg: #0d0d0d; --card: #141414; --border: #222; --input-bg: #1a1a1a;
@@ -17,7 +17,7 @@ body.light {
   --blue: #4f6bed; --green: #4caf50; --red: #e53935;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: var(--bg); color: var(--text); font-family: 'Segoe UI',system-ui,-apple-system,sans-serif; height: 100vh; display: flex; flex-direction: column; }
+body { background: var(--bg); color: var(--text); font-family: 'Microsoft YaHei','PingFang SC',sans-serif; height: 100vh; display: flex; flex-direction: column; }
 header { background: var(--card); padding: 14px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
 header h1 { font-size: 16px; color: var(--gold); }
 header .step-label { font-size: 12px; color: var(--gray); }
@@ -58,20 +58,20 @@ table.t td select { padding: 6px 8px; }
 .btn-add { background: var(--card); border: 1px solid var(--border); color: var(--gray); padding: 6px 16px; border-radius: var(--radius-sm); cursor: pointer; font-size: 13px; font-family: inherit; transition: all 0.15s; }
 .btn-add:hover { border-color: var(--gold); color: var(--gold); }
 .btn-add.gold { border-color: var(--gold); color: var(--gold); }
-.btn-add.gold:hover { background: var(--gold); color: #000; }
-body.light .btn-add.gold:hover { background: var(--gold); color: #fff; }
+.btn-add.gold:hover { background: var(--gold); color: var(--on-accent); }
+body.light .btn-add.gold:hover { background: var(--gold); color: var(--on-accent); }
 .add-row-wrap { text-align: right; padding: 6px 0 2px; }
 
 .btn-r { display: flex; gap: 8px; margin: 12px 0; }
 .btn { background: var(--card); color: var(--gray); border: 1px solid var(--border); padding: 10px 20px; border-radius: var(--radius-sm); cursor: pointer; font-size: 14px; font-family: inherit; transition: all 0.15s; }
 .btn:hover { border-color: var(--gold); color: var(--gold); }
-.btn.gold { background: var(--gold); color: #000; border: none; font-weight: bold; }
+.btn.gold { background: var(--gold); color: var(--on-accent); border: none; font-weight: bold; }
 .btn.gold:hover { opacity: 0.85; }
-body.light .btn.gold { color: #fff; }
-.btn.green { background: var(--green); color: #fff; border: none; font-weight: bold; }
+body.light .btn.gold { color: var(--on-accent); }
+.btn.green { background: var(--green); color: var(--on-func); border: none; font-weight: bold; }
 .btn.green:hover { opacity: 0.85; }
 
-.output-panel { background: var(--input-bg); border: 1px solid var(--gold); border-radius: var(--radius); padding: 16px; margin: 12px 0; max-height: 400px; overflow-y: auto; white-space: pre-wrap; font-family: 'Consolas',monospace; font-size: 13px; line-height: 1.6; color: var(--text); display: none; }
+.output-panel { background: var(--input-bg); border: 1px solid var(--gold); border-radius: var(--radius); padding: 16px; margin: 12px 0; max-height: 400px; overflow-y: auto; white-space: pre-wrap; font-family: 'Consolas','Microsoft YaHei',monospace; font-size: 13px; line-height: 1.6; color: var(--text); display: none; }
 .fmt-row { display:flex;gap:10px;justify-content:center;margin:8px 0; }
 .fmt-btn { flex:1;max-width:150px;background:var(--input-bg);border:1px solid var(--border);color:var(--text);padding:14px 10px;border-radius:var(--radius-sm);cursor:pointer;font-family:inherit;text-align:center; }
 .fmt-btn:hover { border-color:var(--gold); }
@@ -85,6 +85,8 @@ body.light .btn.gold { color: #fff; }
 .section-block { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin: 10px 0; position: relative; }
 .section-block .remove-btn { position: absolute; top: 10px; right: 10px; }
 
+
+/* Responsive */
 @media (max-width:600px) {
   header { padding: 10px 14px; }
   header h1 { font-size: 14px; }
@@ -95,34 +97,439 @@ body.light .btn.gold { color: #fff; }
   .row-inp { flex-direction: column; gap: 4px; }
   .row-inp label { padding-top: 0; }
 }
+
+
+/* R5: navigation styling resides in existing native CSS, without new style/JS loop. */
+header[data-dc-nav]{
+ --dc-nav-line:var(--border,var(--line,#d8dee9));
+ --dc-nav-bg:var(--card,var(--bg,#fff));--dc-nav-accent:var(--gold,var(--accent,#4f6bed));
+ display:grid;grid-template-columns:minmax(55px,1fr) minmax(0,2fr) minmax(55px,1fr);
+ align-items:center;gap:8px;min-height:56px;height:auto;
+ padding:8px max(12px,env(safe-area-inset-right,0px)) 8px max(12px,env(safe-area-inset-left,0px));
+}
+header[data-dc-nav]>[data-dc-back]{grid-column:1;grid-row:1;justify-self:start;position:static;left:auto;top:auto;transform:none}
+header[data-dc-nav]>[data-dc-title]{grid-column:2;grid-row:1;justify-self:center;position:static;inset:auto;transform:none;
+ text-align:center;margin:0;min-width:0;max-width:100%;overflow-wrap:anywhere;font-size:clamp(17px,2vw,26px);line-height:1.25}
+header[data-dc-nav]>[data-dc-actions]{grid-column:3;grid-row:1;justify-self:end;display:flex;align-items:center;
+ justify-content:flex-end;flex-wrap:wrap;gap:6px;margin-left:0}
+header[data-dc-nav] [data-dc-back]{min-width:46px;min-height:40px;border:1px solid var(--dc-nav-line);
+ background:var(--dc-nav-bg);color:inherit;border-radius:12px;padding:8px 12px;line-height:1.2;
+ font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+header[data-dc-nav] button:focus-visible{outline:2px solid var(--dc-nav-accent);outline-offset:2px}
+header[data-dc-nav] [data-dc-back]:hover{border-color:var(--dc-nav-accent);box-shadow:0 2px 12px var(--glow,transparent)}
+@media(max-width:690px){
+ header[data-dc-nav]{grid-template-columns:auto minmax(0,1fr) auto;gap:6px;padding:7px max(9px,env(safe-area-inset-right,0px)) 7px max(9px,env(safe-area-inset-left,0px))}
+ header[data-dc-nav]>[data-dc-title]{font-size:clamp(14px,3.5vw,20px)}
+ header[data-dc-nav]>[data-dc-actions]{gap:4px}
+ header[data-dc-nav]>[data-dc-actions] button{min-height:36px;padding-inline:8px}
+ header[data-dc-nav] [data-dc-back]{padding-inline:9px}
+}
+@media(max-width:430px){
+ header[data-dc-nav]:not([data-dc-nav="board"])>[data-dc-title]{grid-column:1/-1;grid-row:2}
+ header[data-dc-nav]:not([data-dc-nav="board"])>[data-dc-actions]{grid-column:3;grid-row:1}
+}
+header[data-dc-nav="board"]{grid-template-columns:auto minmax(100px,1fr) minmax(170px,1.2fr) auto;gap:8px}
+header[data-dc-nav="board"]>[data-dc-title]{grid-column:2}
+header[data-dc-nav="board"]>.hd-center{grid-column:3;grid-row:1;min-width:0;position:static;transform:none}
+header[data-dc-nav="board"]>.hd-right{grid-column:4;grid-row:1}
+@media(max-width:1050px){
+ header[data-dc-nav="board"]{grid-template-columns:auto minmax(0,1fr) auto}
+ header[data-dc-nav="board"]>[data-dc-title]{grid-column:2}
+ header[data-dc-nav="board"]>.hd-center{grid-column:1/-1;grid-row:2;justify-self:stretch}
+ header[data-dc-nav="board"]>.hd-right{grid-column:3}
+}
+@media(max-width:600px){
+ header[data-dc-nav="board"]{grid-template-columns:auto minmax(0,1fr) auto;row-gap:4px}
+ header[data-dc-nav="board"]>[data-dc-title]{grid-column:1/-1;grid-row:2;white-space:normal;justify-self:center}
+ header[data-dc-nav="board"]>.hd-center{grid-column:1/-1;grid-row:3;justify-self:stretch}
+ header[data-dc-nav="board"]>.hd-right{grid-column:3;grid-row:1}
+}
+header[data-dc-nav="tendency"]{grid-template-columns:auto minmax(0,1fr) auto auto}
+header[data-dc-nav="tendency"]>[data-dc-title]{grid-column:2}
+header[data-dc-nav="tendency"]>.spacer{display:none}
+header[data-dc-nav="tendency"]>#lang-btn{grid-column:3}
+header[data-dc-nav="tendency"]>#hdr-theme{grid-column:4}
+header .bar[data-dc-nav="glossary"]{display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+ min-height:58px;padding-inline:max(12px,env(safe-area-inset-left,0px)) max(12px,env(safe-area-inset-right,0px))}
+header .bar[data-dc-nav="glossary"]>[data-dc-back]{min-height:40px;border-radius:12px;padding:8px 11px}
+header .bar[data-dc-nav="glossary"]>[data-dc-title]{flex:1;text-align:center;min-width:100px;position:static;transform:none}
+header .bar[data-dc-nav="glossary"]>#search{min-width:100px;max-width:210px;flex:1}
+
+
+/* R6 theme control: original native buttons, same moon/sun paths as Timer. No JS listener or extra DOM. */
+header button[data-dc-theme],header #btnTheme[data-dc-theme],header #theme-toggle[data-dc-theme],header #hdr-theme[data-dc-theme],header #dc-theme-glossary[data-dc-theme]{display:inline-flex;align-items:center;justify-content:center;
+ flex:0 0 42px;box-sizing:border-box;width:42px;min-width:42px;max-width:42px;height:42px;min-height:42px;
+ border-radius:12px;padding:0;font-size:0;line-height:0;white-space:nowrap;overflow:hidden;vertical-align:middle}
+header button[data-dc-theme]::before{content:"";display:block;flex:0 0 19px;width:19px;height:19px;
+ background-color:currentColor;
+ -webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M21%2012.8A9%209%200%201%201%2011.2%203a7%207%200%200%200%209.8%209.8z%22%2F%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M21%2012.8A9%209%200%201%201%2011.2%203a7%207%200%200%200%209.8%209.8z%22%2F%3E%3C%2Fsvg%3E");
+ -webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain;
+ -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+body.dark header button[data-dc-theme]::before{
+ -webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%224%22%2F%3E%3Cpath%20d%3D%22M12%202v2M12%2020v2M4.9%204.9l1.4%201.4M17.7%2017.7l1.4%201.4M2%2012h2M20%2012h2M4.9%2019.1l1.4-1.4M17.7%206.3l1.4-1.4%22%2F%3E%3C%2Fsvg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%224%22%2F%3E%3Cpath%20d%3D%22M12%202v2M12%2020v2M4.9%204.9l1.4%201.4M17.7%2017.7l1.4%201.4M2%2012h2M20%2012h2M4.9%2019.1l1.4-1.4M17.7%206.3l1.4-1.4%22%2F%3E%3C%2Fsvg%3E")}
+header button[data-dc-theme]:focus-visible{outline:2px solid var(--dc-nav-accent,var(--gold,#679efe));outline-offset:2px}
+@media(max-width:690px){header button[data-dc-theme]{flex-basis:40px;width:40px;min-width:40px;max-width:40px;height:40px;min-height:40px}}
 </style>
+<script>
+(function(){
+var P={"aurora":{"name":"极光","font":"'MiSans','HarmonyOS Sans SC','Alibaba PuHuiTi R','Noto Sans SC',system-ui,'Microsoft YaHei','PingFang SC',sans-serif","light":{"bg":"#f4f6fb","card":"#ffffff","ivory":"#eef1f8","paper":"#f8fafd","input":"#eef1f7","text1":"#171c26","text2":"#384152","text3":"#667085","text4":"#9aa3b2","accent":"#4f6bed","accentLight":"#6d87f5","accentSoft":"#e6ebfd","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#8f9bb3","goldSoft":"#eef1f8","minor":"#b0b8c7","line":"#e1e6f0","lineSoft":"#eaeef6","blue":"#4f6bed","green":"#12b76a","red":"#ef4444","warnBg":"#fef4e6","warnBorder":"#f59e0b","eng":"#8e44ad","grid":"#dfe5f1","hover":"#f2f5fb","shadow":"rgba(23,32,54,.10)","shadowSm":"rgba(23,32,54,.06)","shadowMd":"rgba(23,32,54,.15)","radius":"14px","radiusSm":"10px","accent2":"#06b6d4","glow":"rgba(79,107,237,.32)","dot":"rgba(79,107,237,.13)","sans":"'MiSans','HarmonyOS Sans SC','Alibaba PuHuiTi R','Noto Sans SC',system-ui,'Microsoft YaHei','PingFang SC',sans-serif","serif":"'LXGW WenKai','Source Han Serif SC','Songti SC','STSong',Georgia,serif"},"dark":{"bg":"#0b0e16","card":"#121722","ivory":"#161c2a","paper":"#0e1220","input":"#171e2e","text1":"#f1f4fa","text2":"#c6cddc","text3":"#8b94a8","text4":"#525b6e","accent":"#679efe","accentLight":"#8ab2ff","accentSoft":"#1a2440","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#8f9bb3","goldSoft":"#1a2130","minor":"#5a6478","line":"#232b3d","lineSoft":"#1b2230","blue":"#679efe","green":"#22c55e","red":"#f25a5a","warnBg":"#2a2000","warnBorder":"#6b5226","eng":"#c39bdb","grid":"#1a2130","hover":"#161d2b","shadow":"rgba(0,0,0,.45)","shadowSm":"rgba(0,0,0,.35)","shadowMd":"rgba(0,0,0,.6)","radius":"14px","radiusSm":"10px","accent2":"#22d3ee","glow":"rgba(103,158,254,.35)","dot":"rgba(122,158,255,.15)","sans":"'MiSans','HarmonyOS Sans SC','Alibaba PuHuiTi R','Noto Sans SC',system-ui,'Microsoft YaHei','PingFang SC',sans-serif","serif":"'LXGW WenKai','Source Han Serif SC','Songti SC','STSong',Georgia,serif"}},"classic":{"name":"经典","font":"'Microsoft YaHei','PingFang SC',system-ui,sans-serif","light":{"bg":"#f5f5f5","card":"#ffffff","ivory":"#f0f0f0","paper":"#fafafa","input":"#f0f0f0","text1":"#222222","text2":"#333333","text3":"#666666","text4":"#999999","accent":"#4f6bed","accentLight":"#4f6bed","accentSoft":"#e3e9f8","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#8f9bb3","goldSoft":"#f0f0f0","minor":"#b0b0b0","line":"#e0e0e0","lineSoft":"#e8e8e8","blue":"#4f6bed","green":"#4caf50","red":"#e53935","warnBg":"#fff3cd","warnBorder":"#ffc107","eng":"#8e44ad","grid":"#e4e4e4","hover":"#fafafa","shadow":"rgba(0,0,0,.08)","shadowSm":"rgba(0,0,0,.06)","shadowMd":"rgba(0,0,0,.10)","radius":"8px","radiusSm":"6px","sans":"'Microsoft YaHei','PingFang SC',system-ui,sans-serif","serif":"'Songti SC','STSong',Georgia,serif"},"dark":{"bg":"#0d0d0d","card":"#141414","ivory":"#1a1a1a","paper":"#101010","input":"#1a1a1a","text1":"#eeeeee","text2":"#cccccc","text3":"#999999","text4":"#555555","accent":"#ffc000","accentLight":"#ffd75e","accentSoft":"#332b00","onAccent":"#000000","onFunc":"#ffffff","gold":"#8f9bb3","goldSoft":"#2a2a2a","minor":"#666666","line":"#222222","lineSoft":"#1b1b1b","blue":"#4fa8ee","green":"#6ecd71","red":"#ee5555","warnBg":"#2a2000","warnBorder":"#664400","eng":"#c39bdb","grid":"#1e1e1e","hover":"#1b1b1b","shadow":"rgba(0,0,0,.35)","shadowSm":"rgba(0,0,0,.30)","shadowMd":"rgba(0,0,0,.45)","radius":"8px","radiusSm":"6px","sans":"'Microsoft YaHei','PingFang SC',system-ui,sans-serif","serif":"'Songti SC','STSong',Georgia,serif"}},"tendency":{"name":"人格测试","font":"-apple-system,'SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',system-ui,sans-serif","light":{"bg":"#eef1f6","card":"#ffffff","ivory":"#f7f9fc","paper":"#f2f5fa","input":"#f7f9fc","text1":"#1c2333","text2":"#39445a","text3":"#5f6b80","text4":"#8b95a8","accent":"#123a6d","accentLight":"#2b5ea8","accentSoft":"#e7eef8","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#6f7f99","goldSoft":"#eef2f8","minor":"#b0bfd4","line":"#dde3ec","lineSoft":"#e8ecf3","blue":"#2b5ea8","green":"#1e8e5a","red":"#c0392b","warnBg":"#eef2f8","warnBorder":"#b0bfd4","eng":"#2b5ea8","grid":"#dde3ec","hover":"#f7f9fc","shadow":"rgba(18,40,80,.06)","shadowSm":"rgba(18,40,80,.06)","shadowMd":"rgba(18,40,80,.08)","radius":"20px","radiusSm":"12px","sans":"-apple-system,'SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',system-ui,sans-serif","serif":"Georgia,'Songti SC','STSong','Source Han Serif SC','Noto Serif CJK SC','SimSun',serif"},"dark":{"bg":"#0c1017","card":"#141a26","ivory":"#171e2c","paper":"#121722","input":"#171e2c","text1":"#ece8df","text2":"#c8c2b2","text3":"#98917f","text4":"#6f6959","accent":"#f0b429","accentLight":"#ffd166","accentSoft":"#2b2412","onAccent":"#1c2333","onFunc":"#ffffff","gold":"#d9b25f","goldSoft":"#241d10","minor":"#5a4c2c","line":"#232c3d","lineSoft":"#1f2837","blue":"#9db9e3","green":"#6ecf8f","red":"#e57a77","warnBg":"#2b2412","warnBorder":"#5a4c2c","eng":"#9db9e3","grid":"#232c3d","hover":"#171e2c","shadow":"rgba(0,0,0,.4)","shadowSm":"rgba(0,0,0,.4)","shadowMd":"rgba(0,0,0,.4)","radius":"20px","radiusSm":"12px","sans":"-apple-system,'SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',system-ui,sans-serif","serif":"Georgia,'Songti SC','STSong','Source Han Serif SC','Noto Serif CJK SC','SimSun',serif"}},"apple":{"name":"苹果风","font":"-apple-system,'SF Pro Display','SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',system-ui,sans-serif","light":{"bg":"#f5f3f0","card":"#ffffff","ivory":"#faf8f6","paper":"#f5f3f0","input":"#faf8f6","text1":"#1c1c1e","text2":"#3a3a3c","text3":"#6e6e73","text4":"#8e8e93","accent":"#007aff","accentLight":"#3395ff","accentSoft":"#e5f0ff","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#bf8d3c","goldSoft":"#faf6ed","minor":"#d1d1d6","line":"#e5e5ea","lineSoft":"#eae9e8","blue":"#007aff","green":"#1e7a1e","red":"#b13e3e","warnBg":"#faf6ed","warnBorder":"#bf8d3c","eng":"#bf8d3c","grid":"#e5e5ea","hover":"#faf8f6","shadow":"rgba(0,0,0,.04)","shadowSm":"rgba(0,0,0,.04)","shadowMd":"rgba(0,0,0,.06)","radius":"20px","radiusSm":"12px","sans":"-apple-system,'SF Pro Display','SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',system-ui,sans-serif","serif":"Georgia,'Songti SC','STSong',serif"},"dark":{"bg":"#101014","card":"#1c1c1e","ivory":"#2c2c2e","paper":"#17171a","input":"#2c2c2e","text1":"#f2f2f7","text2":"#c7c7cc","text3":"#8e8e93","text4":"#636366","accent":"#0a84ff","accentLight":"#409cff","accentSoft":"#14273f","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#d4a95c","goldSoft":"#2a2416","minor":"#48484a","line":"#38383a","lineSoft":"#2c2c2e","blue":"#0a84ff","green":"#30d158","red":"#ff453a","warnBg":"#2a2416","warnBorder":"#bf8d3c","eng":"#d4a95c","grid":"#38383a","hover":"#2c2c2e","shadow":"rgba(0,0,0,.5)","shadowSm":"rgba(0,0,0,.5)","shadowMd":"rgba(0,0,0,.5)","radius":"20px","radiusSm":"12px","sans":"-apple-system,'SF Pro Display','SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',system-ui,sans-serif","serif":"Georgia,'Songti SC','STSong',serif"}},"editorial":{"name":"编辑风","font":"'Songti SC','STSong','Source Han Serif SC','Noto Serif CJK SC',Georgia,'Microsoft YaHei',serif","light":{"bg":"#f5f4ed","card":"#faf9f5","ivory":"#faf9f5","paper":"#f5f4ed","input":"#faf9f5","text1":"#141413","text2":"#3d3d3a","text3":"#504e49","text4":"#6b6a64","accent":"#1B365D","accentLight":"#2D5A8A","accentSoft":"#E4ECF5","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#b98f3f","goldSoft":"#EEF2F7","minor":"#b8b7b0","line":"#e8e6dc","lineSoft":"#e5e3d8","blue":"#2D5A8A","green":"#52734f","red":"#9c3b33","warnBg":"#f6e9c8","warnBorder":"#b98f3f","eng":"#1B365D","grid":"#e8e6dc","hover":"#faf9f5","shadow":"rgba(20,20,19,.06)","shadowSm":"rgba(20,20,19,.05)","shadowMd":"rgba(20,20,19,.08)","radius":"10px","radiusSm":"6px","sans":"'Microsoft YaHei','PingFang SC',system-ui,sans-serif","serif":"'Songti SC','STSong','Source Han Serif SC','Noto Serif CJK SC',Georgia,'Microsoft YaHei',serif"},"dark":{"bg":"#141413","card":"#1c1c1a","ivory":"#1c1c1a","paper":"#141413","input":"#222220","text1":"#f2f0e9","text2":"#b0aea5","text3":"#8f8d84","text4":"#6b6a64","accent":"#4a7fb5","accentLight":"#6b9fd1","accentSoft":"#1e2a38","onAccent":"#ffffff","onFunc":"#ffffff","gold":"#b98f3f","goldSoft":"#23221f","minor":"#5a5952","line":"#2a2a28","lineSoft":"#242422","blue":"#6b9fd1","green":"#7fa37f","red":"#d08a80","warnBg":"#2a2416","warnBorder":"#b98f3f","eng":"#8fb3d9","grid":"#2a2a28","hover":"#222220","shadow":"rgba(0,0,0,.5)","shadowSm":"rgba(0,0,0,.5)","shadowMd":"rgba(0,0,0,.5)","radius":"10px","radiusSm":"6px","sans":"'Microsoft YaHei','PingFang SC',system-ui,sans-serif","serif":"'Songti SC','STSong','Source Han Serif SC','Noto Serif CJK SC',Georgia,'Microsoft YaHei',serif"}}};
+var A={"bg":["--bg"],"card":["--card"],"ivory":["--ivory"],"paper":["--paper"],"input":["--input-bg","--input"],"text1":["--text","--text-1"],"text2":["--text-2"],"text3":["--gray","--text-3"],"text4":["--dark-gray","--text-4"],"accent":["--gold","--ink"],"accentLight":["--ink-light"],"accentSoft":["--ink-soft"],"accent2":["--gold2"],"glow":["--glow"],"dot":["--dot"],"goldSoft":["--gold-soft"],"minor":["--minor"],"line":["--border","--line"],"lineSoft":["--line-soft"],"blue":["--blue"],"green":["--green"],"red":["--red"],"warnBg":["--warn-bg"],"warnBorder":["--warn-border"],"eng":["--eng"],"grid":["--grid"],"hover":["--hover"],"shadow":["--shadow"],"shadowSm":["--shadow-sm"],"shadowMd":["--shadow-md"],"radius":["--radius"],"radiusSm":["--radius-sm"],"sans":["--sans"],"serif":["--serif"],"onAccent":["--on-accent"],"onFunc":["--on-func"]};
+var F='darkroot';
+var DEF='classic';
+function css(v){var s='';if(!v)return s;for(var k in v){var a=A[k];if(!a)continue;for(var i=0;i<a.length;i++)s+=a[i]+':'+v[k]+';';}return s;}
+function read(){try{var c=JSON.parse(localStorage.getItem('debate_coach_toolbox_theme')||localStorage.getItem('debate_toolbox_theme')||'null');if(c&&c.preset==='custom'&&c.light&&c.dark)return c;if(c&&P[c.preset])return c;return {preset:DEF};}catch(e){return {preset:DEF};}}
+function tokens(mode){var c=read();var t=P[c.preset]||P.classic;if(c.preset==='custom')return (mode==='dark'?(c.dark||t.dark):(c.light||t.light));return mode==='dark'?t.dark:t.light;}
+function themeCss(c){var t=P[c.preset]||P[DEF]||P.classic;var L=(c.preset==='custom'?(c.light||t.light):t.light);var D=(c.preset==='custom'?(c.dark||t.dark):t.dark);var f=(c.preset==='custom'?(c.font||t.font):t.font)||t.font;var root=(F==='darkroot')?css(D):css(L);return ':root{'+root+'}body.light{'+css(L)+'}body.dark{'+css(D)+'}body{font-family:'+f+';-webkit-font-smoothing:antialiased}.tools .card{border-radius:var(--radius)}.home{border-radius:var(--radius-sm)}';}
+function emit(c){var p=c&&c.preset?c.preset:DEF;if(p==='custom')p=(c&&c.base)||DEF;document.documentElement.setAttribute('data-tbx-style',p);var cssText=themeCss(c);var old=document.getElementById('tbx-theme');if(old&&old.parentNode)old.parentNode.removeChild(old);if(document.body){var s=document.createElement('style');s.id='tbx-theme';s.textContent=cssText;document.head.appendChild(s);}else{document.write('<style id="tbx-theme">'+cssText+'</style>');}}
+var share=null;
+function tokensFor(name,mode){var t=P[name]||P[DEF]||P.classic;return mode==='dark'?t.dark:t.light;}
+function tokens(mode){if(share)return tokensFor(share,mode);var c=read();var t=P[c.preset]||P[DEF]||P.classic;if(c.preset==='custom')return (mode==='dark'?(c.dark||t.dark):(c.light||t.light));return mode==='dark'?t.dark:t.light;}
+function setShare(name){share=name||null;}
+function getShare(){return share;}
+var cfg=read();emit(cfg);
+window.__TBX={P:P,A:A,F:F,emit:emit,read:read,tokens:tokens,tokensFor:tokensFor,setShare:setShare,getShare:getShare};
+})();
+</script>
+<script>
+/*
+COACH_FILE_IO_ARCHITECTURE_CONTRACT_BEGIN
+R01 SINGLE-FILE COACH FILE DELIVERY CONTRACT (source-owned, not a help page).
+SCOPE: createCoachFileIO(environment) is the one shared file delivery/receipt service,
+installed as window.DCFileIO in the executable Coach shell. AI Recorder is excluded.
+OWNERSHIP: Module producers alone own payload bytes, original name, MIME, JSON
+schema, IDs, links, history, session state and import validation/commit.
+The service accepts a canonical Blob once; it does NOT serialize JSON, repair
+invalid inputs, alter report content, commit a project, or inspect prompts.
+API: present(PreparedFile) offers supported actions; deliver(PreparedFile,
+'download'|'share'|'save-local') performs exactly one intent; openPreview()
+starts read-only HTML preview; standaloneSource() emits this same self-contained
+factory for Atlas/Startrack offline reports. PreparedFile: {blob,name,mime,kind,
+owner,lang,nativeLocation:{directory,folder},profile:'ordinary'|'timer'}.
+Receipt.status: download-started, preview-open-started, share-returned, saved,
+cancelled, share-not-completed, unsupported, failed. A resolved Promise or an
+anchor.click does not establish that the destination file was saved.
+WEB: iOS HTTPS uses navigator.share({files:[File]}) ONLY, never title/text;
+JSON/MD may use text/plain MIME without changing extension. Android Web JSON/MD
+share uses byte-identical .json.txt/.md.txt and text/plain regardless of
+canShare(original); original extension is retained for downloads. Unsupported
+Web Share falls back to a *user-selected* download, not a silent retry. Explicit
+cancellation/failure NEVER auto-downloads. Asynchronously prepared exports wait
+for a NEW user click before Web Share; no await before navigator.share.
+NATIVE: Use existing Capacitor Filesystem -> URI -> Share or test-only LocalSave
+(SAF). Write raw Blob bytes in <=256 KiB slices, Base64 encode each slice, await
+writeFile then serial appendFile without encoding. Verify raw byte count/stat;
+Timer uses partial -> stat -> rename -> URI while ordinary files use the prior
+direct target. Preserve original per-module DOCUMENTS/CACHE folder. Do not
+decode entire Blob as text, build whole-file Base64, or share partial files.
+INPUT: JSON can be carried in .json/.txt/.md only if the ENTIRE contents parse
+as JSON (remove only one leading BOM); original module parser/validator commits
+or rejects. Genuine Markdown reports (especially Judge) have independent
+report import paths; no code-fence extraction or LLM JSON repair.
+FILE MATRIX: JSON/MD/TXT/HTML/CSV/SVG keep actual bytes/MIME; XLSX, JPG,
+PNG/audio/other binary MUST keep real bytes and extensions, never TXT aliases.
+No new PDF/ZIP generators are implied; existing HTML preview/print is separate.
+LARGE TIMER: ordinary format <=5 MiB; portable JSON <=96 MiB; display-image
+library single image <=80 MiB and total <=256 MiB is a different data domain.
+8 MiB selects Timer's dedicated large-file *import parser*, not an export cap.
+Android Chromium browser Web Share currently gates files over 50 MiB to the
+normal download action; this is NOT a Timer generation/import limit. Never
+change MATCH/FORMAT, clocks, sounds, media inclusion semantics, canvas or
+explicit settings application in an I/O change.
+FAILURES: One prepared file, one user intent, one Receipt. Cancelled share or SAF
+save must not report success or cause a second action. No global a.click/Blob/
+JSON.parse intercepts, duplicate delivery services, extra schema engine,
+persistent file cache, external file dependency, or Recorder coupling.
+MAINTENANCE: When changing a service interface, edit this comment; when a
+module exception changes, edit its FILE_IO_ADAPTER comment near the real code.
+Real execution code and current project rules outrank stale comments/line IDs.
+COACH_FILE_IO_ARCHITECTURE_CONTRACT_END
+*/
+function createCoachFileIO(environment) {
+  'use strict';
+  const host=environment||window;
+  const held=new Map();
+  let sequence=0;
+  const BUCKET=256*1024;
+  const allowed=new Set(['download','share','save-local']);
+  const isNative=()=>{
+    try {return !!(host.Capacitor&&host.Capacitor.isNativePlatform&&host.Capacitor.isNativePlatform());}
+    catch(_) {return false;}
+  };
+  const lang=file=>file.lang==='en'?'en':'zh';
+  const say=(file,zh,en)=>lang(file)==='en'?en:zh;
+  const filename=str=>String(str||'Export').replace(/[\\/:*?"<>|\u0000-\u001f]/g,'-').trim()||'Export';
+  const mimeOf=(file)=>String(file.mime||file.blob?.type||'application/octet-stream');
+  const kindOf=file=>{
+    if(file.kind&&file.kind!=='ordinary'&&file.kind!=='timer')return file.kind;
+    const ext=String(file.name).toLowerCase().split('.').pop();
+    return ({json:'json',md:'markdown',txt:'text',html:'html',htm:'html',
+      csv:'csv',svg:'svg',png:'image',jpg:'image',jpeg:'image',xlsx:'binary'})[ext]||'binary';
+  };
+  function prepare(input) {
+    if(!input||!input.blob||typeof input.blob.slice!=='function'||!Number.isFinite(input.blob.size))
+      throw Error('A prepared Blob is required');
+    return {...input,name:filename(input.name),mime:mimeOf(input),kind:kindOf(input)};
+  }
+  function receipt(file,status,method,extra) {
+    return Object.freeze({status,method,originalName:file.name,bytes:file.blob.size,...(extra||{})});
+  }
+  function message(r,file){
+    const en=lang(file)==='en';
+    const labels={
+      'download-started':en?'Download started; check your downloads folder.':'已发起下载，请检查下载目录。',
+      'preview-open-started':en?'Preview opening was requested.':'已发起预览，请检查新窗口。',
+      'share-returned':en?'System share returned; verify the destination file.':'系统分享流程已返回，请确认目标应用中的文件。',
+      saved:en?'File saved to the selected location.':'文件已保存到选择的位置。',
+      cancelled:en?'Action cancelled; no download was started.':'已取消，未自动下载。',
+      'share-not-completed':en?'System share did not complete; no download was started.':'系统分享未完成，未自动下载。',
+      unsupported:en?'This action is unsupported; select Download.':'当前环境不支持该操作，请选择下载。',
+      failed:en?'File operation failed; retry explicitly.':'文件操作失败，请自行选择重试。'
+    };
+    return labels[r.status]||r.message||'';
+  }
+  function capability(file){
+    const native=isNative(),nav=host.navigator||{},mobile=/Android|iPhone|iPad|iPod/i.test(String(nav.userAgent||''))||
+      (/Macintosh/i.test(String(nav.userAgent||''))&&Number(nav.maxTouchPoints||0)>1);
+    const androidWeb=!native&&/Android/i.test(String(nav.userAgent||''));
+    let share=!!(native&&host.Capacitor?.Plugins?.Share?.share);
+    if(!native&&mobile&&host.isSecureContext!==false&&typeof nav.share==='function'&&
+       typeof nav.canShare==='function'&&typeof host.File==='function'&&
+       (!androidWeb||file.blob.size<=50*1024*1024)){
+      try {
+        const type=(androidWeb&&['json','markdown'].includes(file.kind))?'text/plain':file.mime;
+        const name=(androidWeb&&['json','markdown'].includes(file.kind))?file.name+'.txt':file.name;
+        share=!!nav.canShare({files:[new host.File([file.blob],name,{type})]});
+        if(!share&&!androidWeb&&['json','markdown'].includes(file.kind))
+          share=!!nav.canShare({files:[new host.File([file.blob],file.name,{type:'text/plain'})]});
+      }catch(_) {share=false;}
+    }
+    const local=!!(native&&host.Capacitor?.Plugins?.LocalSave?.saveDocument);
+    return {native,mobile,androidWeb,share,local};
+  }
+  function webDownload(file){
+    let url=null,link=null;
+    try{
+      url=host.URL.createObjectURL(file.blob);
+      link=host.document.createElement('a');
+      link.href=url;link.download=file.name;link.style.cssText='position:fixed;top:-9999px;left:0';
+      (host.document.body||host.document.documentElement).appendChild(link);
+      link.click();
+      return receipt(file,'download-started','browser-download');
+    }catch(e){return receipt(file,'failed','browser-download',{errorName:e.name,message:String(e.message||e)});}
+    finally{
+      if(url||link)host.setTimeout(()=>{
+        try{link?.remove();}catch(_){}try{if(url)host.URL.revokeObjectURL(url);}catch(_){}
+      },30000);
+    }
+  }
+  // Called from a fresh click; call navigator.share before any await.
+  function webShare(file,cap){
+    const nav=host.navigator;
+    if(!cap.share)return Promise.resolve(receipt(file,'unsupported','web-share'));
+    try{
+      const androidTxt=cap.androidWeb&&['json','markdown'].includes(file.kind);
+      let name=androidTxt?file.name+'.txt':file.name;
+      let type=androidTxt?'text/plain':file.mime;
+      let shareFile=new host.File([file.blob],name,{type});
+      if(!nav.canShare({files:[shareFile]})&&!androidTxt&&['json','markdown'].includes(file.kind)){
+        type='text/plain';
+        shareFile=new host.File([file.blob],name,{type});
+      }
+      if(!nav.canShare({files:[shareFile]}))return Promise.resolve(receipt(file,'unsupported','web-share'));
+      const pending=nav.share({files:[shareFile]}); // files-only: iOS contract
+      return Promise.resolve(pending).then(
+        ()=>receipt(file,'share-returned','web-share',{deliveredName:name}),
+        e=>receipt(file,e?.name==='AbortError'?'share-not-completed':'failed','web-share',
+          {errorName:e?.name||'Error',message:String(e?.message||e),deliveredName:name}));
+    }catch(e){return Promise.resolve(receipt(file,'failed','web-share',{errorName:e.name,message:String(e.message||e)}));}
+  }
+  function encode64(array){
+    let binary='';
+    for(let i=0;i<array.length;i+=8192)
+      binary+=String.fromCharCode.apply(null,array.subarray(i,i+8192));
+    return host.btoa(binary);
+  }
+  async function writeNativeBlob(file,session){
+    const C=host.Capacitor,FS=C?.Plugins?.Filesystem;
+    if(!FS||typeof FS.writeFile!=='function'||typeof FS.appendFile!=='function'||
+       typeof FS.stat!=='function'||typeof FS.getUri!=='function')
+      throw Error('Native Filesystem byte operations unavailable');
+    const loc=file.nativeLocation;
+    if(!loc||!['DOCUMENTS','CACHE'].includes(String(loc.directory))||
+       !loc.folder||!/^[-\w/]+$/.test(loc.folder))
+      throw Error('Missing audited nativeLocation');
+    const dir=loc.directory,final=loc.folder.replace(/\/+$/,'')+'/'+file.name;
+    const key=dir+':'+final;
+    const occupant=held.get(key);
+    if(occupant&&occupant!==session)throw Error('This file is being delivered by another session');
+    held.set(key,session);
+    session.pathKey=key;
+    if(session.artifact)return session.artifact;
+    const timer=file.profile==='timer',tmp=timer?final+'.partial-'+(++sequence).toString(36):final;
+    let written=0;
+    try{
+      if(timer&&typeof FS.rename!=='function')throw Error('Timer rename unavailable');
+      if(file.blob.size===0){
+        await FS.writeFile({path:tmp,data:'',directory:dir,recursive:true});
+      }else{
+        for(let off=0;off<file.blob.size;off+=BUCKET){
+          const buf=new Uint8Array(await file.blob.slice(off,Math.min(file.blob.size,off+BUCKET)).arrayBuffer());
+          const data=encode64(buf);
+          if(off===0)await FS.writeFile({path:tmp,data,directory:dir,recursive:true});
+          else await FS.appendFile({path:tmp,data,directory:dir});
+          written+=buf.byteLength;
+        }
+      }
+      if(written!==file.blob.size)throw Error('Native chunk size mismatch');
+      const stat=await FS.stat({path:tmp,directory:dir});
+      if(Number(stat?.size)!==file.blob.size)throw Error('Native stored bytes mismatch');
+      if(timer)await FS.rename({from:tmp,to:final,directory:dir,toDirectory:dir});
+      const uri=(await FS.getUri({path:final,directory:dir}))?.uri;
+      if(!uri)throw Error('Native file URI missing');
+      session.artifact={uri,bytes:written,path:final,directory:dir};
+      return session.artifact;
+    }catch(e){
+      if(timer)try{await FS.deleteFile({path:tmp,directory:dir});}catch(_){}
+      throw e;
+    }
+  }
+  async function deliver(input,intent='download',options={}){
+    let file;
+    try{file=prepare(input);}catch(e){return {status:'failed',method:'prepare',message:String(e.message||e),bytes:0};}
+    if(!allowed.has(intent))return receipt(file,'unsupported','unknown-intent');
+    const cap=capability(file);
+    if(!cap.native){
+      if(intent==='download')return webDownload(file);
+      if(intent==='share')return webShare(file,cap);
+      return receipt(file,'unsupported','web-save-location');
+    }
+    if(intent==='download')return receipt(file,'unsupported','native-download');
+    if(intent==='share'&&!cap.share||intent==='save-local'&&!cap.local)
+      return receipt(file,'unsupported','native-plugin');
+    const session=options.session||{pathKey:null,artifact:null};
+    const own=!options.session;
+    try{
+      const artifact=await writeNativeBlob(file,session);
+      if(intent==='share'){
+        try{
+          await host.Capacitor.Plugins.Share.share({files:[artifact.uri]});
+          return receipt(file,'share-returned','native-share',
+            {nativeFileWritten:true,nativeUri:artifact.uri});
+        }catch(e){return receipt(file,e?.name==='AbortError'?'share-not-completed':'failed','native-share',
+          {nativeFileWritten:true,nativeUri:artifact.uri,errorName:e?.name,message:String(e?.message||e)});}
+      }
+      try{
+        const data=await host.Capacitor.Plugins.LocalSave.saveDocument({
+          sourceUri:artifact.uri,name:file.name,mimeType:file.mime});
+        if(data?.canceled||data?.cancelled)return receipt(file,'cancelled','native-local-save',
+          {nativeFileWritten:true,nativeUri:artifact.uri});
+        if(data?.saved&&Number(data.bytes)===file.blob.size)
+          return receipt(file,'saved','native-local-save',{nativeFileWritten:true,nativeUri:artifact.uri});
+        throw Error('Local save did not confirm byte-complete closed stream');
+      }catch(e){return receipt(file,e?.name==='AbortError'?'cancelled':'failed','native-local-save',
+        {nativeFileWritten:true,nativeUri:artifact.uri,errorName:e?.name,message:String(e?.message||e)});}
+    }catch(e){return receipt(file,'failed','native-write',{errorName:e?.name,message:String(e?.message||e)});}
+    finally{if(own&&session.pathKey)held.delete(session.pathKey);}
+  }
+  function present(input,options={}){
+    let file;
+    try{file=prepare(input);}catch(e){return Promise.resolve({status:'failed',method:'prepare',message:String(e.message||e)});}
+    const cap=capability(file);
+    if(!cap.mobile&&!cap.native)return deliver(file,'download');
+    const doc=host.document;
+    if(!doc||!doc.body)return deliver(file,cap.native?'share':'download');
+    return new Promise(resolve=>{
+      const session={pathKey:null,artifact:null};
+      const layer=doc.createElement('div');
+      layer.style.cssText='position:fixed;inset:0;z-index:2147483646;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:16px';
+      const box=doc.createElement('div');
+      // FILE_IO_ADAPTER: delivery dialog --surface is translucent; choose opaque theme tokens instead.
+      box.style.cssText='background:var(--bg1,#fff);color:var(--ink,#222);border-radius:14px;padding:20px;max-width:440px;width:100%;box-shadow:0 20px 60px #0004;display:grid;gap:10px;font:14px/1.5 system-ui,sans-serif';
+      const head=doc.createElement('div');head.textContent=say(file,'文件已准备好，请选择交付方式','File ready. Choose a delivery method.');
+      head.style.cssText='font-size:17px;font-weight:700';
+      const detail=doc.createElement('div');detail.textContent=file.name+' ('+file.blob.size+' bytes)';
+      detail.style.cssText='overflow-wrap:anywhere;font-size:12px;opacity:.75';
+      const info=doc.createElement('div');info.setAttribute('role','status');info.style.cssText='font-size:13px;min-height:20px;overflow-wrap:anywhere';
+      box.append(head,detail);
+      let active=false,closed=false,last=null;
+      const buttons=[];
+      function finish(){
+        if(closed)return;
+        if(active)return;
+        closed=true;layer.remove();
+        if(session.pathKey)held.delete(session.pathKey);
+        resolve(last||receipt(file,'cancelled','dialog'));
+      }
+      function add(label,intent){
+        const btn=doc.createElement('button');
+        btn.type='button';btn.textContent=label;btn.style.cssText='padding:11px;border:1px solid #aaa;border-radius:8px;background:var(--bg0,#f4f6fb);color:inherit;cursor:pointer;font:inherit';
+        btn.addEventListener('click',()=>{
+          if(intent==='close'){finish();return;}
+          if(active)return;active=true;for(const b of buttons)b.disabled=true;
+          // Call deliver immediately under user activation, before any await.
+          Promise.resolve(deliver(file,intent,{session})).then(r=>{
+            last=r;info.textContent=message(r,file)+(r.deliveredName&&r.deliveredName!==file.name?' '+r.deliveredName:'');
+            if(typeof options.onReceipt==='function')try{options.onReceipt(r);}catch(_){}
+          }).catch(e=>{last=receipt(file,'failed',intent,{message:String(e?.message||e)});info.textContent=message(last,file);})
+            .finally(()=>{active=false;for(const b of buttons)b.disabled=false;});
+        });
+        box.appendChild(btn);buttons.push(btn);return btn;
+      }
+      if(!cap.native)add(say(file,'下载原文件','Download original file'),'download');
+      if(cap.share)add(say(file,cap.androidWeb&&['json','markdown'].includes(file.kind)?'分享TXT兼容副本':'分享文件','Share file'),'share');
+      if(cap.local)add(say(file,'另存为（选择文件位置）','Save as (choose location)'),'save-local');
+      add(say(file,'完成 / 取消','Done / Cancel'),'close');
+      box.appendChild(info);layer.appendChild(box);doc.body.appendChild(layer);
+      layer.addEventListener('click',e=>{if(e.target===layer)finish();});
+    });
+  }
+  function openPreview(input) {
+    let file;try{file=prepare(input);}catch(e){return {status:'failed',method:'preview',message:String(e.message||e)};}
+    try{
+      const url=host.URL.createObjectURL(file.blob);
+      const w=host.open(url,'_blank');
+      host.setTimeout(()=>{try{host.URL.revokeObjectURL(url);}catch(_){}},30000);
+      return receipt(file,w?'preview-open-started':'failed','web-preview');
+    }catch(e){return receipt(file,'failed','web-preview',{message:String(e.message||e)});}
+  }
+  function standaloneSource(){
+    return '(function(){window.DCFileIO=('+createCoachFileIO.toString()+')(window);})();';
+  }
+  return Object.freeze({present,deliver,openPreview,standaloneSource,message,capability,
+    readJsonText:text=>JSON.parse(String(text).replace(/^\uFEFF/,''))});
+}
+
+if(window.Capacitor?.isNativePlatform?.()&&typeof window.Capacitor.registerPlugin==="function") window.Capacitor.registerPlugin("LocalSave");
+window.DCFileIO=createCoachFileIO(window);
+</script>
 </head>
-<body class="light">
-<header><h1>Case Prep · Standardized Case Workbench <span class="step-label" id="step-label"></span></h1><span style="display:flex;gap:8px;align-items:center"><button id="theme-toggle" onclick="document.body.classList.toggle('light');this.textContent='Theme'" title="Toggle light/dark theme">Theme</button><button id="clear-data" onclick="if(confirm('Clear all entered data? This cannot be undone.')){localStorage.removeItem('estage_v2');location.reload();}" title="Clear local data" style="color:var(--red)">Clear Data</button></span></header>
+<body class="light"><script>if(localStorage.getItem("debate_coach_theme")==="dark")document.body.classList.remove("light")</script>
+<header data-dc-nav="case"><button class="btn" data-dc-back onclick="parent.DCHandleBack()">返回</button><h1 data-dc-title>备赛整合 · 标准化辩案工作台 <span class="step-label" id="step-label"></span></h1><span data-dc-actions style="display:flex;gap:8px;align-items:center"><button id="theme-toggle" data-dc-theme aria-label="切换界面颜色 / Toggle color theme" onclick="toggleTheme()" title="切换深色/浅色主题">界面颜色</button><button class="btn-sm" id="lang-toggle" onclick="toggleToolLanguage()">EN</button><button id="clear-data" onclick="if(confirm('确定清除所有填写数据？此操作不可恢复。')){localStorage.removeItem('estage_v2');location.reload();}" title="清除本地数据" style="color:var(--red)">清除数据</button></span></header>
 <main id="content"></main>
 <div style="padding:12px 20px;border-top:1px solid var(--border);flex-shrink:0;display:flex;justify-content:center;background:var(--card);align-items:center;position:relative">
-  <button onclick="window.top.location.reload()" class="btn" style="padding:10px 12px;position:absolute;left:20px">Home</button>
+  
   <span style="display:flex;gap:12px;align-items:center">
-  <button onclick="prevStep()" id="btn-prev" class="btn">← Prev</button>
+  <button onclick="prevStep()" id="btn-prev" class="btn">← 上一步</button>
   <span style="color:var(--gray);font-size:13px" id="page-num"></span>
-  <button onclick="nextStep()" id="btn-next" class="btn gold">Next →</button>
+  <button onclick="nextStep()" id="btn-next" class="btn gold">下一步 →</button>
   </span>
 </div>
 
 <script>
 (function(){if(typeof Capacitor==='undefined'){var s=document.createElement('script');s.src='https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';document.head.appendChild(s);}})();
 </script>
-<script>
+<script>var __TBX_LOCALE=window.__TBX_LOCALE=localStorage.getItem('debate_coach_lang')==='zh'?'zh':'en';
+
 const STEPS = [
-  { id:'E0', title:'Overview' },{ id:'E1', title:'Research', part:'Part1' },
-  { id:'E2', title:'Assembly 1.0', part:'Part2' },{ id:'E3', title:'Argument Brainstorm', part:'Part3' },
-  { id:'E4', title:'Case Architecture', part:'Part4' },{ id:'E5', title:'Defense', part:'Part5' },
-  { id:'E6', title:'Offense', part:'Part6' },{ id:'E7', title:'Free Debate Prep', part:'Part7' },
-  { id:'E8', title:'Assembly 2.0', part:'Part8' },{ id:'E9', title:'Export Case', part:'Part9' },
+  { id:'E0', title:(window.__TBX_LOCALE==='en'?'Overview':'总览') },{ id:'E1', title:(window.__TBX_LOCALE==='en'?'Research':'资料搜集'), part:'Part1' },
+  { id:'E2', title:(window.__TBX_LOCALE==='en'?'Assembly 1.0':'资料汇编1.0'), part:'Part2' },{ id:'E3', title:(window.__TBX_LOCALE==='en'?'Argument Brainstorm':'论点穷举'), part:'Part3' },
+  { id:'E4', title:(window.__TBX_LOCALE==='en'?'Case Architecture':'论证架构'), part:'Part4' },{ id:'E5', title:(window.__TBX_LOCALE==='en'?'Defense':'我方防守'), part:'Part5' },
+  { id:'E6', title:(window.__TBX_LOCALE==='en'?'Offense':'我方攻击'), part:'Part6' },{ id:'E7', title:(window.__TBX_LOCALE==='en'?'Free Debate Prep':'自由辩套题'), part:'Part7' },
+  { id:'E8', title:(window.__TBX_LOCALE==='en'?'Assembly 2.0':'资料汇编2.0'), part:'Part8' },{ id:'E9', title:(window.__TBX_LOCALE==='en'?'Export Case':'导出辩案'), part:'Part9' },
 ];
 let current = 0;
 
-// DATA STORE
+// ---- DATA STORE ----
 let D = {};
 try { const s=localStorage.getItem('estage_v2'); if(s) D=JSON.parse(s); } catch(e) {}
 function save() { try { localStorage.setItem('estage_v2', JSON.stringify(D)); } catch(e) {} }
@@ -138,6 +545,7 @@ function S(key,opts) { const v=g(key,opts[0]); return `<select data-k="${key}" o
 function II(prefix,i,ph) { return `<input data-k="${prefix}_${i}" placeholder="${ph||''}" value="${esc(gi(prefix,i))}" oninput="si('${prefix}','${i}',this.value)">`; }
 function TI(prefix,i,ph) { return `<textarea data-k="${prefix}_${i}" placeholder="${ph||''}" oninput="si('${prefix}','${i}',this.value)">${esc(gi(prefix,i))}</textarea>`; }
 
+// Dynamic list utils
 function ensureList(key, defaultCount) {
   if (!D[key+'_count']) s(key+'_count', defaultCount);
 }
@@ -156,7 +564,12 @@ function rowCount2(key,field){
 function addItem(key) { const c=getCount(key); s(key+'_count', c+1); render(); }
 function removeItem(key, idx) {
   const c=getCount(key);
-  for (let i=idx; i<c-1; i++) {}
+  // Shift items above idx down
+  for (let i=idx; i<c-1; i++) {
+    for (let f of D._fields||[]) {
+      // Nope, just shift by brute force in render
+    }
+  }
   s(key+'_count', Math.max(0, c-1));
   render();
 }
@@ -167,9 +580,9 @@ function progressBar() {
   return `<div class="progress-bar">${d}</div>`;
 }
 
-// E0
+// ---- E0 ----
 function rE0() {
-  return progressBar()+`
+  return progressBar()+(window.__TBX_LOCALE==='en'?`
   <div class="step-card"><h2>Case Preparation Workbench</h2>
   <p style="font-size:15px;line-height:1.7;color:var(--text);margin-bottom:12px">A guided tool based on the <b style="color:var(--gold)">Standardized Case Template</b>. Fill in each worksheet in order and export a complete case document at the end.</p><p style="font-size:15px;line-height:1.7;color:var(--text);margin-bottom:12px">Every table supports dynamic add/remove rows — add as many keywords, arguments, or speaker positions as you need.</p>
   <div class="coach-msg"><span class="tag">How to use</span> Fill in from left to right. Click Next after each step. At Step 9, click Export to generate the complete case document.</div>
@@ -184,26 +597,41 @@ function rE0() {
   <tr><td>7</td><td>Free Debate Prep</td><td>N battlefields × (Ask → Chase×2 → Return → Transition)</td></tr>
   <tr><td>8</td><td>Assembly 2.0</td><td>Re-categorize by Part 4 architecture</td></tr>
   <tr><td>9</td><td>Export Case</td><td>Consistency check → compile final case document</td></tr></table>
-  <div class="btn-r"><button class="btn gold" onclick="nextStep()">Start →</button></div></div>`;
+  <div class="btn-r"><button class="btn gold" onclick="nextStep()">Start →</button></div></div>`:`
+  <div class="step-card"><h2>备赛整合工作台</h2>
+  <p style="font-size:15px;line-height:1.7;color:var(--text);margin-bottom:12px">本工具系根据<b style="color:var(--gold)">《辩论筑基》标准化辩案模板</b>、逐表填写、最终导出完整辩案的辅助小工具，也可按顺序辅助引导备赛流程。</p><p style="font-size:15px;line-height:1.7;color:var(--text);margin-bottom:12px">每张表都支持动态增删行——有多少关键词就加多少行，有多少辩位就加多少行。</p>
+  <div class="coach-msg"><span class="tag">用法</span> 从左到右挨个填。每步填完点下一步。到 E9 点「导出辩案」生成完整辩案文档。</div>
+  <h3>九张工作表</h3>
+  <table class="t"><tr><th style="width:40px">#</th><th>工作表</th><th>核心产出</th></tr>
+  <tr><td>1</td><td>资料搜集</td><td>关键词解释 + 类似案例 + 热点事件 + 专业理论（行数自定）</td></tr>
+  <tr><td>2</td><td>资料汇编1.0</td><td>按论证方向归类去重（方向数自定）</td></tr>
+  <tr><td>3</td><td>论点穷举</td><td>"因为…所以…" 不限条数</td></tr>
+  <tr><td>4</td><td>论证架构</td><td>定义 → 标准B0 → 分论点(N个) → 环节任务(N行,自由填写)</td></tr>
+  <tr><td>5</td><td>我方防守</td><td>每个我方论点 × 多路径 × 四层回应链</td></tr>
+  <tr><td>6</td><td>我方攻击</td><td>每个对方论点 × 三种反驳类型</td></tr>
+  <tr><td>7</td><td>自由辩套题</td><td>N个战场 × (问→追×2→归→转)</td></tr>
+  <tr><td>8</td><td>资料汇编2.0</td><td>按Part4架构重新归类</td></tr>
+  <tr><td>9</td><td>导出辩案</td><td>一致性检查 → 编译输出完整辩案文档</td></tr></table>
+  <div class="btn-r"><button class="btn gold" onclick="nextStep()">开始 →</button></div></div>`);
 }
 
-// E1: Part1 Research
+// ---- E1: Part1 资料搜集 ----
 function rE1() {
   ensureList('e1_kw',3); ensureList('e1_case',2); ensureList('e1_news',2); ensureList('e1_theory',2);
-  let h=progressBar()+`<div class="step-card"><h2><span class="part-label">Part1</span>Research</h2>`;
+  let h=progressBar()+(window.__TBX_LOCALE==='en'?`<div class="step-card"><h2><span class="part-label">Part1</span>Research</h2>`:`<div class="step-card"><h2><span class="part-label">Part1</span>资料搜集</h2>`);
   const blocks=[
-    {name:'Keyword Explanations',key:'e1_kw',desc:'At least 3 different sources per keyword in the motion', hasKw:true},
-    {name:'Similar Cases / Surveys',key:'e1_case',desc:'Public events, academic surveys, historical cases related to the motion', hasKw:false},
-    {name:'Current / Recent Events',key:'e1_news',desc:'News from the past 1–2 years related to the motion', hasKw:false},
-    {name:'Academic Sources',key:'e1_theory',desc:'Academic theories, legal provisions, professional data', hasKw:false},
+    {name:(window.__TBX_LOCALE==='en'?'Keyword Explanations':'关键词解释'),key:'e1_kw',desc:(window.__TBX_LOCALE==='en'?'At least 3 different sources per keyword in the motion':'辩题每个关键词至少3条不同来源的解释'), hasKw:true},
+    {name:(window.__TBX_LOCALE==='en'?'Similar Cases / Surveys':'类似案例/调查'),key:'e1_case',desc:(window.__TBX_LOCALE==='en'?'Public events, academic surveys, historical cases related to the motion':'和辩题相关的公共事件、学术调查、历史案例'), hasKw:false},
+    {name:(window.__TBX_LOCALE==='en'?'Current / Recent Events':'热点/近期事件'),key:'e1_news',desc:(window.__TBX_LOCALE==='en'?'News from the past 1–2 years related to the motion':'近1-2年与辩题相关的新闻'), hasKw:false},
+    {name:(window.__TBX_LOCALE==='en'?'Academic Sources':'专业理论/学术研究'),key:'e1_theory',desc:(window.__TBX_LOCALE==='en'?'Academic theories, legal provisions, professional data':'学术理论、法律条文、专业数据'), hasKw:false},
   ];
   blocks.forEach(b=>{
     const n=getCount(b.key);
     h+=`<h3>${b.name}</h3><p class="meta">${b.desc}</p>`;
     if (b.hasKw) {
-      h+=`<table class="t"><tr><th style="width:30px">#</th><th style="width:80px">Keyword</th><th>Summary</th><th>Key Quote</th><th style="width:100px">Author/Org/Date</th><th style="width:80px">Source</th><th style="width:100px">URL</th><th style="width:30px"></th></tr>`;
+      h+=(window.__TBX_LOCALE==='en'?`<table class="t"><tr><th style="width:30px">#</th><th style="width:80px">Keyword</th><th>Summary</th><th>Key Quote</th><th style="width:100px">Author/Org/Date</th><th style="width:80px">Source</th><th style="width:100px">URL</th><th style="width:30px"></th></tr>`:`<table class="t"><tr><th style="width:30px">#</th><th style="width:80px">关键词</th><th>一句话概括</th><th>关键句粘贴</th><th style="width:100px">作者/机构/时间</th><th style="width:80px">来源</th><th style="width:100px">网址</th><th style="width:30px"></th></tr>`);
     } else {
-      h+=`<table class="t"><tr><th style="width:30px">#</th><th>Summary</th><th>Key Quote</th><th style="width:100px">Author/Org/Date</th><th style="width:80px">Source</th><th style="width:100px">URL</th><th style="width:30px"></th></tr>`;
+      h+=(window.__TBX_LOCALE==='en'?`<table class="t"><tr><th style="width:30px">#</th><th>Summary</th><th>Key Quote</th><th style="width:100px">Author/Org/Date</th><th style="width:80px">Source</th><th style="width:100px">URL</th><th style="width:30px"></th></tr>`:`<table class="t"><tr><th style="width:30px">#</th><th>一句话概括</th><th>关键句粘贴</th><th style="width:100px">作者/机构/时间</th><th style="width:80px">来源</th><th style="width:100px">网址</th><th style="width:30px"></th></tr>`);
     }
     for(let i=0;i<n;i++){
       if (b.hasKw) {
@@ -212,7 +640,7 @@ function rE1() {
         h+=`<tr><td>${i+1}</td><td>${II(b.key+'_s',i)}</td><td>${TI(b.key+'_q',i)}</td><td>${II(b.key+'_a',i)}</td><td>${II(b.key+'_src',i)}</td><td>${II(b.key+'_url',i)}</td><td>${n>1?`<button class="btn-sm danger" onclick="removeRow('${b.key}',${i})">×</button>`:''}</td></tr>`;
       }
     }
-    h+=`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${b.key}')">+1 Row</button></div>`;
+    h+=(window.__TBX_LOCALE==='en'?`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${b.key}')">+1 Row</button></div>`:`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${b.key}')">+1行</button></div>`);
   });
   return h+`</div>`;
 }
@@ -234,6 +662,7 @@ function removeOpp(o){
 }
 function removeRow(key,idx) {
   const n=getCount(key);
+  // Copy last item to idx, then decrement count
   if (n<=1) return;
   const fields=['s','q','a','src','url'];
   for (let i=idx; i<n-1; i++) {
@@ -243,42 +672,49 @@ function removeRow(key,idx) {
   render();
 }
 
-// E2: Part2 Assembly 1.0
+// ---- E2: Part2 资料汇编1.0 ----
 function rE2() {
   ensureList('e2_dir',3);
   const nd=getCount('e2_dir');
-  let h=progressBar()+`<div class="step-card"><h2><span class="part-label">Part2</span>Assembly 1.0 — Deduplicate & Categorize</h2>
-  <p class="meta">Categorize by argument direction. Freely add/remove directions and sources per direction.</p>`;
+  let h=progressBar()+(window.__TBX_LOCALE==='en'?`<div class="step-card"><h2><span class="part-label">Part2</span>Assembly 1.0 — Deduplicate & Categorize</h2>
+  <p class="meta">Categorize by argument direction. Freely add/remove directions and sources per direction.</p>`:`<div class="step-card"><h2><span class="part-label">Part2</span>资料汇编1.0 — 去重合并归类</h2>
+  <p class="meta">按论证方向归类。方向数和每方向的资料数自由增减。</p>`);
   for(let d=0;d<nd;d++){
     ensureList('e2_d'+d,3);
     const ni=getCount('e2_d'+d);
-    h+=`<div class="section-block"><h4>Direction ${d+1} <button class="btn-sm danger remove-btn" onclick="removeRow('e2_dir',${d})">× Dir</button></h4>
+    h+=(window.__TBX_LOCALE==='en'?`<div class="section-block"><h4>Direction ${d+1} <button class="btn-sm danger remove-btn" onclick="removeRow('e2_dir',${d})">× Dir</button></h4>
     <div class="row-inp"><label>Direction Name</label>${II('e2_dirname',d,'e.g. Supports Sub-Argument 1 / Scope support')}</div>
-    <table class="t"><tr><th style="width:30px">#</th><th>Source Summary</th><th>Key Quote</th><th>Source</th><th>URL</th><th style="width:30px"></th></tr>`;
+    <table class="t"><tr><th style="width:30px">#</th><th>Source Summary</th><th>Key Quote</th><th>Source</th><th>URL</th><th style="width:30px"></th></tr>`:`<div class="section-block"><h4>论证方向 ${d+1} <button class="btn-sm danger remove-btn" onclick="removeRow('e2_dir',${d})">×方向</button></h4>
+    <div class="row-inp"><label>方向名</label>${II('e2_dirname',d,'例：支持分论点1 / 范围支撑')}</div>
+    <table class="t"><tr><th style="width:30px">#</th><th>资料摘要</th><th>关键句</th><th>来源</th><th>网址</th><th style="width:30px"></th></tr>`);
     for(let i=0;i<ni;i++){
       h+=`<tr><td>${i+1}</td><td>${II('e2_d'+d+'_s',i)}</td><td>${TI('e2_d'+d+'_q',i)}</td><td>${II('e2_d'+d+'_src',i)}</td><td>${II('e2_d'+d+'_url',i)}</td><td>${ni>1?`<button class="btn-sm danger" onclick="removeRow('e2_d${d}',${i})">×</button>`:''}</td></tr>`;
     }
-    h+=`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('e2_d${d}')">+1 Row</button></div></div>`;
+    h+=(window.__TBX_LOCALE==='en'?`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('e2_d${d}')">+1 Row</button></div></div>`:`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('e2_d${d}')">+1行</button></div></div>`);
   }
-  h+=`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e2_dir')">+1 Direction</button></div>`;
+  h+=(window.__TBX_LOCALE==='en'?`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e2_dir')">+1 Direction</button></div>`:`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e2_dir')">+1个方向</button></div>`);
   return h+`</div>`;
 }
 
-// E3: Part3 Argument Brainstorm
+// ---- E3: Part3 论点穷举 ----
 function rE3() {
   ensureList('e3_args',20);
   const n=getCount('e3_args');
-  let h=progressBar()+`<div class="step-card"><h2><span class="part-label">Part3</span>Argument Brainstorm List</h2>
+  let h=progressBar()+(window.__TBX_LOCALE==='en'?`<div class="step-card"><h2><span class="part-label">Part3</span>Argument Brainstorm List</h2>
   <p class="meta">No filtering or judging — list every possible argument direction ("Because… therefore…" format).</p>
-  <table class="t"><tr><th style="width:30px">#</th><th style="width:40%">Because</th><th style="width:40%">Therefore</th><th style="width:60px">Side</th><th style="width:30px"></th></tr>`;
+  <table class="t"><tr><th style="width:30px">#</th><th style="width:40%">Because</th><th style="width:40%">Therefore</th><th style="width:60px">Side</th><th style="width:30px"></th></tr>`:`<div class="step-card"><h2><span class="part-label">Part3</span>论点穷举清单</h2>
+  <p class="meta">不筛选不评判——把能想到的所有论证方向全列出来（"因为…所以…"格式）。</p>
+  <table class="t"><tr><th style="width:30px">#</th><th style="width:40%">因为</th><th style="width:40%">所以</th><th style="width:60px">方向</th><th style="width:30px"></th></tr>`);
   for(let i=0;i<n;i++){
-    h+=`<tr><td>${i+1}</td><td>${II('e3_because',i)}</td><td>${II('e3_so',i)}</td><td>${(()=>{const v=gi('e3_side',i,'Ours');return `<select data-k="e3_side_${i}" onchange="si('e3_side','${i}',this.value)"><option ${v==='Ours'?'selected':''}>Ours</option><option ${v==='Theirs'?'selected':''}>Theirs</option></select>`})()}</td><td>${n>1?`<button class="btn-sm danger" onclick="removeRow('e3_args',${i})">×</button>`:''}</td></tr>`;
+    h+=(window.__TBX_LOCALE==='en'?`<tr><td>${i+1}</td><td>${II('e3_because',i)}</td><td>${II('e3_so',i)}</td><td>${(()=>{const v=gi('e3_side',i,'Ours');return `<select data-k="e3_side_${i}" onchange="si('e3_side','${i}',this.value)"><option ${v==='Ours'?'selected':''}>Ours</option><option ${v==='Theirs'?'selected':''}>Theirs</option></select>`})()}</td><td>${n>1?`<button class="btn-sm danger" onclick="removeRow('e3_args',${i})">×</button>`:''}</td></tr>`:`<tr><td>${i+1}</td><td>${II('e3_because',i)}</td><td>${II('e3_so',i)}</td><td>${(()=>{const v=gi('e3_side',i,'我方');return `<select data-k="e3_side_${i}" onchange="si('e3_side','${i}',this.value)"><option ${v==='我方'?'selected':''}>我方</option><option ${v==='对方'?'selected':''}>对方</option></select>`})()}</td><td>${n>1?`<button class="btn-sm danger" onclick="removeRow('e3_args',${i})">×</button>`:''}</td></tr>`);
   }
-  return h+`</table><div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e3_args')">+1 Row</button></div></div>`;
+  return h+(window.__TBX_LOCALE==='en'?`</table><div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e3_args')">+1 Row</button></div></div>`:`</table><div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e3_args')">+1行</button></div></div>`);
 }
 
-// E4: Part4 Case Architecture
+// ---- E4: Part4 论证架构 ----
 function dynBlock(key, idx, total, label, titleFields) {
+  // titleFields: [{label,fieldKey,placeholder,isTextarea}]
+  // Each block has its own dynamic evidence rows: key+'_ev_'+idx count
   const evKey = key+'_'+idx;
   ensureList(evKey, 2);
   const nev = getCount(evKey);
@@ -290,259 +726,289 @@ function dynBlock(key, idx, total, label, titleFields) {
       h += `<div class="row-inp"><label>${tf.label}</label>${II(key+'_'+tf.fieldKey, idx, tf.placeholder||'')}</div>`;
     }
   });
-  h += `<table class="t"><tr><th style="width:30px">#</th><th>Argument</th><th>Evidence</th><th style="width:30px"></th></tr>`;
+  h += (window.__TBX_LOCALE==='en'?`<table class="t"><tr><th style="width:30px">#</th><th>Argument</th><th>Evidence</th><th style="width:30px"></th></tr>`:`<table class="t"><tr><th style="width:30px">#</th><th>论证</th><th>证据</th><th style="width:30px"></th></tr>`);
   for(let i=0;i<nev;i++){
     h += `<tr><td>${i+1}</td><td>${TI(evKey+'_arg',i)}</td><td>${II(evKey+'_ev',i)}</td><td>${nev>1?`<button class="btn-sm danger" onclick="removeRow('${evKey}',${i})">×</button>`:''}</td></tr>`;
   }
-  h += `</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${evKey}')">+1 Row</button></div></div>`;
+  h += (window.__TBX_LOCALE==='en'?`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${evKey}')">+1 Row</button></div></div>`:`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${evKey}')">+1行</button></div></div>`);
   return h;
 }
 
 function rE4() {
   ensureList('e4_defs',2); ensureList('e4_subpoints',3); ensureList('e4_extra',0);
   const nd=getCount('e4_defs'), np=getCount('e4_subpoints'), ne=getCount('e4_extra');
-  let h=progressBar()+`<div class="step-card"><h2><span class="part-label">Part4</span>Case Architecture + Round Task Assignment</h2>`;
+  let h=progressBar()+(window.__TBX_LOCALE==='en'?`<div class="step-card"><h2><span class="part-label">Part4</span>Case Architecture + Round Task Assignment</h2>`:`<div class="step-card"><h2><span class="part-label">Part4</span>论证架构 + 环节任务分配</h2>`);
 
-  h+=`<h3>Definition / Scope of Discussion</h3><p class="meta">Freely set the number of keywords. Add rows per keyword for arguments and evidence.</p>`;
+  h+=(window.__TBX_LOCALE==='en'?`<h3>Definition / Scope of Discussion</h3><p class="meta">Freely set the number of keywords. Add rows per keyword for arguments and evidence.</p>`:`<h3>定义/讨论范围</h3><p class="meta">关键词数量自定。每个关键词内部论证行数自定——每行填一条论证和对应证据。</p>`);
   for(let d=0;d<nd;d++){
-    h+=dynBlock('e4_defs',d,nd,'Keyword '+(d+1),[
-      {label:'Keyword',fieldKey:'kw',placeholder:'A specific term in the motion'},
-      {label:'Definition',fieldKey:'val',placeholder:'Our definition of this keyword',isTextarea:true}
+    h+=dynBlock('e4_defs',d,nd,(window.__TBX_LOCALE==='en'?'Keyword ':'关键词 ')+(d+1),[
+      {label:(window.__TBX_LOCALE==='en'?'Keyword':'关键词'),fieldKey:'kw',placeholder:(window.__TBX_LOCALE==='en'?'A specific term in the motion':'辩题中的具体词语')},
+      {label:(window.__TBX_LOCALE==='en'?'Definition':'定义内容'),fieldKey:'val',placeholder:(window.__TBX_LOCALE==='en'?'Our definition of this keyword':'我方对这个关键词的定义'),isTextarea:true}
     ]);
   }
-  h+=`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e4_defs')">+1 Keyword</button></div>`;
+  h+=(window.__TBX_LOCALE==='en'?`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e4_defs')">+1 Keyword</button></div>`:`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e4_defs')">+1个关键词</button></div>`);
 
   // B0
-  h+=`<h3>Criterion B0</h3><div class="row-inp"><label>B0</label>${I('e4_b0','The most direct / primary / most important reason our side holds')}</div>
-  <div class="row-inp"><label>Criterion Reasonableness</label>${T('e4_b0_arg1','Why this criterion should be used to judge')}</div>`;
+  h+=(window.__TBX_LOCALE==='en'?`<h3>Criterion B0</h3><div class="row-inp"><label>B0</label>${I('e4_b0','The most direct / primary / most important reason our side holds')}</div>
+  <div class="row-inp"><label>Criterion Reasonableness</label>${T('e4_b0_arg1','Why this criterion should be used to judge')}</div>`:`<h3>标准 B0</h3><div class="row-inp"><label>B0</label>${I('e4_b0','我方成立的最直接/最大/最重要的理由')}</div>
+  <div class="row-inp"><label>标准合理性</label>${T('e4_b0_arg1','凭什么用这个标准来判断')}</div>`);
   ensureList('e4_b0_ev',2);
   const nb0ev=getCount('e4_b0_ev');
-  h+=`<table class="t"><tr><th style="width:30px">#</th><th>Argument</th><th>Evidence</th><th style="width:30px"></th></tr>`;
+  h+=(window.__TBX_LOCALE==='en'?`<table class="t"><tr><th style="width:30px">#</th><th>Argument</th><th>Evidence</th><th style="width:30px"></th></tr>`:`<table class="t"><tr><th style="width:30px">#</th><th>论证</th><th>证据</th><th style="width:30px"></th></tr>`);
   for(let i=0;i<nb0ev;i++){
     h+=`<tr><td>${i+1}</td><td>${TI('e4_b0_ev_arg',i)}</td><td>${II('e4_b0_ev_ev',i)}</td><td>${nb0ev>1?`<button class="btn-sm danger" onclick="removeRow('e4_b0_ev',${i})">×</button>`:''}</td></tr>`;
   }
-  h+=`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('e4_b0_ev')">+1 Row</button></div>`;
+  h+=(window.__TBX_LOCALE==='en'?`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('e4_b0_ev')">+1 Row</button></div>`:`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('e4_b0_ev')">+1行</button></div>`);
 
   // Sub-points
-  h+=`<h3>Sub-Arguments</h3>`;
+  h+=(window.__TBX_LOCALE==='en'?`<h3>Sub-Arguments</h3>`:`<h3>分论点</h3>`);
   for(let p=0;p<np;p++){
-    h+=dynBlock('e4_subpoints',p,np,'Sub-Argument '+(p+1),[
-      {label:'Argument Statement',fieldKey:'chain',placeholder:'',isTextarea:true}
+    h+=dynBlock('e4_subpoints',p,np,(window.__TBX_LOCALE==='en'?'Sub-Argument ':'分论点')+(p+1),[
+      {label:(window.__TBX_LOCALE==='en'?'Argument Statement':'论点句'),fieldKey:'chain',placeholder:'',isTextarea:true}
     ]);
   }
-  h+=`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e4_subpoints')">+1 Sub-Argument</button></div>`;
+  h+=(window.__TBX_LOCALE==='en'?`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e4_subpoints')">+1 Sub-Argument</button></div>`:`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e4_subpoints')">+1个分论点</button></div>`);
 
   // Extra
-  h+=`<h3>Additional Notes</h3><p class="meta">Extra premises, conditions, or clarifications needed for the architecture but not covered above</p>`;
+  h+=(window.__TBX_LOCALE==='en'?`<h3>Additional Notes</h3><p class="meta">Extra premises, conditions, or clarifications needed for the architecture but not covered above</p>`:`<h3>其它补充</h3><p class="meta">架构中需要拿下但不在上述分类中的额外前提、条件或说明</p>`);
   for(let e=0;e<ne;e++){
-    h+=dynBlock('e4_extra',e,ne,'Note '+(e+1),[
-      {label:'Content',fieldKey:'title',placeholder:''}
+    h+=dynBlock('e4_extra',e,ne,(window.__TBX_LOCALE==='en'?'Note ':'补充')+(e+1),[
+      {label:(window.__TBX_LOCALE==='en'?'Content':'内容'),fieldKey:'title',placeholder:''}
     ]);
   }
-  h+=`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e4_extra')">+1 Note</button></div>`;
+  h+=(window.__TBX_LOCALE==='en'?`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e4_extra')">+1 Note</button></div>`:`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e4_extra')">+1条补充</button></div>`);
 
   // Session tasks
   ensureList('e4_tasks',4);
   const nt=getCount('e4_tasks');
-  h+=`<h3>Round Task Assignment</h3><p class="meta">Freely fill in speaker position, round name, task description, and planned duration.</p>
-  <table class="t"><tr><th style="width:80px">Position</th><th style="width:100px">Round</th><th>Task Description</th><th style="width:60px">Duration</th><th style="width:30px"></th></tr>`;
+  h+=(window.__TBX_LOCALE==='en'?`<h3>Round Task Assignment</h3><p class="meta">Freely fill in speaker position, round name, task description, and planned duration.</p>
+  <table class="t"><tr><th style="width:80px">Position</th><th style="width:100px">Round</th><th>Task Description</th><th style="width:60px">Duration</th><th style="width:30px"></th></tr>`:`<h3>各环节任务分配</h3><p class="meta">辩位/环节名称、任务描述、时长全部自由填写。</p>
+  <table class="t"><tr><th style="width:80px">辩位</th><th style="width:100px">环节</th><th>任务描述</th><th style="width:60px">计划时长</th><th style="width:30px"></th></tr>`);
   for(let i=0;i<nt;i++){
-    h+=`<tr><td>${II('e4_t_pos',i,'1st Speaker')}</td><td>${II('e4_t_seg',i,'Constructive')}</td><td>${TI('e4_t_task',i)}</td><td>${II('e4_t_time',i,'3min')}</td><td>${nt>1?`<button class="btn-sm danger" onclick="removeRow('e4_tasks',${i})">×</button>`:''}</td></tr>`;
+    h+=(window.__TBX_LOCALE==='en'?`<tr><td>${II('e4_t_pos',i,'1st Speaker')}</td><td>${II('e4_t_seg',i,'Constructive')}</td><td>${TI('e4_t_task',i)}</td><td>${II('e4_t_time',i,'3min')}</td><td>${nt>1?`<button class="btn-sm danger" onclick="removeRow('e4_tasks',${i})">×</button>`:''}</td></tr>`:`<tr><td>${II('e4_t_pos',i,'一辩')}</td><td>${II('e4_t_seg',i,'立论陈词')}</td><td>${TI('e4_t_task',i)}</td><td>${II('e4_t_time',i,'3min')}</td><td>${nt>1?`<button class="btn-sm danger" onclick="removeRow('e4_tasks',${i})">×</button>`:''}</td></tr>`);
   }
-  h+=`</table><div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e4_tasks')">+1 Row</button></div>`;
+  h+=(window.__TBX_LOCALE==='en'?`</table><div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e4_tasks')">+1 Row</button></div>`:`</table><div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e4_tasks')">+1行</button></div>`);
   return h+`</div>`;
 }
 
-// E5: Part5 Defense
+// ---- E5: Part5 我方防守 ----
 function defBlock(key, idx, total, label) {
+  // Dynamic rows: 对方可能攻击 | 对方可能论据 | 我方回应 | 我方论据
   const evKey = key+'_'+idx;
   ensureList(evKey, 2);
   const nev = getCount(evKey);
-  let h = `<div class="section-block"><b style="color:var(--gold);font-size:13px">${label}</b> ${total>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('${key}',${idx})">×</button>`:''}
-  <table class="t"><tr><th>Opponent Attack</th><th>Opponent Evidence</th><th>Our Response</th><th>Our Evidence</th><th style="width:30px"></th></tr>`;
+  let h = (window.__TBX_LOCALE==='en'?`<div class="section-block"><b style="color:var(--gold);font-size:13px">${label}</b> ${total>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('${key}',${idx})">×</button>`:''}
+  <table class="t"><tr><th>Opponent Attack</th><th>Opponent Evidence</th><th>Our Response</th><th>Our Evidence</th><th style="width:30px"></th></tr>`:`<div class="section-block"><b style="color:var(--gold);font-size:13px">${label}</b> ${total>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('${key}',${idx})">×</button>`:''}
+  <table class="t"><tr><th>对方可能攻击</th><th>对方可能论据</th><th>我方回应</th><th>我方论据</th><th style="width:30px"></th></tr>`);
   for(let i=0;i<nev;i++){
     h+=`<tr><td>${TI(evKey+'_atk',i)}</td><td>${II(evKey+'_oev',i)}</td><td>${TI(evKey+'_res',i)}</td><td>${II(evKey+'_mev',i)}</td><td>${nev>1?`<button class="btn-sm danger" onclick="removeRow('${evKey}',${i})">×</button>`:''}</td></tr>`;
   }
-  h+=`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${evKey}')">+1 Row</button></div></div>`;
+  h+=(window.__TBX_LOCALE==='en'?`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${evKey}')">+1 Row</button></div></div>`:`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${evKey}')">+1行</button></div></div>`);
   return h;
 }
 
 function scopeBlock(key, label) {
+  // Discussion scope: unified table - 对方可能攻击 | 对方可能论据 | 我方回应 | 我方论据
   ensureList(key+'_rows', 2);
   const nr = getCount(key+'_rows');
-  let h = `<div class="section-block"><b style="color:var(--gold);font-size:13px">${label}</b>
-  <table class="t"><tr><th>Opponent Attack</th><th>Opponent Evidence</th><th>Our Response</th><th>Our Evidence</th><th style="width:30px"></th></tr>`;
+  let h = (window.__TBX_LOCALE==='en'?`<div class="section-block"><b style="color:var(--gold);font-size:13px">${label}</b>
+  <table class="t"><tr><th>Opponent Attack</th><th>Opponent Evidence</th><th>Our Response</th><th>Our Evidence</th><th style="width:30px"></th></tr>`:`<div class="section-block"><b style="color:var(--gold);font-size:13px">${label}</b>
+  <table class="t"><tr><th>对方可能攻击</th><th>对方可能论据</th><th>我方回应</th><th>我方论据</th><th style="width:30px"></th></tr>`);
   for(let i=0;i<nr;i++){
     h+=`<tr><td>${TI(key+'_rows_atk',i)}</td><td>${II(key+'_rows_oev',i)}</td><td>${TI(key+'_rows_res',i)}</td><td>${II(key+'_rows_mev',i)}</td><td>${nr>1?`<button class="btn-sm danger" onclick="removeRow('${key}_rows',${i})">×</button>`:''}</td></tr>`;
   }
-  h+=`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${key}_rows')">+1 Row</button></div></div>`;
+  h+=(window.__TBX_LOCALE==='en'?`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${key}_rows')">+1 Row</button></div></div>`:`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${key}_rows')">+1行</button></div></div>`);
   return h;
 }
 
 function customBlock(key, idx, total) {
+  // Custom defense block: 我方防守的点 | 对方可能攻击 | 对方可能论据 | 我方回应及论据
   const evKey = key+'_'+idx;
   ensureList(evKey, 2);
   const nev = getCount(evKey);
-  let h = `<div class="section-block"><b style="color:var(--gold);font-size:13px">Custom Defense ${idx+1}</b> ${total>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('${key}',${idx})">×</button>`:''}
+  let h = (window.__TBX_LOCALE==='en'?`<div class="section-block"><b style="color:var(--gold);font-size:13px">Custom Defense ${idx+1}</b> ${total>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('${key}',${idx})">×</button>`:''}
   <div class="row-inp"><label>Point to Defend</label>${II(key+'_pt',idx,'e.g. Sub-Argument 1 / Criterion B0 / key evidence')}</div>
-  <table class="t"><tr><th>Opponent Attack</th><th>Opponent Evidence</th><th>Our Response & Evidence</th><th style="width:30px"></th></tr>`;
+  <table class="t"><tr><th>Opponent Attack</th><th>Opponent Evidence</th><th>Our Response & Evidence</th><th style="width:30px"></th></tr>`:`<div class="section-block"><b style="color:var(--gold);font-size:13px">自定义防守 ${idx+1}</b> ${total>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('${key}',${idx})">×</button>`:''}
+  <div class="row-inp"><label>我方防守的点</label>${II(key+'_pt',idx,'例如：分论点1 / 标准B0 / 某个关键论据')}</div>
+  <table class="t"><tr><th>对方可能攻击</th><th>对方可能论据</th><th>我方回应及论据</th><th style="width:30px"></th></tr>`);
   for(let i=0;i<nev;i++){
     h+=`<tr><td>${TI(evKey+'_atk',i)}</td><td>${II(evKey+'_oev',i)}</td><td>${TI(evKey+'_res',i)}</td><td>${nev>1?`<button class="btn-sm danger" onclick="removeRow('${evKey}',${i})">×</button>`:''}</td></tr>`;
   }
-  h+=`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${evKey}')">+1 Row</button></div></div>`;
+  h+=(window.__TBX_LOCALE==='en'?`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${evKey}')">+1 Row</button></div></div>`:`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${evKey}')">+1行</button></div></div>`);
   return h;
 }
 
 function rE5() {
   ensureList('e5_custom',0);
   const nc=getCount('e5_custom');
-  let h=progressBar()+`<div class="step-card"><h2><span class="part-label">Part5</span>Defense System</h2>
-  <p class="meta">All modules support dynamic row counts — add as many attack paths as needed. Four columns per row: Opponent Attack | Opponent Evidence | Our Response | Our Evidence.</p>`;
+  let h=progressBar()+(window.__TBX_LOCALE==='en'?`<div class="step-card"><h2><span class="part-label">Part5</span>Defense System</h2>
+  <p class="meta">All modules support dynamic row counts — add as many attack paths as needed. Four columns per row: Opponent Attack | Opponent Evidence | Our Response | Our Evidence.</p>`:`<div class="step-card"><h2><span class="part-label">Part5</span>我方防守体系</h2>
+  <p class="meta">所有模块内部行数自定——有多少攻击路径就加多少行。每行四列：对方可能攻击 | 对方可能论据 | 我方回应 | 我方论据。</p>`);
 
-  // Inherent Definition Domain
-  h+=`<h3>Inherent Definition (Domain)</h3>`;
-  h+=defBlock('e5_domain',0,2,'Definition Too Broad / Too Narrow');
-  h+=defBlock('e5_domain',1,2,'Definition Avoids Core Controversy');
+  // 固有定义域
+  h+=(window.__TBX_LOCALE==='en'?`<h3>Inherent Definition (Domain)</h3>`:`<h3>固有定义域</h3>`);
+  h+=defBlock('e5_domain',0,2,(window.__TBX_LOCALE==='en'?'Definition Too Broad / Too Narrow':'定义过宽/过窄'));
+  h+=defBlock('e5_domain',1,2,(window.__TBX_LOCALE==='en'?'Definition Avoids Core Controversy':'定义回避核心争议'));
 
-  // Scope of Discussion
-  h+=`<h3>Scope of Discussion</h3>`;
-  h+=scopeBlock('e5_scope','Scope of Discussion Defense');
+  // 讨论范围切入
+  h+=(window.__TBX_LOCALE==='en'?`<h3>Scope of Discussion</h3>`:`<h3>讨论范围切入</h3>`);
+  h+=scopeBlock('e5_scope',(window.__TBX_LOCALE==='en'?'Scope of Discussion Defense':'讨论范围切入防守'));
 
-  // Criterion B0
-  h+=`<h3>Criterion B0 Defense</h3>`;
-  h+=defBlock('e5_b0',0,2,'B→C Does Not Follow');
-  h+=defBlock('e5_b0',1,2,'B Unimportant (more important criterion exists)');
+  // 标准B0
+  h+=(window.__TBX_LOCALE==='en'?`<h3>Criterion B0 Defense</h3>`:`<h3>标准 B0 防守</h3>`);
+  h+=defBlock('e5_b0',0,2,(window.__TBX_LOCALE==='en'?'B→C Does Not Follow':'B→C推不通'));
+  h+=defBlock('e5_b0',1,2,(window.__TBX_LOCALE==='en'?'B Unimportant (more important criterion exists)':'B不重要（有更重要的判准）'));
 
-  // Sub-argument defense (dynamic)
+  // 分论点防守 (dynamic)
   ensureList('e5_subp',3);
   const np=getCount('e5_subp');
-  h+=`<h3>Sub-Argument Defense</h3>`;
+  h+=(window.__TBX_LOCALE==='en'?`<h3>Sub-Argument Defense</h3>`:`<h3>分论点防守</h3>`);
   for(let p=0;p<np;p++){
-    h+=`<div class="section-block"><b style="color:var(--gold);font-size:13px">Sub-Argument ${p+1} Defense</b> ${np>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('e5_subp',${p})">×</button>`:''}
-    <div class="row-inp"><label>Argument Statement</label>${TI('e5_subp_pt',p)}</div>`;
-    ['A→B (Factual)','B→C (Logical)','B Unimportant (Value)'].forEach((path,pi)=>{
+    h+=(window.__TBX_LOCALE==='en'?`<div class="section-block"><b style="color:var(--gold);font-size:13px">Sub-Argument ${p+1} Defense</b> ${np>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('e5_subp',${p})">×</button>`:''}
+    <div class="row-inp"><label>Argument Statement</label>${TI('e5_subp_pt',p)}</div>`:`<div class="section-block"><b style="color:var(--gold);font-size:13px">分论点${p+1}防守</b> ${np>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('e5_subp',${p})">×</button>`:''}
+    <div class="row-inp"><label>论点句</label>${TI('e5_subp_pt',p)}</div>`);
+    // 3 paths each with dynamic rows
+    [(window.__TBX_LOCALE==='en'?'A→B (Factual)':'A→B（事实反驳）'),(window.__TBX_LOCALE==='en'?'B→C (Logical)':'B→C（逻辑反驳）'),(window.__TBX_LOCALE==='en'?'B Unimportant (Value)':'B不重要（价值反驳）')].forEach((path,pi)=>{
       const evKey='e5_subp_'+p+'_'+pi;
       ensureList(evKey,2);
       const nev=getCount(evKey);
-      h+=`<div style="margin:6px 0;padding:8px;background:var(--bg);border-radius:6px"><b style="color:var(--gold);font-size:11px">${path}</b>
-      <table class="t"><tr><th>Opponent Attack</th><th>Opponent Evidence</th><th>Our Response</th><th>Our Evidence</th><th style="width:30px"></th></tr>`;
+      h+=(window.__TBX_LOCALE==='en'?`<div style="margin:6px 0;padding:8px;background:var(--bg);border-radius:6px"><b style="color:var(--gold);font-size:11px">${path}</b>
+      <table class="t"><tr><th>Opponent Attack</th><th>Opponent Evidence</th><th>Our Response</th><th>Our Evidence</th><th style="width:30px"></th></tr>`:`<div style="margin:6px 0;padding:8px;background:var(--bg);border-radius:6px"><b style="color:var(--gold);font-size:11px">${path}</b>
+      <table class="t"><tr><th>对方可能攻击</th><th>对方可能论据</th><th>我方回应</th><th>我方论据</th><th style="width:30px"></th></tr>`);
       for(let i=0;i<nev;i++){
         h+=`<tr><td>${TI(evKey+'_atk',i)}</td><td>${II(evKey+'_oev',i)}</td><td>${TI(evKey+'_res',i)}</td><td>${II(evKey+'_mev',i)}</td><td>${nev>1?`<button class="btn-sm danger" onclick="removeRow('${evKey}',${i})">×</button>`:''}</td></tr>`;
       }
-      h+=`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${evKey}')">+1 Row</button></div></div>`;
+      h+=(window.__TBX_LOCALE==='en'?`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${evKey}')">+1 Row</button></div></div>`:`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('${evKey}')">+1行</button></div></div>`);
     });
     h+=`</div>`;
   }
-  h+=`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e5_subp')">+1 Sub-Argument Defense</button></div>`;
+  h+=(window.__TBX_LOCALE==='en'?`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e5_subp')">+1 Sub-Argument Defense</button></div>`:`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e5_subp')">+1个分论点防守</button></div>`);
 
   // Custom blocks
-  h+=`<h3>Other Defense Points</h3>`;
+  h+=(window.__TBX_LOCALE==='en'?`<h3>Other Defense Points</h3>`:`<h3>其它防守点</h3>`);
   for(let c=0;c<nc;c++){
     h+=customBlock('e5_custom',c,nc);
   }
-  h+=`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e5_custom')">+1 Defense Point</button></div>`;
+  h+=(window.__TBX_LOCALE==='en'?`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e5_custom')">+1 Defense Point</button></div>`:`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e5_custom')">+1个防守点</button></div>`);
   return h+`</div>`;
 }
 
-// E6: Part6 Offense
+// ---- E6: Part6 我方攻击 ----
 function rE6() {
   ensureList('e6_opp',3);
   const no=getCount('e6_opp');
-  let h=progressBar()+`<div class="step-card"><h2><span class="part-label">Part6</span>Offense System</h2>
-  <p class="meta">Map attack paths for each possible opponent argument. Each argument gets 3 refutation types + evidence + G-series code.</p>`;
+  let h=progressBar()+(window.__TBX_LOCALE==='en'?`<div class="step-card"><h2><span class="part-label">Part6</span>Offense System</h2>
+  <p class="meta">Map attack paths for each possible opponent argument. Each argument gets 3 refutation types + evidence + G-series code.</p>`:`<div class="step-card"><h2><span class="part-label">Part6</span>我方攻击体系</h2>
+  <p class="meta">按对方可能论点穷举攻击路径，每个论点配三种反驳类型+证据+编号G系列</p>`);
   for(let o=0;o<no;o++){
-    h+=`<div class="section-block"><h4>Opponent Argument ${o+1} ${no>1?`<button class="btn-sm danger remove-btn" onclick="removeOpp(${o})">×</button>`:''}</h4>
+    h+=(window.__TBX_LOCALE==='en'?`<div class="section-block"><h4>Opponent Argument ${o+1} ${no>1?`<button class="btn-sm danger remove-btn" onclick="removeOpp(${o})">×</button>`:''}</h4>
     <div class="row-inp"><label>Opponent's Argument</label>${TI('e6_opp_chain',o,'Complete A→B→C chain')}</div>
     <div class="row-inp"><label>Opponent's Evidence</label>${II('e6_opp_ev',o,'Most likely evidence the opponent will cite')}</div>
-    <table class="t"><tr><th>Refutation Type</th><th>Attack Path (How We Attack)</th><th>Evidence</th><th>Argument</th><th style="width:50px">Code</th></tr>`;
-    ['A→B (Factual)','B→C (Logical)','B Unimportant (Value)'].forEach((t,ti)=>{
+    <table class="t"><tr><th>Refutation Type</th><th>Attack Path (How We Attack)</th><th>Evidence</th><th>Argument</th><th style="width:50px">Code</th></tr>`:`<div class="section-block"><h4>对方论点 ${o+1} ${no>1?`<button class="btn-sm danger remove-btn" onclick="removeOpp(${o})">×</button>`:''}</h4>
+    <div class="row-inp"><label>对方论证</label>${TI('e6_opp_chain',o,'完整A→B→C链条')}</div>
+    <div class="row-inp"><label>对方证据</label>${II('e6_opp_ev',o,'对方最可能引用的证据')}</div>
+    <table class="t"><tr><th>反驳类型</th><th>攻击路径（我方怎么打）</th><th>证据</th><th>论证</th><th style="width:50px">编号</th></tr>`);
+    [(window.__TBX_LOCALE==='en'?'A→B (Factual)':'A→B（事实）'),(window.__TBX_LOCALE==='en'?'B→C (Logical)':'B→C（逻辑）'),(window.__TBX_LOCALE==='en'?'B Unimportant (Value)':'B不重要（价值）')].forEach((t,ti)=>{
       h+=`<tr><td style="font-size:12px">${t}</td><td>${TI('e6_atk',o+'_'+ti)}</td><td>${II('e6_ev',o+'_'+ti)}</td><td>${II('e6_arg',o+'_'+ti)}</td><td>G${o+1}${ti+1}1</td></tr>`;
     });
     h+=`</table></div>`;
   }
-  h+=`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e6_opp')">+1 Opponent Argument</button></div>`;
+  h+=(window.__TBX_LOCALE==='en'?`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e6_opp')">+1 Opponent Argument</button></div>`:`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e6_opp')">+1个对方论点</button></div>`);
   return h+`</div>`;
 }
 
-// E7: Part7 Free Debate Prep
+// ---- E7: Part7 自由辩套题 ----
 function rE7() {
   ensureList('e7_bf',3);
   const nb=getCount('e7_bf');
-  let h=progressBar()+`<div class="step-card"><h2><span class="part-label">Part7</span>Free Debate Prep</h2>
-  <p class="meta">Each battlefield: Ask (pin stance) → Chase ×2 (anticipate & follow up) → Return (synthesize to our side) → Transition (cut to next battlefield)</p>`;
+  let h=progressBar()+(window.__TBX_LOCALE==='en'?`<div class="step-card"><h2><span class="part-label">Part7</span>Free Debate Prep</h2>
+  <p class="meta">Each battlefield: Ask (pin stance) → Chase ×2 (anticipate & follow up) → Return (synthesize to our side) → Transition (cut to next battlefield)</p>`:`<div class="step-card"><h2><span class="part-label">Part7</span>自由辩套题</h2>
+  <p class="meta">每个战场：问（锁定立场）→ 追×2（预判回应追问）→ 归（收束到我方）→ 转（切下一战场）</p>`);
   for(let b=0;b<nb;b++){
-    h+=`<div class="section-block"><h4>Battlefield ${b+1} ${nb>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('e7_bf',${b})">×</button>`:''}</h4>
+    h+=(window.__TBX_LOCALE==='en'?`<div class="section-block"><h4>Battlefield ${b+1} ${nb>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('e7_bf',${b})">×</button>`:''}</h4>
     <div class="row-inp"><label>Battlefield</label>${II('e7_name',b,'')}</div>
     <table class="t"><tr><th style="width:20px">#</th><th style="width:60px">Function</th><th>Content</th><th style="width:120px">Predicted Response</th></tr>
     <tr><td>1</td><td style="color:var(--gold)">Ask</td><td>${TI('e7_ask',b)}</td><td>${II('e7_ask_resp',b)}</td></tr>
     <tr><td>2</td><td style="color:var(--blue)">Chase 1</td><td>${TI('e7_ch1',b)}</td><td>${II('e7_ch1_resp',b)}</td></tr>
     <tr><td>3</td><td style="color:var(--blue)">Chase 2</td><td>${TI('e7_ch2',b)}</td><td>${II('e7_ch2_resp',b)}</td></tr>
     <tr><td>4</td><td style="color:var(--green)">Return</td><td>${TI('e7_ret',b)}</td><td>—</td></tr>
-    <tr><td>5</td><td style="color:var(--gray)">Transition</td><td>${II('e7_trans',b,'Transition phrase to next battlefield')}</td><td>—</td></tr></table></div>`;
+    <tr><td>5</td><td style="color:var(--gray)">Transition</td><td>${II('e7_trans',b,'Transition phrase to next battlefield')}</td><td>—</td></tr></table></div>`:`<div class="section-block"><h4>战场 ${b+1} ${nb>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('e7_bf',${b})">×</button>`:''}</h4>
+    <div class="row-inp"><label>战场</label>${II('e7_name',b,'')}</div>
+    <table class="t"><tr><th style="width:20px">#</th><th style="width:60px">功能</th><th>内容</th><th style="width:120px">预判回应</th></tr>
+    <tr><td>1</td><td style="color:var(--gold)">问</td><td>${TI('e7_ask',b)}</td><td>${II('e7_ask_resp',b)}</td></tr>
+    <tr><td>2</td><td style="color:var(--blue)">追1</td><td>${TI('e7_ch1',b)}</td><td>${II('e7_ch1_resp',b)}</td></tr>
+    <tr><td>3</td><td style="color:var(--blue)">追2</td><td>${TI('e7_ch2',b)}</td><td>${II('e7_ch2_resp',b)}</td></tr>
+    <tr><td>4</td><td style="color:var(--green)">归</td><td>${TI('e7_ret',b)}</td><td>—</td></tr>
+    <tr><td>5</td><td style="color:var(--gray)">转</td><td>${II('e7_trans',b,'过渡句，切入下一战场')}</td><td>—</td></tr></table></div>`);
   }
   return h+`</div>`;
 }
 
-// E8: Part8 Assembly 2.0
+// ---- E8: Part8 资料汇编2.0 ----
 function rE8() {
   ensureList('e8_cats',5);
   const nc=getCount('e8_cats');
-  const defNames=['Definition / Scope','Criterion B0','Sub-Argument 1','Sub-Argument 2','Sub-Argument 3'];
-  let h=progressBar()+`<div class="step-card"><h2><span class="part-label">Part8</span>Assembly 2.0</h2>
-  <p class="meta">Re-categorize by Part 4 architecture. Freely set the number of sources per category.</p>`;
+  const defNames=[(window.__TBX_LOCALE==='en'?'Definition / Scope':'定义/讨论范围'),(window.__TBX_LOCALE==='en'?'Criterion B0':'标准B0'),(window.__TBX_LOCALE==='en'?'Sub-Argument 1':'分论点1'),(window.__TBX_LOCALE==='en'?'Sub-Argument 2':'分论点2'),(window.__TBX_LOCALE==='en'?'Sub-Argument 3':'分论点3')];
+  let h=progressBar()+(window.__TBX_LOCALE==='en'?`<div class="step-card"><h2><span class="part-label">Part8</span>Assembly 2.0</h2>
+  <p class="meta">Re-categorize by Part 4 architecture. Freely set the number of sources per category.</p>`:`<div class="step-card"><h2><span class="part-label">Part8</span>资料汇编2.0</h2>
+  <p class="meta">按Part4架构重新归类。每类资料数自定。</p>`);
   for(let c=0;c<nc;c++){
     ensureList('e8_c'+c,2);
     const ni=rowCount2('e8_c'+c,'s');
-    const catName=gi('e8_catname',c,defNames[c]||'Category '+(c+1));
-    if(D['e8_catname_'+c]===undefined) si('e8_catname',c,defNames[c]||'Category '+(c+1));
-    h+=`<div class="section-block"><h4>${esc(catName)} ${nc>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('e8_cats',${c})">×</button>`:''}</h4>
+    const catName=gi('e8_catname',c,defNames[c]||(window.__TBX_LOCALE==='en'?'Category ':'分类')+(c+1));
+    if(D['e8_catname_'+c]===undefined) si('e8_catname',c,defNames[c]||(window.__TBX_LOCALE==='en'?'Category ':'分类')+(c+1));
+    h+=(window.__TBX_LOCALE==='en'?`<div class="section-block"><h4>${esc(catName)} ${nc>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('e8_cats',${c})">×</button>`:''}</h4>
     <div class="row-inp"><label>Category Name</label><input data-k="e8_catname_${c}" value="${esc(catName)}" oninput="si('e8_catname','${c}',this.value)"></div>
-    <table class="t"><tr><th style="width:30px">#</th><th>Summary</th><th>Key Quote</th><th>Source</th><th style="width:60px">Ref Code</th><th style="width:30px"></th></tr>`;
+    <table class="t"><tr><th style="width:30px">#</th><th>Summary</th><th>Key Quote</th><th>Source</th><th style="width:60px">Ref Code</th><th style="width:30px"></th></tr>`:`<div class="section-block"><h4>${esc(catName)} ${nc>1?`<button class="btn-sm danger remove-btn" onclick="removeRow('e8_cats',${c})">×</button>`:''}</h4>
+    <div class="row-inp"><label>分类名</label><input data-k="e8_catname_${c}" value="${esc(catName)}" oninput="si('e8_catname','${c}',this.value)"></div>
+    <table class="t"><tr><th style="width:30px">#</th><th>资料摘要</th><th>关键句</th><th>来源</th><th style="width:60px">对应编号</th><th style="width:30px"></th></tr>`);
     for(let i=0;i<ni;i++){
-      h+=`<tr><td>${i+1}</td><td>${II('e8_c'+c+'_s',i)}</td><td>${TI('e8_c'+c+'_q',i)}</td><td>${II('e8_c'+c+'_src',i)}</td><td>${II('e8_c'+c+'_code',i,'F/G code')}</td><td>${ni>1?`<button class="btn-sm danger" onclick="removeRow('e8_c${c}',${i})">×</button>`:''}</td></tr>`;
+      h+=(window.__TBX_LOCALE==='en'?`<tr><td>${i+1}</td><td>${II('e8_c'+c+'_s',i)}</td><td>${TI('e8_c'+c+'_q',i)}</td><td>${II('e8_c'+c+'_src',i)}</td><td>${II('e8_c'+c+'_code',i,'F/G code')}</td><td>${ni>1?`<button class="btn-sm danger" onclick="removeRow('e8_c${c}',${i})">×</button>`:''}</td></tr>`:`<tr><td>${i+1}</td><td>${II('e8_c'+c+'_s',i)}</td><td>${TI('e8_c'+c+'_q',i)}</td><td>${II('e8_c'+c+'_src',i)}</td><td>${II('e8_c'+c+'_code',i,'F/G编号')}</td><td>${ni>1?`<button class="btn-sm danger" onclick="removeRow('e8_c${c}',${i})">×</button>`:''}</td></tr>`);
     }
-    h+=`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('e8_c${c}')">+1 Row</button></div></div>`;
+    h+=(window.__TBX_LOCALE==='en'?`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('e8_c${c}')">+1 Row</button></div></div>`:`</table><div class="add-row-wrap"><button class="btn-add" onclick="addItem('e8_c${c}')">+1行</button></div></div>`);
   }
-  h+=`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e8_cats')">+1 Category</button></div>`;
+  h+=(window.__TBX_LOCALE==='en'?`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e8_cats')">+1 Category</button></div>`:`<div class="add-row-wrap"><button class="btn-add gold" onclick="addItem('e8_cats')">+1个分类</button></div>`);
   return h+`</div>`;
 }
 
-// E9: Part9 Export
+// ---- E9: Part9 导出 ----
 function rE9() {
-  let h=progressBar()+`<div class="step-card"><h2><span class="part-label">Part9</span>Final Assembly — Export Case</h2>`;
-  h+=`<h3>Consistency Check</h3><table class="t"><tr><th>Check Item</th><th style="width:60px">Status</th><th>Notes</th></tr>`;
-  ['Info Consistency: B0 / sub-argument wording unified across all sheets','Argument Coherence: argument order matches Part 4 optimal sequence','Offense-Defense Alignment: final draft aligned with Part 6 attack paths','Round time allocation confirmed; speech length matches word count','Free Debate Loop Complete: each battlefield has Ask-Chase-Return chain','Materials printed; attire ready'].forEach((c,i)=>{
+  let h=progressBar()+(window.__TBX_LOCALE==='en'?`<div class="step-card"><h2><span class="part-label">Part9</span>Final Assembly — Export Case</h2>`:`<div class="step-card"><h2><span class="part-label">Part9</span>成文整合 — 导出辩案</h2>`);
+  h+=(window.__TBX_LOCALE==='en'?`<h3>Consistency Check</h3><table class="t"><tr><th>Check Item</th><th style="width:60px">Status</th><th>Notes</th></tr>`:`<h3>一致性检查</h3><table class="t"><tr><th>检查项</th><th style="width:60px">状态</th><th>备注</th></tr>`);
+  [(window.__TBX_LOCALE==='en'?'Info Consistency: B0 / sub-argument wording unified across all sheets':'信息一致性：各表B0/分论点措辞统一'),(window.__TBX_LOCALE==='en'?'Argument Coherence: argument order matches Part 4 optimal sequence':'论证连贯性：论证顺序与Part4最佳序一致'),(window.__TBX_LOCALE==='en'?'Offense-Defense Alignment: final draft aligned with Part 6 attack paths':'攻防一致性：成文稿对齐Part6攻击路径'),(window.__TBX_LOCALE==='en'?'Round time allocation confirmed; speech length matches word count':'各环节时间分配确定，环节时长与稿件字数匹配'),(window.__TBX_LOCALE==='en'?'Free Debate Loop Complete: each battlefield has Ask-Chase-Return chain':'自由辩闭环：每个战场有问-追-归完整链'),(window.__TBX_LOCALE==='en'?'Materials printed; attire ready':'资料稿件打印、服装准备就绪')].forEach((c,i)=>{
     h+=`<tr><td>${c}</td><td>${S('e9_c'+i,['✓','✗','⚠'])}</td><td>${I('e9_n'+i)}</td></tr>`;
   });
-  h+=`</table><h3>Export Case</h3><div class="fmt-row">${[
+  h+=(window.__TBX_LOCALE==='en'?`</table><h3>Export Case</h3><div class="fmt-row">${[
   ['xlsx','📊 Excel','Desktop only'],
   ['md','📄 Markdown','AI-readable'],
   ['txt','Plain Text','Universal'],
   ['html','🌐 HTML','Open in browser']
-].map(([fmt,label,desc])=>'<button class="fmt-btn" onclick="doExport(\''+fmt+'\')"><b>'+label+'</b><span>'+desc+'</span></button>').join('')}</div><div class="output-panel" id="op"></div></div>`;
+].map(([fmt,label,desc])=>'<button class="fmt-btn" onclick="doExport(\''+fmt+'\')"><b>'+label+'</b><span>'+desc+'</span></button>').join('')}</div><div class="output-panel" id="op"></div></div>`:`</table><h3>导出辩案</h3><div class="fmt-row">${[
+  ['xlsx','📊 Excel','限电脑端'],
+  ['md','📄 MD','AI 可读'],
+  ['txt','纯文本','通用兼容'],
+  ['html','🌐 HTML','浏览器打开']
+].map(([fmt,label,desc])=>'<button class="fmt-btn" onclick="doExport(\''+fmt+'\')"><b>'+label+'</b><span>'+desc+'</span></button>').join('')}</div><div class="output-panel" id="op"></div></div>`);
   return h;
 }
 
 var isApp = typeof Capacitor !== 'undefined';
-// EXPORT
+// ---- EXPORT ----
 async function doExport(fmt) {
   save();
   var content='', ext='', mime='';
   if (fmt==='md') { content=genMD(); ext='md'; mime='text/markdown'; }
   else if (fmt==='html') { content=genHTMLTable(); ext='html'; mime='text/html'; }
-  else if (fmt==='xlsx') { if(isApp||typeof XLSX==='undefined'){content=buildCSV();ext='csv';mime='text/csv';}else{genXLSX();return;} }
+  else if (fmt==='xlsx') { if(isApp||typeof XLSX==='undefined'){content=buildCSV();ext='csv';mime='text/csv';}else{await genXLSX();return;} }
   else { content=genTXT(); ext='txt'; mime='text/plain'; }
-  var name='Debate-Case-'+new Date().toISOString().slice(0,10)+'.'+ext;
+  var name=(window.__TBX_LOCALE==='en'?'Debate-Case-':'辩论筑基-标准化辩案-')+new Date().toISOString().slice(0,10)+'.'+ext;
   var blob=new Blob(['﻿'+content],{type:mime+';charset=utf-8'});
-  if(typeof Capacitor!=='undefined'&&Capacitor.Plugins&&Capacitor.Plugins.Filesystem){
-    try{var C=Capacitor,FS=C.Plugins.Filesystem;
-      var result=await FS.writeFile({path:'Debate-Coach/'+name,data:ext==='csv'?'﻿'+content:content,directory:'CACHE',recursive:true,encoding:'utf8'});
-      try{var Share=C.Plugins.Share;if(Share&&Share.share)Share.share({title:'Export Case',url:result.uri});}catch(e2){}
-      alert('Exported: '+name);return;
-    }catch(e){alert('Export failed: '+e.message);return;}
-  }
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download=name;a.click();URL.revokeObjectURL(a.href);
+  /* FILE_IO_ADAPTER: case doExport builds MD/HTML/TXT/CSV with canonical BOM; desktop XLSX uses
+   * XLSX.write(workbook,array) actual binary. All call DCFileIO.present CACHE/Debate-Coach.
+   * No case project import is supported; preserve buildParts and XLSX/CSV capability branch. */
+  var result=await top.DCFileIO.present({blob:blob,name:name,mime:blob.type,kind:"ordinary",owner:"case",lang:window.__TBX_LOCALE==='en'?'en':'zh',nativeLocation:{directory:"CACHE",folder:"Debate-Coach"}});
+  if(["failed","unsupported"].includes(result.status))alert(top.DCFileIO.message(result,{lang:window.__TBX_LOCALE}));
+
 }
 
 function rc(key) {
@@ -558,176 +1024,176 @@ function rcField(key, field) {
   return n;
 }
 
-// SHARED DATA
+// ---- SHARED DATA ----
 function p5x(s,label,key,idx){for(var j=0;j<rc(key+'_'+idx);j++)s.push([label,g(key+'_'+idx+'_atk_'+j)||'',g(key+'_'+idx+'_oev_'+j)||'',g(key+'_'+idx+'_res_'+j)||'',g(key+'_'+idx+'_mev_'+j)||'']);}
 function buildParts(){
   var P=[],s,i,d,p,pi,c,b;
   // P1
-  s=[['Category','#','Keyword','Summary','Key Quote','Author','Source','URL']];
-  [{k:'e1_kw',n:'Keyword Explanations'},{k:'e1_case',n:'Similar Cases'},{k:'e1_news',n:'Current Events'},{k:'e1_theory',n:'Academic Sources'}].forEach(function(c){for(i=0;i<rcField(c.k,'s');i++)s.push([c.n,i+1,g(c.k+'_kw_'+i)||'',g(c.k+'_s_'+i)||'',g(c.k+'_q_'+i)||'',g(c.k+'_a_'+i)||'',g(c.k+'_src_'+i)||'',g(c.k+'_url_'+i)||'']);});
-  P.push({title:'Part1 Research',rows:s});
+  s=[[(window.__TBX_LOCALE==='en'?'Category':'分类'),(window.__TBX_LOCALE==='en'?'#':'序号'),(window.__TBX_LOCALE==='en'?'Keyword':'关键词'),(window.__TBX_LOCALE==='en'?'Summary':'摘要'),(window.__TBX_LOCALE==='en'?'Key Quote':'关键句'),(window.__TBX_LOCALE==='en'?'Author':'作者'),(window.__TBX_LOCALE==='en'?'Source':'来源'),(window.__TBX_LOCALE==='en'?'URL':'网址')]];
+  [{k:'e1_kw',n:(window.__TBX_LOCALE==='en'?'Keyword Explanations':'关键词解释')},{k:'e1_case',n:(window.__TBX_LOCALE==='en'?'Similar Cases':'类似案例')},{k:'e1_news',n:(window.__TBX_LOCALE==='en'?'Current Events':'热点事件')},{k:'e1_theory',n:(window.__TBX_LOCALE==='en'?'Academic Sources':'专业理论')}].forEach(function(c){for(i=0;i<rcField(c.k,'s');i++)s.push([c.n,i+1,g(c.k+'_kw_'+i)||'',g(c.k+'_s_'+i)||'',g(c.k+'_q_'+i)||'',g(c.k+'_a_'+i)||'',g(c.k+'_src_'+i)||'',g(c.k+'_url_'+i)||'']);});
+  P.push({title:(window.__TBX_LOCALE==='en'?'Part1 Research':'Part1 资料搜集'),rows:s});
   // P2
-  s=[['Direction','#','Summary','Key Quote','Source','URL']];
-  for(d=0;d<rcField('e2_dir','dirname');d++){for(i=0;i<rcField('e2_d'+d,'s');i++)s.push([g('e2_dirname_'+d)||'Direction '+(d+1),i+1,g('e2_d'+d+'_s_'+i)||'',g('e2_d'+d+'_q_'+i)||'',g('e2_d'+d+'_src_'+i)||'',g('e2_d'+d+'_url_'+i)||'']);}
-  P.push({title:'Part2 Assembly',rows:s});
+  s=[[(window.__TBX_LOCALE==='en'?'Direction':'方向'),'#',(window.__TBX_LOCALE==='en'?'Summary':'摘要'),(window.__TBX_LOCALE==='en'?'Key Quote':'关键句'),(window.__TBX_LOCALE==='en'?'Source':'来源'),(window.__TBX_LOCALE==='en'?'URL':'网址')]];
+  for(d=0;d<rcField('e2_dir','dirname');d++){for(i=0;i<rcField('e2_d'+d,'s');i++)s.push([g('e2_dirname_'+d)||(window.__TBX_LOCALE==='en'?'Direction ':'方向')+(d+1),i+1,g('e2_d'+d+'_s_'+i)||'',g('e2_d'+d+'_q_'+i)||'',g('e2_d'+d+'_src_'+i)||'',g('e2_d'+d+'_url_'+i)||'']);}
+  P.push({title:(window.__TBX_LOCALE==='en'?'Part2 Assembly':'Part2 资料汇编'),rows:s});
   // P3
-  s=[['#','Because','Therefore','Side']];
+  s=[['#',(window.__TBX_LOCALE==='en'?'Because':'因为'),(window.__TBX_LOCALE==='en'?'Therefore':'所以'),(window.__TBX_LOCALE==='en'?'Side':'方向')]];
   for(i=0;i<rcField('e3_args','because');i++)s.push([i+1,g('e3_because_'+i)||'',g('e3_so_'+i)||'',g('e3_side_'+i)||'']);
-  P.push({title:'Part3 Brainstorm',rows:s});
+  P.push({title:(window.__TBX_LOCALE==='en'?'Part3 Brainstorm':'Part3 论点穷举'),rows:s});
   // P4
-  s=[['Module','Item','Argument','Evidence']];
-  for(d=0;d<rcField('e4_defs','kw');d++){for(i=0;i<rc('e4_defs_'+d);i++)s.push(['Definition',(g('e4_def_kw_'+d)||'')+': '+(g('e4_def_val_'+d)||''),g('e4_defs_'+d+'_arg_'+i)||'',g('e4_defs_'+d+'_ev_'+i)||'']);}
-  s.push(['Criterion B0','B0',g('e4_b0')||'','']);s.push(['Criterion B0','Criterion Reasonableness',g('e4_b0_arg1')||'','']);
-  for(i=0;i<rc('e4_b0_ev');i++)s.push(['Criterion B0','Evidence',g('e4_b0_ev_arg_'+i)||'',g('e4_b0_ev_ev_'+i)||'']);
-  for(p=0;p<rcField('e4_subpoints','chain');p++){for(i=0;i<rc('e4_subpoints_'+p);i++)s.push(['Sub-Argument '+(p+1),g('e4_p_chain_'+p)||'',g('e4_subpoints_'+p+'_arg_'+i)||'',g('e4_subpoints_'+p+'_ev_'+i)||'']);}
-  for(i=0;i<rcField('e4_tasks','pos');i++)s.push(['Round Tasks',g('e4_t_pos_'+i)||'',(g('e4_t_seg_'+i)||'')+': '+(g('e4_t_task_'+i)||''),g('e4_t_time_'+i)||'']);
-  P.push({title:'Part4 Architecture',rows:s});
+  s=[[(window.__TBX_LOCALE==='en'?'Module':'模块'),(window.__TBX_LOCALE==='en'?'Item':'项目'),(window.__TBX_LOCALE==='en'?'Argument':'论证'),(window.__TBX_LOCALE==='en'?'Evidence':'证据')]];
+  for(d=0;d<rcField('e4_defs','kw');d++){for(i=0;i<rc('e4_defs_'+d);i++)s.push([(window.__TBX_LOCALE==='en'?'Definition':'定义'),(g('e4_def_kw_'+d)||'')+': '+(g('e4_def_val_'+d)||''),g('e4_defs_'+d+'_arg_'+i)||'',g('e4_defs_'+d+'_ev_'+i)||'']);}
+  s.push([(window.__TBX_LOCALE==='en'?'Criterion B0':'标准B0'),'B0',g('e4_b0')||'','']);s.push([(window.__TBX_LOCALE==='en'?'Criterion B0':'标准B0'),(window.__TBX_LOCALE==='en'?'Criterion Reasonableness':'标准合理性'),g('e4_b0_arg1')||'','']);
+  for(i=0;i<rc('e4_b0_ev');i++)s.push([(window.__TBX_LOCALE==='en'?'Criterion B0':'标准B0'),(window.__TBX_LOCALE==='en'?'Evidence':'证据'),g('e4_b0_ev_arg_'+i)||'',g('e4_b0_ev_ev_'+i)||'']);
+  for(p=0;p<rcField('e4_subpoints','chain');p++){for(i=0;i<rc('e4_subpoints_'+p);i++)s.push([(window.__TBX_LOCALE==='en'?'Sub-Argument ':'分论点')+(p+1),g('e4_p_chain_'+p)||'',g('e4_subpoints_'+p+'_arg_'+i)||'',g('e4_subpoints_'+p+'_ev_'+i)||'']);}
+  for(i=0;i<rcField('e4_tasks','pos');i++)s.push([(window.__TBX_LOCALE==='en'?'Round Tasks':'环节任务'),g('e4_t_pos_'+i)||'',(g('e4_t_seg_'+i)||'')+': '+(g('e4_t_task_'+i)||''),g('e4_t_time_'+i)||'']);
+  P.push({title:(window.__TBX_LOCALE==='en'?'Part4 Architecture':'Part4 架构'),rows:s});
   // P5
-  s=[['Module','Opponent Attack','Opponent Evidence','Our Response','Our Evidence']];
-  p5x(s,'Inherent Def. - Too Broad/Narrow','e5_domain',0);p5x(s,'Inherent Def. - Avoids Core Controversy','e5_domain',1);
-  for(i=0;i<rc('e5_scope_rows');i++)s.push(['Scope of Discussion',g('e5_scope_rows_atk_'+i)||'',g('e5_scope_rows_oev_'+i)||'',g('e5_scope_rows_res_'+i)||'',g('e5_scope_rows_mev_'+i)||'']);
-  p5x(s,'Criterion B0 - B→C Fails','e5_b0',0);p5x(s,'Criterion B0 - B Unimportant','e5_b0',1);
-  for(p=0;p<rcField('e5_subp','pt');p++){for(pi=0;pi<3;pi++){for(j=0;j<rc('e5_subp_'+p+'_'+pi);j++)s.push([(g('e5_subp_pt_'+p)||'Sub-Argument '+(p+1))+' - '+['A→B','B→C','B Unimportant'][pi],g('e5_subp_'+p+'_'+pi+'_atk_'+j)||'',g('e5_subp_'+p+'_'+pi+'_oev_'+j)||'',g('e5_subp_'+p+'_'+pi+'_res_'+j)||'',g('e5_subp_'+p+'_'+pi+'_mev_'+j)||'']);}}
-  for(c=0;c<rcField('e5_custom','pt');c++){for(j=0;j<rc('e5_custom_'+c);j++)s.push([g('e5_custom_pt_'+c)||'Defense Point '+(c+1),g('e5_custom_'+c+'_atk_'+j)||'',g('e5_custom_'+c+'_oev_'+j)||'',g('e5_custom_'+c+'_res_'+j)||'','']);}
-  P.push({title:'Part5 Defense',rows:s});
+  s=[[(window.__TBX_LOCALE==='en'?'Module':'模块'),(window.__TBX_LOCALE==='en'?'Opponent Attack':'对方可能攻击'),(window.__TBX_LOCALE==='en'?'Opponent Evidence':'对方可能论据'),(window.__TBX_LOCALE==='en'?'Our Response':'我方回应'),(window.__TBX_LOCALE==='en'?'Our Evidence':'我方论据')]];
+  p5x(s,(window.__TBX_LOCALE==='en'?'Inherent Def. - Too Broad/Narrow':'固有定义域-过宽/过窄'),'e5_domain',0);p5x(s,(window.__TBX_LOCALE==='en'?'Inherent Def. - Avoids Core Controversy':'固有定义域-回避核心争议'),'e5_domain',1);
+  for(i=0;i<rc('e5_scope_rows');i++)s.push([(window.__TBX_LOCALE==='en'?'Scope of Discussion':'讨论范围切入'),g('e5_scope_rows_atk_'+i)||'',g('e5_scope_rows_oev_'+i)||'',g('e5_scope_rows_res_'+i)||'',g('e5_scope_rows_mev_'+i)||'']);
+  p5x(s,(window.__TBX_LOCALE==='en'?'Criterion B0 - B→C Fails':'标准B0-B→C推不通'),'e5_b0',0);p5x(s,(window.__TBX_LOCALE==='en'?'Criterion B0 - B Unimportant':'标准B0-B不重要'),'e5_b0',1);
+  for(p=0;p<rcField('e5_subp','pt');p++){for(pi=0;pi<3;pi++){for(j=0;j<rc('e5_subp_'+p+'_'+pi);j++)s.push([(g('e5_subp_pt_'+p)||(window.__TBX_LOCALE==='en'?'Sub-Argument ':'分论点')+(p+1))+' - '+['A→B','B→C',(window.__TBX_LOCALE==='en'?'B Unimportant':'B不重要')][pi],g('e5_subp_'+p+'_'+pi+'_atk_'+j)||'',g('e5_subp_'+p+'_'+pi+'_oev_'+j)||'',g('e5_subp_'+p+'_'+pi+'_res_'+j)||'',g('e5_subp_'+p+'_'+pi+'_mev_'+j)||'']);}}
+  for(c=0;c<rcField('e5_custom','pt');c++){for(j=0;j<rc('e5_custom_'+c);j++)s.push([g('e5_custom_pt_'+c)||(window.__TBX_LOCALE==='en'?'Defense Point ':'防守点')+(c+1),g('e5_custom_'+c+'_atk_'+j)||'',g('e5_custom_'+c+'_oev_'+j)||'',g('e5_custom_'+c+'_res_'+j)||'','']);}
+  P.push({title:(window.__TBX_LOCALE==='en'?'Part5 Defense':'Part5 防守'),rows:s});
   // P6
-  s=[['Opponent Argument','Refutation Type','Attack Path','Evidence','Argument','Code']];
-  for(var oo=0;oo<rcField('e6_opp','chain');oo++){for(var ti=0;ti<3;ti++)s.push([g('e6_opp_chain_'+oo)||'Opponent Argument '+(oo+1),['A→B','B→C','B Unimportant'][ti],g('e6_atk_'+oo+'_'+ti)||'',g('e6_ev_'+oo+'_'+ti)||'',g('e6_arg_'+oo+'_'+ti)||'','G'+oo+(ti+1)+'1']);}
-  P.push({title:'Part6 Offense',rows:s});
+  s=[[(window.__TBX_LOCALE==='en'?'Opponent Argument':'对方论点'),(window.__TBX_LOCALE==='en'?'Refutation Type':'反驳类型'),(window.__TBX_LOCALE==='en'?'Attack Path':'攻击路径'),(window.__TBX_LOCALE==='en'?'Evidence':'证据'),(window.__TBX_LOCALE==='en'?'Argument':'论证'),(window.__TBX_LOCALE==='en'?'Code':'编号')]];
+  for(var oo=0;oo<rcField('e6_opp','chain');oo++){for(var ti=0;ti<3;ti++)s.push([g('e6_opp_chain_'+oo)||(window.__TBX_LOCALE==='en'?'Opponent Argument ':'对方论点')+(oo+1),['A→B','B→C',(window.__TBX_LOCALE==='en'?'B Unimportant':'B不重要')][ti],g('e6_atk_'+oo+'_'+ti)||'',g('e6_ev_'+oo+'_'+ti)||'',g('e6_arg_'+oo+'_'+ti)||'','G'+oo+(ti+1)+'1']);}
+  P.push({title:(window.__TBX_LOCALE==='en'?'Part6 Offense':'Part6 攻击'),rows:s});
   // P7
-  s=[['Battlefield','Function','Content','Predicted Response']];
-  for(b=0;b<rcField('e7_bf','name');b++){var nm=g('e7_name_'+b)||'Battlefield '+(b+1);s.push([nm,'Ask',g('e7_ask_'+b)||'',g('e7_ask_resp_'+b)||'']);s.push([nm,'Chase 1',g('e7_ch1_'+b)||'',g('e7_ch1_resp_'+b)||'']);s.push([nm,'Chase 2',g('e7_ch2_'+b)||'',g('e7_ch2_resp_'+b)||'']);s.push([nm,'Return',g('e7_ret_'+b)||'','']);s.push([nm,'Transition',g('e7_trans_'+b)||'','']);}
-  P.push({title:'Part7 Free Debate',rows:s});
+  s=[[(window.__TBX_LOCALE==='en'?'Battlefield':'战场'),(window.__TBX_LOCALE==='en'?'Function':'功能'),(window.__TBX_LOCALE==='en'?'Content':'内容'),(window.__TBX_LOCALE==='en'?'Predicted Response':'预判回应')]];
+  for(b=0;b<rcField('e7_bf','name');b++){var nm=g('e7_name_'+b)||(window.__TBX_LOCALE==='en'?'Battlefield ':'战场')+(b+1);s.push([nm,(window.__TBX_LOCALE==='en'?'Ask':'问'),g('e7_ask_'+b)||'',g('e7_ask_resp_'+b)||'']);s.push([nm,(window.__TBX_LOCALE==='en'?'Chase 1':'追1'),g('e7_ch1_'+b)||'',g('e7_ch1_resp_'+b)||'']);s.push([nm,(window.__TBX_LOCALE==='en'?'Chase 2':'追2'),g('e7_ch2_'+b)||'',g('e7_ch2_resp_'+b)||'']);s.push([nm,(window.__TBX_LOCALE==='en'?'Return':'归'),g('e7_ret_'+b)||'','']);s.push([nm,(window.__TBX_LOCALE==='en'?'Transition':'转'),g('e7_trans_'+b)||'','']);}
+  P.push({title:(window.__TBX_LOCALE==='en'?'Part7 Free Debate':'Part7 自由辩'),rows:s});
   // P8
-  s=[['Category','#','Summary','Key Quote','Source','Code']];
-  for(c=0;c<rcField('e8_cats','catname');c++){for(i=0;i<rcField('e8_c'+c,'s');i++)s.push([g('e8_catname_'+c)||'Category '+(c+1),i+1,g('e8_c'+c+'_s_'+i)||'',g('e8_c'+c+'_q_'+i)||'',g('e8_c'+c+'_src_'+i)||'',g('e8_c'+c+'_code_'+i)||'']);}
-  P.push({title:'Part8 Assembly 2.0',rows:s});
+  s=[[(window.__TBX_LOCALE==='en'?'Category':'分类'),'#',(window.__TBX_LOCALE==='en'?'Summary':'摘要'),(window.__TBX_LOCALE==='en'?'Key Quote':'关键句'),(window.__TBX_LOCALE==='en'?'Source':'来源'),(window.__TBX_LOCALE==='en'?'Code':'编号')]];
+  for(c=0;c<rcField('e8_cats','catname');c++){for(i=0;i<rcField('e8_c'+c,'s');i++)s.push([g('e8_catname_'+c)||(window.__TBX_LOCALE==='en'?'Category ':'分类')+(c+1),i+1,g('e8_c'+c+'_s_'+i)||'',g('e8_c'+c+'_q_'+i)||'',g('e8_c'+c+'_src_'+i)||'',g('e8_c'+c+'_code_'+i)||'']);}
+  P.push({title:(window.__TBX_LOCALE==='en'?'Part8 Assembly 2.0':'Part8 资料2.0'),rows:s});
   // P9
-  s=[['Check Item','Status','Notes']];
-  for(i=0;i<6;i++)s.push([['Info Consistency','Argument Coherence','Offense-Defense Alignment','Round Time Allocation','Free Debate Loop Complete','Materials & Attire Ready'][i],g('e9_c'+i)||'?',g('e9_n'+i)||'']);
-  P.push({title:'Part9 Checklist',rows:s});
+  s=[[(window.__TBX_LOCALE==='en'?'Check Item':'检查项'),(window.__TBX_LOCALE==='en'?'Status':'状态'),(window.__TBX_LOCALE==='en'?'Notes':'备注')]];
+  for(i=0;i<6;i++)s.push([[(window.__TBX_LOCALE==='en'?'Info Consistency':'信息一致性'),(window.__TBX_LOCALE==='en'?'Argument Coherence':'论证连贯性'),(window.__TBX_LOCALE==='en'?'Offense-Defense Alignment':'攻防一致性'),(window.__TBX_LOCALE==='en'?'Round Time Allocation':'各环节时间分配'),(window.__TBX_LOCALE==='en'?'Free Debate Loop Complete':'自由辩闭环'),(window.__TBX_LOCALE==='en'?'Materials & Attire Ready':'资料稿件打印准备')][i],g('e9_c'+i)||'?',g('e9_n'+i)||'']);
+  P.push({title:(window.__TBX_LOCALE==='en'?'Part9 Checklist':'Part9 检查清单'),rows:s});
   return P;
 }
 
-// TXT
+// ---- TXT ----
 function genTXT() {
   var d=new Date().toLocaleDateString();
-  var o='Standardized Case\nDate: '+d+'\n'+'='.repeat(50)+'\n\n';
+  var o=(window.__TBX_LOCALE==='en'?'Standardized Case\nDate: ':'标准化辩案\n日期：')+d+'\n'+'='.repeat(50)+'\n\n';
 
   // P1
-  o+='Part1 · Research\n';
-  [{k:'e1_kw',n:'Keyword Explanations',kw:true},{k:'e1_case',n:'Similar Cases',kw:false},{k:'e1_news',n:'Current Events',kw:false},{k:'e1_theory',n:'Academic Sources',kw:false}].forEach(function(c){
-    o+='\n['+c.n+']\n';
+  o+=(window.__TBX_LOCALE==='en'?'Part1 · Research\n':'Part1 · 资料搜集\n');
+  [{k:'e1_kw',n:(window.__TBX_LOCALE==='en'?'Keyword Explanations':'关键词解释'),kw:true},{k:'e1_case',n:(window.__TBX_LOCALE==='en'?'Similar Cases':'类似案例'),kw:false},{k:'e1_news',n:(window.__TBX_LOCALE==='en'?'Current Events':'热点事件'),kw:false},{k:'e1_theory',n:(window.__TBX_LOCALE==='en'?'Academic Sources':'专业理论'),kw:false}].forEach(function(c){
+    o+=(window.__TBX_LOCALE==='en'?'\n[':'\n【')+c.n+(window.__TBX_LOCALE==='en'?']\n':'】\n');
     for(var i=0;i<rcField(c.k,'s');i++){
       o+='  '+(i+1)+'. '+(c.kw?(g(c.k+'_kw_'+i)||'')+' | ':'')+(g(c.k+'_s_'+i)||'')+((g(c.k+'_a_'+i)||'')?' | '+(g(c.k+'_a_'+i)||''):'')+'\n     '+(g(c.k+'_q_'+i)||'').substring(0,150)+'\n';
     }
   });
 
   // P2
-  o+='\nPart2 · Assembly 1.0\n';
+  o+=(window.__TBX_LOCALE==='en'?'\nPart2 · Assembly 1.0\n':'\nPart2 · 资料汇编1.0\n');
   for(var dir=0;dir<rcField('e2_dir','dirname');dir++){
-    o+='\n['+(g('e2_dirname_'+dir)||'Direction '+(dir+1))+']\n';
+    o+=(window.__TBX_LOCALE==='en'?'\n[':'\n【')+(g('e2_dirname_'+dir)||(window.__TBX_LOCALE==='en'?'Direction ':'方向')+(dir+1))+(window.__TBX_LOCALE==='en'?']\n':'】\n');
     for(var i=0;i<rcField('e2_d'+dir,'s');i++){
       o+='  '+(i+1)+'. '+(g('e2_d'+dir+'_s_'+i)||'')+'\n';
     }
   }
 
   // P3
-  o+='\nPart3 · Argument Brainstorm\n';
+  o+=(window.__TBX_LOCALE==='en'?'\nPart3 · Argument Brainstorm\n':'\nPart3 · 论点穷举\n');
   for(var i=0;i<rcField('e3_args','because');i++){
-    o+='  '+(i+1)+'. ['+(g('e3_side_'+i)||'')+'] Because '+(g('e3_because_'+i)||'')+', therefore '+(g('e3_so_'+i)||'')+'\n';
+    o+='  '+(i+1)+'. ['+(g('e3_side_'+i)||'')+(window.__TBX_LOCALE==='en'?'] Because ':'] 因为')+(g('e3_because_'+i)||'')+(window.__TBX_LOCALE==='en'?', therefore ':'，所以')+(g('e3_so_'+i)||'')+'\n';
   }
 
   // P4
-  o+='\nPart4 · Case Architecture\n';
-  o+='[Definition / Scope of Discussion]\n';
+  o+=(window.__TBX_LOCALE==='en'?'\nPart4 · Case Architecture\n':'\nPart4 · 论证架构\n');
+  o+=(window.__TBX_LOCALE==='en'?'[Definition / Scope of Discussion]\n':'【定义/讨论范围】\n');
   for(var kw=0;kw<rcField('e4_defs','kw');kw++){
-    o+='  Keyword '+(kw+1)+': '+(g('e4_def_kw_'+kw)||'')+' — '+(g('e4_def_val_'+kw)||'')+'\n';
+    o+=(window.__TBX_LOCALE==='en'?'  Keyword ':'  关键词')+(kw+1)+(window.__TBX_LOCALE==='en'?': ':'：')+(g('e4_def_kw_'+kw)||'')+' — '+(g('e4_def_val_'+kw)||'')+'\n';
     for(var i=0;i<rc('e4_defs_'+kw);i++){
-      o+='    Argument: '+(g('e4_defs_'+kw+'_arg_'+i)||'')+' | Evidence: '+(g('e4_defs_'+kw+'_ev_'+i)||'')+'\n';
+      o+=(window.__TBX_LOCALE==='en'?'    Argument: ':'    论证：')+(g('e4_defs_'+kw+'_arg_'+i)||'')+(window.__TBX_LOCALE==='en'?' | Evidence: ':' | 证据：')+(g('e4_defs_'+kw+'_ev_'+i)||'')+'\n';
     }
   }
-  o+='[Criterion B0] '+(g('e4_b0')||'')+'\n';
-  o+='  Criterion Reasonableness: '+(g('e4_b0_arg1')||'')+'\n';
+  o+=(window.__TBX_LOCALE==='en'?'[Criterion B0] ':'【标准 B0】')+(g('e4_b0')||'')+'\n';
+  o+=(window.__TBX_LOCALE==='en'?'  Criterion Reasonableness: ':'  标准合理性：')+(g('e4_b0_arg1')||'')+'\n';
   for(var i=0;i<rc('e4_b0_ev');i++){
-    o+='    Argument: '+(g('e4_b0_ev_arg_'+i)||'')+' | Evidence: '+(g('e4_b0_ev_ev_'+i)||'')+'\n';
+    o+=(window.__TBX_LOCALE==='en'?'    Argument: ':'    论证：')+(g('e4_b0_ev_arg_'+i)||'')+(window.__TBX_LOCALE==='en'?' | Evidence: ':' | 证据：')+(g('e4_b0_ev_ev_'+i)||'')+'\n';
   }
-  o+='[Sub-Arguments]\n';
+  o+=(window.__TBX_LOCALE==='en'?'[Sub-Arguments]\n':'【分论点】\n');
   for(var p=0;p<rcField('e4_subpoints','chain');p++){
-    o+='  Sub-Argument '+(p+1)+': '+(g('e4_p_chain_'+p)||'')+'\n';
+    o+=(window.__TBX_LOCALE==='en'?'  Sub-Argument ':'  分论点')+(p+1)+(window.__TBX_LOCALE==='en'?': ':'：')+(g('e4_p_chain_'+p)||'')+'\n';
     for(var i=0;i<rc('e4_subpoints_'+p);i++){
-      o+='    Argument: '+(g('e4_subpoints_'+p+'_arg_'+i)||'')+' | Evidence: '+(g('e4_subpoints_'+p+'_ev_'+i)||'')+'\n';
+      o+=(window.__TBX_LOCALE==='en'?'    Argument: ':'    论证：')+(g('e4_subpoints_'+p+'_arg_'+i)||'')+(window.__TBX_LOCALE==='en'?' | Evidence: ':' | 证据：')+(g('e4_subpoints_'+p+'_ev_'+i)||'')+'\n';
     }
   }
-  o+='[Round Tasks]\n';
+  o+=(window.__TBX_LOCALE==='en'?'[Round Tasks]\n':'【各环节任务】\n');
   for(var i=0;i<rcField('e4_tasks','pos');i++){
     o+='  '+(g('e4_t_pos_'+i)||'')+' · '+(g('e4_t_seg_'+i)||'')+' | '+(g('e4_t_task_'+i)||'').substring(0,60)+' | '+(g('e4_t_time_'+i)||'')+'\n';
   }
 
   // P5
-  o+='\nPart5 · Defense\n';
+  o+=(window.__TBX_LOCALE==='en'?'\nPart5 · Defense\n':'\nPart5 · 我方防守\n');
   function p5row(label,key,idx){
     for(var i=0;i<rc(key+'_'+idx);i++){
-      o+='  ['+label+'] Attack: '+(g(key+'_'+idx+'_atk_'+i)||'').substring(0,80)+' → Response: '+(g(key+'_'+idx+'_res_'+i)||'').substring(0,100)+'\n';
+      o+=(window.__TBX_LOCALE==='en'?'  [':'  【')+label+(window.__TBX_LOCALE==='en'?'] Attack: ':'】攻击：')+(g(key+'_'+idx+'_atk_'+i)||'').substring(0,80)+(window.__TBX_LOCALE==='en'?' → Response: ':' → 回应：')+(g(key+'_'+idx+'_res_'+i)||'').substring(0,100)+'\n';
     }
   }
-  p5row('Inherent Def. - Too Broad/Narrow','e5_domain',0);
-  p5row('Inherent Def. - Avoids Core Controversy','e5_domain',1);
-  o+='  [Scope of Discussion]\n';
+  p5row((window.__TBX_LOCALE==='en'?'Inherent Def. - Too Broad/Narrow':'固有定义域-定义过宽/过窄'),'e5_domain',0);
+  p5row((window.__TBX_LOCALE==='en'?'Inherent Def. - Avoids Core Controversy':'固有定义域-定义回避核心争议'),'e5_domain',1);
+  o+=(window.__TBX_LOCALE==='en'?'  [Scope of Discussion]\n':'  【讨论范围切入】\n');
   for(var i=0;i<rc('e5_scope_rows');i++){
-    o+='    Attack: '+(g('e5_scope_rows_atk_'+i)||'').substring(0,80)+' → Response: '+(g('e5_scope_rows_res_'+i)||'').substring(0,100)+'\n';
+    o+=(window.__TBX_LOCALE==='en'?'    Attack: ':'    攻击：')+(g('e5_scope_rows_atk_'+i)||'').substring(0,80)+(window.__TBX_LOCALE==='en'?' → Response: ':' → 回应：')+(g('e5_scope_rows_res_'+i)||'').substring(0,100)+'\n';
   }
-  p5row('Criterion B0 - B→C Fails','e5_b0',0);
-  p5row('Criterion B0 - B Unimportant','e5_b0',1);
+  p5row((window.__TBX_LOCALE==='en'?'Criterion B0 - B→C Fails':'标准B0-B→C推不通'),'e5_b0',0);
+  p5row((window.__TBX_LOCALE==='en'?'Criterion B0 - B Unimportant':'标准B0-B不重要'),'e5_b0',1);
   for(var p=0;p<rcField('e5_subp','pt');p++){
-    o+='\n['+(g('e5_subp_pt_'+p)||'Sub-Argument '+(p+1))+']\n';
-    ['A→B','B→C','B Unimportant'].forEach(function(path,pi){
+    o+=(window.__TBX_LOCALE==='en'?'\n[':'\n【')+(g('e5_subp_pt_'+p)||(window.__TBX_LOCALE==='en'?'Sub-Argument ':'分论点')+(p+1))+(window.__TBX_LOCALE==='en'?']\n':'】\n');
+    ['A→B','B→C',(window.__TBX_LOCALE==='en'?'B Unimportant':'B不重要')].forEach(function(path,pi){
       for(var i=0;i<rc('e5_subp_'+p+'_'+pi);i++){
-        o+='  '+path+' | Attack: '+(g('e5_subp_'+p+'_'+pi+'_atk_'+i)||'').substring(0,60)+' → Response: '+(g('e5_subp_'+p+'_'+pi+'_res_'+i)||'').substring(0,80)+'\n';
+        o+='  '+path+(window.__TBX_LOCALE==='en'?' | Attack: ':' | 攻击：')+(g('e5_subp_'+p+'_'+pi+'_atk_'+i)||'').substring(0,60)+(window.__TBX_LOCALE==='en'?' → Response: ':' → 回应：')+(g('e5_subp_'+p+'_'+pi+'_res_'+i)||'').substring(0,80)+'\n';
       }
     });
   }
   for(var c=0;c<rcField('e5_custom','pt');c++){
-    o+='\n['+(g('e5_custom_pt_'+c)||'Defense Point '+(c+1))+']\n';
+    o+=(window.__TBX_LOCALE==='en'?'\n[':'\n【')+(g('e5_custom_pt_'+c)||(window.__TBX_LOCALE==='en'?'Defense Point ':'防守点')+(c+1))+(window.__TBX_LOCALE==='en'?']\n':'】\n');
     for(var i=0;i<rc('e5_custom_'+c);i++){
-      o+='  Attack: '+(g('e5_custom_'+c+'_atk_'+i)||'').substring(0,80)+' → Response: '+(g('e5_custom_'+c+'_res_'+i)||'').substring(0,100)+'\n';
+      o+=(window.__TBX_LOCALE==='en'?'  Attack: ':'  攻击：')+(g('e5_custom_'+c+'_atk_'+i)||'').substring(0,80)+(window.__TBX_LOCALE==='en'?' → Response: ':' → 回应：')+(g('e5_custom_'+c+'_res_'+i)||'').substring(0,100)+'\n';
     }
   }
 
-  // P6
-  o+='\nPart6 · Offense\n';
+  // P6 - ALL rows exported, no skip
+  o+=(window.__TBX_LOCALE==='en'?'\nPart6 · Offense\n':'\nPart6 · 我方攻击\n');
   for(var oo=0;oo<rcField('e6_opp','chain');oo++){
-    o+='\n[Opponent Argument '+(oo+1)+'] '+(g('e6_opp_chain_'+oo)||'').substring(0,100)+'\n';
-    ['A→B','B→C','B Unimportant'].forEach(function(t,ti){
+    o+=(window.__TBX_LOCALE==='en'?'\n[Opponent Argument ':'\n【对方论点')+(oo+1)+(window.__TBX_LOCALE==='en'?'] ':'】')+(g('e6_opp_chain_'+oo)||'').substring(0,100)+'\n';
+    ['A→B','B→C',(window.__TBX_LOCALE==='en'?'B Unimportant':'B不重要')].forEach(function(t,ti){
       o+='  [G'+(oo)+(ti+1)+'1] '+t+': '+(g('e6_atk_'+oo+'_'+ti)||'').substring(0,100)+'\n';
     });
   }
 
-  // P7
-  o+='\nPart7 · Free Debate Prep\n';
+  // P7 - ALL battlefields exported, no skip
+  o+=(window.__TBX_LOCALE==='en'?'\nPart7 · Free Debate Prep\n':'\nPart7 · 自由辩套题\n');
   for(var b=0;b<rcField('e7_bf','name');b++){
-    o+='\n[Battlefield '+(b+1)+': '+(g('e7_name_'+b)||'')+']\n';
-    o+='  Ask: '+(g('e7_ask_'+b)||'')+'\n';
-    o+='  Chase 1: '+(g('e7_ch1_'+b)||'')+'\n';
-    o+='  Chase 2: '+(g('e7_ch2_'+b)||'')+'\n';
-    o+='  Return: '+(g('e7_ret_'+b)||'')+'\n';
-    o+='  Transition: '+(g('e7_trans_'+b)||'')+'\n';
+    o+=(window.__TBX_LOCALE==='en'?'\n[Battlefield ':'\n【战场')+(b+1)+(window.__TBX_LOCALE==='en'?': ':'：')+(g('e7_name_'+b)||'')+(window.__TBX_LOCALE==='en'?']\n':'】\n');
+    o+=(window.__TBX_LOCALE==='en'?'  Ask: ':'  问：')+(g('e7_ask_'+b)||'')+'\n';
+    o+=(window.__TBX_LOCALE==='en'?'  Chase 1: ':'  追1：')+(g('e7_ch1_'+b)||'')+'\n';
+    o+=(window.__TBX_LOCALE==='en'?'  Chase 2: ':'  追2：')+(g('e7_ch2_'+b)||'')+'\n';
+    o+=(window.__TBX_LOCALE==='en'?'  Return: ':'  归：')+(g('e7_ret_'+b)||'')+'\n';
+    o+=(window.__TBX_LOCALE==='en'?'  Transition: ':'  转：')+(g('e7_trans_'+b)||'')+'\n';
   }
 
   // P8
-  o+='\nPart8 · Assembly 2.0\n';
+  o+=(window.__TBX_LOCALE==='en'?'\nPart8 · Assembly 2.0\n':'\nPart8 · 资料汇编2.0\n');
   for(var c=0;c<rcField('e8_cats','catname');c++){
-    o+='\n['+(g('e8_catname_'+c)||'Category '+(c+1))+']\n';
+    o+=(window.__TBX_LOCALE==='en'?'\n[':'\n【')+(g('e8_catname_'+c)||(window.__TBX_LOCALE==='en'?'Category ':'分类')+(c+1))+(window.__TBX_LOCALE==='en'?']\n':'】\n');
     for(var i=0;i<rcField('e8_c'+c,'s');i++){
       o+='  '+(i+1)+'. '+(g('e8_c'+c+'_s_'+i)||'')+' ['+(g('e8_c'+c+'_code_'+i)||'')+']\n';
     }
   }
 
-  o+='\n'+'='.repeat(50)+'\n  Case Export Complete\n'+'='.repeat(50)+'\n';
+  o+='\n'+'='.repeat(50)+(window.__TBX_LOCALE==='en'?'\n  Case Export Complete\n':'\n  辩案导出完成\n')+'='.repeat(50)+'\n';
   return o;
 }
 function genMD() {
-  var o='# Standardized Case\n\nDate: '+new Date().toLocaleDateString()+'\n\n';
+  var o=(window.__TBX_LOCALE==='en'?'# Standardized Case\n\nDate: ':'# 标准化辩案\n\n日期：')+new Date().toLocaleDateString()+'\n\n';
   var P=buildParts();
   P.forEach(function(p){
     o+='## '+p.title+'\n\n';
@@ -738,13 +1204,14 @@ function genMD() {
     }
     o+='\n';
   });
-  o+='\n---\n*Case Export Complete*\n';
+  o+=(window.__TBX_LOCALE==='en'?'\n---\n*Case Export Complete*\n':'\n---\n*辩案导出完成*\n');
   return o;
 }
 
 function genHTMLTable(){
-  var o='<html><head><meta charset=UTF-8><title>Standardized Case</title><style>body{font-family:system-ui,sans-serif;max-width:900px;margin:0 auto;padding:20px}h1{text-align:center}h2{color:#555;border-bottom:2px solid #ddd;margin-top:24px}table{width:100%;border-collapse:collapse;margin:8px 0;font-size:13px}td,th{border:1px solid #ddd;padding:6px 10px;text-align:left;vertical-align:top}th{background:#f5f5f5;font-weight:bold}tr:nth-child(even){background:#fafafa}</style></head><body>';
-  o+='<h1>Standardized Case</h1><p>Date: '+new Date().toLocaleDateString()+'</p>';
+  var tbxT=window.__TBX&&window.__TBX.tokens?window.__TBX.tokens('light'):null;
+  var o=(window.__TBX_LOCALE==='en'?'<html><head><meta charset=UTF-8><title>Standardized Case</title><style>:root{--tx-text:':'<html><head><meta charset=UTF-8><title>标准化辩案</title><style>:root{--tx-text:')+(tbxT?tbxT.text2:'#555')+';--tx-line:'+(tbxT?tbxT.line:'#ddd')+';--tx-head:'+(tbxT?tbxT.bg:'#f5f5f5')+';--tx-alt:'+(tbxT?(tbxT.ivory||tbxT.paper||'#fafafa'):'#fafafa')+(window.__TBX_LOCALE==='en'?'}body{font-family:system-ui,sans-serif;max-width:900px;margin:0 auto;padding:20px}h1{text-align:center}h2{color:var(--tx-text);border-bottom:2px solid var(--tx-line);margin-top:24px}table{width:100%;border-collapse:collapse;margin:8px 0;font-size:13px}td,th{border:1px solid var(--tx-line);padding:6px 10px;text-align:left;vertical-align:top}th{background:var(--tx-head);font-weight:bold}tr:nth-child(even){background:var(--tx-alt)}</style></head><body>':'}body{font-family:Microsoft YaHei,sans-serif;max-width:900px;margin:0 auto;padding:20px}h1{text-align:center}h2{color:var(--tx-text);border-bottom:2px solid var(--tx-line);margin-top:24px}table{width:100%;border-collapse:collapse;margin:8px 0;font-size:13px}td,th{border:1px solid var(--tx-line);padding:6px 10px;text-align:left;vertical-align:top}th{background:var(--tx-head);font-weight:bold}tr:nth-child(even){background:var(--tx-alt)}</style></head><body>');
+  o+=(window.__TBX_LOCALE==='en'?'<h1>Standardized Case</h1><p>Date: ':'<h1>标准化辩案</h1><p>日期：')+new Date().toLocaleDateString()+'</p>';
   var P=buildParts();
   P.forEach(function(p){
     o+='<h2>'+p.title+'</h2><table>';
@@ -758,9 +1225,9 @@ function genHTMLTable(){
   o+='</body></html>';return o;
 }
 
-// XLSX
-function genXLSX() {
-  if (typeof XLSX==='undefined') { var o2=genHTMLTable();var blob2=new Blob([o2],{type:'application/vnd.ms-excel'});var name2='Debate-Case-'+new Date().toISOString().slice(0,10)+'.xls';var a2=document.createElement('a');a2.href=URL.createObjectURL(blob2);a2.download=name2;a2.click();URL.revokeObjectURL(a2.href);return; }
+// ---- XLSX ----
+async function genXLSX() {
+  if (typeof XLSX==='undefined') { var o2=genHTMLTable();var blob2=new Blob([o2],{type:'application/vnd.ms-excel'});var name2=(window.__TBX_LOCALE==='en'?'Debate-Case-':'辩论筑基-标准化辩案-')+new Date().toISOString().slice(0,10)+'.xls';var a2=document.createElement('a');a2.href=URL.createObjectURL(blob2);a2.download=name2;a2.click();URL.revokeObjectURL(a2.href);return; }
   var wb=XLSX.utils.book_new();
   var cols=function(hdr){ return hdr.map(function(h){ return {wch:Math.max(h.length+4,12)}; }); };
   var P=buildParts();
@@ -769,7 +1236,11 @@ function genXLSX() {
     if(p.rows.length>1) ws['!cols']=cols(p.rows[0]);
     XLSX.utils.book_append_sheet(wb,ws,p.title);
   });
-  XLSX.writeFile(wb,'Debate-Case-'+new Date().toISOString().slice(0,10)+'.xlsx');
+  // FILE_IO_ADAPTER: case XLSX (actual XLSX bytes; no TXT/CSV alias).
+  var bytes=XLSX.write(wb,{bookType:"xlsx",type:"array"});
+  var actualBlob=new Blob([bytes],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+  var name=(window.__TBX_LOCALE==="en"?"Debate-Case-":"辩论筑基-标准化辩案-")+new Date().toISOString().slice(0,10)+".xlsx";
+  await top.DCFileIO.present({blob:actualBlob,name:name,mime:actualBlob.type,kind:"binary",owner:"case",lang:window.__TBX_LOCALE==='en'?'en':'zh',nativeLocation:{directory:"CACHE",folder:"Debate-Coach"}});
 }
 
 function buildCSV(){
@@ -782,19 +1253,99 @@ function buildCSV(){
   });
   return o;
 }
-// NAV
+// ---- NAV ----
 function render() {
   const step=STEPS[current];
   document.getElementById('step-label').textContent=step.id+' · '+step.title;
   document.getElementById('page-num').textContent=(current+1)+'/'+STEPS.length;
   document.getElementById('btn-prev').style.display=current===0?'none':'inline-block';
-  document.getElementById('btn-next').textContent=current===STEPS.length-1?'✓ Done':'Next →';
+  document.getElementById('btn-next').textContent=current===STEPS.length-1?(window.__TBX_LOCALE==='en'?'✓ Done':'✓ 完成'):(window.__TBX_LOCALE==='en'?'Next →':'下一步 →');
   const rs={E0:rE0,E1:rE1,E2:rE2,E3:rE3,E4:rE4,E5:rE5,E6:rE6,E7:rE7,E8:rE8,E9:rE9};
   document.getElementById('content').innerHTML=(rs[step.id]||rE0)();
 }
 function nextStep(){save();if(current<STEPS.length-1){current++;render();}}
 function prevStep(){save();if(current>0){current--;render();}}
 render();
+
+var __TBX_LEGACY_OPTIONS={zh:{STEPS:[
+  { id:'E0', title:'总览' },{ id:'E1', title:'资料搜集', part:'Part1' },
+  { id:'E2', title:'资料汇编1.0', part:'Part2' },{ id:'E3', title:'论点穷举', part:'Part3' },
+  { id:'E4', title:'论证架构', part:'Part4' },{ id:'E5', title:'我方防守', part:'Part5' },
+  { id:'E6', title:'我方攻击', part:'Part6' },{ id:'E7', title:'自由辩套题', part:'Part7' },
+  { id:'E8', title:'资料汇编2.0', part:'Part8' },{ id:'E9', title:'导出辩案', part:'Part9' },
+]},en:{STEPS:[
+  { id:'E0', title:'Overview' },{ id:'E1', title:'Research', part:'Part1' },
+  { id:'E2', title:'Assembly 1.0', part:'Part2' },{ id:'E3', title:'Argument Brainstorm', part:'Part3' },
+  { id:'E4', title:'Case Architecture', part:'Part4' },{ id:'E5', title:'Defense', part:'Part5' },
+  { id:'E6', title:'Offense', part:'Part6' },{ id:'E7', title:'Free Debate Prep', part:'Part7' },
+  { id:'E8', title:'Assembly 2.0', part:'Part8' },{ id:'E9', title:'Export Case', part:'Part9' },
+]}};
+function __tbxRestoreFocus(draw){
+ var target=document.activeElement,selector='input,textarea,select,button';
+ var all=Array.prototype.slice.call(document.querySelectorAll(selector)),idx=all.indexOf(target);
+ var key=target&&target.getAttribute('data-k'),selection=null,position=null;
+ var host=document.getElementById('main')||document.getElementById('content');
+ var scroll=host?{top:host.scrollTop,left:host.scrollLeft}:null;
+ if(target&&typeof target.selectionStart==='number')try{selection={start:target.selectionStart,end:target.selectionEnd};}catch(_e){}
+ if(target&&typeof target.scrollTop==='number')position={top:target.scrollTop,left:target.scrollLeft};
+ draw();
+ if(host&&scroll){host.scrollTop=scroll.top;host.scrollLeft=scroll.left;}
+ if(idx>=0){
+   var next=key?document.querySelector('[data-k="'+key.replace(/"/g,'')+'"]'):null;
+   if(!next)next=document.querySelectorAll(selector)[idx];
+   if(next&&!next.disabled){
+     next.focus({preventScroll:true});
+     if(selection&&typeof next.setSelectionRange==='function')try{next.setSelectionRange(selection.start,selection.end);}catch(_e){}
+     if(position){next.scrollTop=position.top;next.scrollLeft=position.left;}
+   }
+ }
+}
+function __tbxApplyHeader(){
+ var en=window.__TBX_LOCALE==='en',title=document.querySelector('header h1');
+ var titles=["备赛整合 · 标准化辩案工作台","Case Prep · Standardized Case Workbench"];
+ var titleText=en?titles[1]:titles[0];
+ if(title){for(var i=0;i<title.childNodes.length;i++){var n=title.childNodes[i];if(n.nodeType===3){n.nodeValue=titleText+' ';break;}}}
+ document.title=titleText;
+ document.documentElement.lang=en?'en':'zh-CN';
+ var btn=document.getElementById('lang-toggle');if(btn)btn.textContent=en?'中文':'EN';
+ var theme=document.getElementById('theme-toggle');if(theme)theme.textContent=en?'Theme':'界面颜色';
+ var home=document.querySelector('header .home-btn')||document.querySelector('button[onclick*="toolbox.html"]');
+ if(home)home.textContent=en?'Back':'返回';
+ var start=document.querySelector('#footer-bar button.start-btn-left');
+ if(start)start.textContent=en?'Start':'开始页';
+ if("case"==='case'){
+   var prev=document.getElementById('btn-prev');if(prev)prev.textContent=en?'← Previous':'← 上一步';
+   var next=document.getElementById('btn-next');if(next)next.textContent=current===STEPS.length-1?(en?'✓ Finish':'✓ 完成'):(en?'Next →':'下一步 →');
+ }
+}
+function __tbxWriteShared(key,value){
+  // Same public key in the owning srcdoc/file contexts; no new state or polling.
+  try{localStorage.setItem(key,value);}catch(_e){}
+  try{if(parent!==window)parent.localStorage.setItem(key,value);}catch(_e){}
+  try{if(top!==window&&top!==parent)top.localStorage.setItem(key,value);}catch(_e){}
+}
+function applyToolLanguage(next,first){
+ var wanted=next==='en'?'en':'zh',old=window.__TBX_LOCALE;
+ window.__TBX_LOCALE=wanted;
+ __tbxWriteShared('debate_coach_lang',wanted);
+ __TBX_LEGACY_OPTIONS[window.__TBX_LOCALE].STEPS.forEach(function(step,i){STEPS[i].title=step.title;});
+ __tbxApplyHeader();
+ if(!first&&old!==wanted)__tbxRestoreFocus(function(){render();});
+}
+function toggleToolLanguage(){applyToolLanguage(window.__TBX_LOCALE==='en'?'zh':'en',false);}
+function toggleTheme(){
+ var dark=document.body.classList.contains('light');
+ document.body.classList.toggle('light',!dark);
+ document.body.classList.toggle('dark',dark);
+ __tbxWriteShared('debate_coach_theme',dark?'dark':'light');
+ try{if(parent&&typeof parent.syncOpenToolTheme==='function')parent.syncOpenToolTheme();}catch(e){}
+}
+window.applyToolLanguage=applyToolLanguage;window.toggleToolLanguage=toggleToolLanguage;
+applyToolLanguage(window.__TBX_LOCALE,true);
+var __tbxCurrentTheme=localStorage.getItem('debate_coach_theme')==='dark'?'dark':'light';
+document.body.classList.toggle('light',__tbxCurrentTheme==='light');
+document.body.classList.toggle('dark',__tbxCurrentTheme==='dark');
+ 
 </script>
 </body>
 </html>
